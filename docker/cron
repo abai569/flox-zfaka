@@ -1,1 +1,0 @@
-* * * * * www-data php -q /var/www/html/public/cli.php request_uri="/crontab/sendemail/index" >> /var/www/html/log/crontab/cron.log 2>&1
