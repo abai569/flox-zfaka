@@ -1,0 +1,10 @@
+.git
+.github
+.omo
+*.zip
+log/*
+temp/*
+public/res/upload/*
+install/install.lock
+plans
+README_old.md
