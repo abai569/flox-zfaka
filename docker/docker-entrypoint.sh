@@ -99,47 +99,50 @@ user=$DB_USER
 password=$DB_PASSWORD
 EOF
 
-echo "[INFO] Waiting for MySQL at $DB_HOST:$DB_PORT"
-attempt=0
-until mysqladmin --defaults-extra-file="$MYSQL_CNF" ping --silent; do
-  attempt=$((attempt + 1))
-  if [ "$attempt" -ge 60 ]; then
-    echo "INIT_ERROR=MySQL did not become ready"
+# Only perform MySQL initialization when running the main process (supervisord or no args)
+if [ "$#" -eq 0 ] || echo "$*" | grep -q "supervisord"; then
+  echo "[INFO] Waiting for MySQL at $DB_HOST:$DB_PORT"
+  attempt=0
+  until mysqladmin --defaults-extra-file="$MYSQL_CNF" ping --silent; do
+    attempt=$((attempt + 1))
+    if [ "$attempt" -ge 60 ]; then
+      echo "INIT_ERROR=MySQL did not become ready"
+      exit 1
+    fi
+    sleep 2
+  done
+
+  TABLE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='t_config';")
+  if [ "$TABLE_COUNT" = "0" ]; then
+    echo "[INFO] Initializing ZFAKA database"
+    mysql --defaults-extra-file="$MYSQL_CNF" "$DB_NAME" < "$APP_ROOT/install/faka.sql"
+    printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
+  elif [ ! -f "$APP_ROOT/install/install.lock" ]; then
+    echo "INIT_ERROR=Existing database is missing install/install.lock; restore the matching install volume or migrate manually"
     exit 1
-  fi
-  sleep 2
-done
-
-TABLE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='t_config';")
-if [ "$TABLE_COUNT" = "0" ]; then
-  echo "[INFO] Initializing ZFAKA database"
-  mysql --defaults-extra-file="$MYSQL_CNF" "$DB_NAME" < "$APP_ROOT/install/faka.sql"
-  printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
-elif [ ! -f "$APP_ROOT/install/install.lock" ]; then
-  echo "INIT_ERROR=Existing database is missing install/install.lock; restore the matching install volume or migrate manually"
-  exit 1
-else
-  LOCK_VERSION=$(normalize_version "$(cat "$APP_ROOT/install/install.lock")")
-  case "$LOCK_VERSION" in
-    1.4.6|1.4.7|"$APP_VERSION_NORMALIZED")
-      printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
-      ;;
-    *)
-      CURRENT_BASELINE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='t_article'; SELECT COUNT(*) FROM t_payment WHERE alias IN ('paypal','uzhifu','vpayalipay','vpaywx');" | awk '{sum += $1} END {print sum}')
-      if [ "$CURRENT_BASELINE_COUNT" = "5" ]; then
+  else
+    LOCK_VERSION=$(normalize_version "$(cat "$APP_ROOT/install/install.lock")")
+    case "$LOCK_VERSION" in
+      1.4.6|1.4.7|"$APP_VERSION_NORMALIZED")
         printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
-      else
-        echo "INIT_ERROR=Unsupported existing install.lock version $LOCK_VERSION for Docker image $APP_VERSION_NORMALIZED"
-        exit 1
-      fi
-      ;;
-  esac
+        ;;
+      *)
+        CURRENT_BASELINE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='t_article'; SELECT COUNT(*) FROM t_payment WHERE alias IN ('paypal','uzhifu','vpayalipay','vpaywx');" | awk '{sum += $1} END {print sum}')
+        if [ "$CURRENT_BASELINE_COUNT" = "5" ]; then
+          printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
+        else
+          echo "INIT_ERROR=Unsupported existing install.lock version $LOCK_VERSION for Docker image $APP_VERSION_NORMALIZED"
+          exit 1
+        fi
+        ;;
+    esac
+  fi
+
+  chown -R www-data:www-data "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
+  chmod -R u+rwX,g+rwX "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
+
+  echo "INIT_ADMIN_URL=/$ADMIN_DIR/login"
+  echo "INIT_DONE"
 fi
-
-chown -R www-data:www-data "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
-chmod -R u+rwX,g+rwX "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
-
-echo "INIT_ADMIN_URL=/$ADMIN_DIR/login"
-echo "INIT_DONE"
 
 exec "$@"
