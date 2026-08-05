@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `t_payment` (
   `configure4` text NOT NULL DEFAULT ('') COMMENT '配置4',
   `overtime` int(11) NOT NULL DEFAULT '0' COMMENT '支付超时,0是不限制',
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未激活,1已激活'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
 -- 转存表中的数据 `t_payment`
@@ -268,8 +268,8 @@ INSERT INTO `t_payment` (`id`, `payment`, `payname`, `payimage`, `alias`, `sign_
 (3, '微信扫码支付', '微信', '/res/images/pay/weixin.jpg', 'wxf2f', 'MD5', '', '', '', '', '', '',0, 0),
 (4, '微信H5支付', '微信', '/res/images/pay/weixin.jpg', 'wxh5', 'MD5', '', '', '', '', '','', 0, 0),
 (5, 'PAYPAL', 'PAYPAL', '/res/images/pay/paypal.jpg', 'paypal', 'RSA2', '', '', '', '', 'live','7', 0, 0),
-(6, 'V免签微信', '微信', '/res/images/pay/weixin.jpg', 'vpaywx', 'MD5', '', '', '', '', '','', 0, 0),
-(7, 'V免签支付宝', '支付宝', '/res/images/pay/alipay.jpg', 'vpayalipay', 'MD5', '', '', '', '', '','', 0, 0),
+(6, 'V免签微信', '微信', '/res/images/pay/weixin.jpg', 'vpaywx', 'MD5', '', '', '', '', '', '', 6000, 0),
+(7, 'V免签支付宝', '支付宝', '/res/images/pay/alipay.jpg', 'vpayalipay', 'MD5', '', '', '', '', '', '', 6000, 0),
 (8, 'U支付', 'USDT', '/res/images/pay/usdt.jpg', 'uzhifu', 'MD5', '', '', '', '', '', '', 6000, 0);
 -- --------------------------------------------------------
 
@@ -619,7 +619,7 @@ ALTER TABLE `t_order`
 -- AUTO_INCREMENT for table `t_payment`
 --
 ALTER TABLE `t_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `t_products`
 --
