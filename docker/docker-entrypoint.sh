@@ -103,7 +103,7 @@ if [ "$TABLE_COUNT" = "0" ]; then
 fi
 
 if [ ! -f "$APP_ROOT/install/install.lock" ]; then
-  printf '%s\n' "${APP_VERSION:-1.4.6}" > "$APP_ROOT/install/install.lock"
+  printf '%s\n' "${APP_VERSION:-1.4.7}" > "$APP_ROOT/install/install.lock"
 fi
 
 chown -R www-data:www-data "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
