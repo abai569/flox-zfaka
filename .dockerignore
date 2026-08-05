@@ -6,5 +6,6 @@ log/*
 temp/*
 public/res/upload/*
 install/install.lock
+install/1.*/
 plans
 README_old.md

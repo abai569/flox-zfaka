@@ -8,6 +8,18 @@ DB_NAME=${DB_NAME:-faka}
 DB_USER=${DB_USER:-faka}
 DB_PASSWORD=${DB_PASSWORD:-zfaka_change_me}
 ADMIN_DIR=${ADMIN_DIR:-Admin}
+APP_VERSION_RAW=${APP_VERSION:-1.4.8}
+
+normalize_version() {
+  printf '%s' "$1" | sed 's/^[vV]//'
+}
+
+APP_VERSION_NORMALIZED=$(normalize_version "$APP_VERSION_RAW")
+
+if ! printf '%s' "$APP_VERSION_NORMALIZED" | grep -Eq '^[0-9]+(\.[0-9]+)*$'; then
+  echo "INIT_ERROR=APP_VERSION must be a release version like 1.4.8"
+  exit 1
+fi
 
 if ! printf '%s' "$ADMIN_DIR" | grep -Eq '^[A-Z][a-z]{3,10}$'; then
   echo "INIT_ERROR=ADMIN_DIR must start with one uppercase letter followed by 3-10 lowercase letters"
@@ -37,6 +49,8 @@ fi
 mkdir -p "$APP_ROOT/log/php" "$APP_ROOT/log/request" "$APP_ROOT/log/sql" \
   "$APP_ROOT/log/sqld" "$APP_ROOT/log/crontab" "$APP_ROOT/log/yewu" \
   "$APP_ROOT/log/upgrade" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
+
+find "$APP_ROOT/install" -mindepth 1 -maxdepth 1 -type d -name '1.*' -exec rm -rf {} +
 
 if [ -d "$APP_ROOT/application/modules/Admin" ] && [ "$ADMIN_DIR" != "Admin" ]; then
   mv "$APP_ROOT/application/modules/Admin" "$APP_ROOT/application/modules/$ADMIN_DIR"
@@ -100,10 +114,26 @@ TABLE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELE
 if [ "$TABLE_COUNT" = "0" ]; then
   echo "[INFO] Initializing ZFAKA database"
   mysql --defaults-extra-file="$MYSQL_CNF" "$DB_NAME" < "$APP_ROOT/install/faka.sql"
-fi
-
-if [ ! -f "$APP_ROOT/install/install.lock" ]; then
-  printf '%s\n' "${APP_VERSION:-1.4.7}" > "$APP_ROOT/install/install.lock"
+  printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
+elif [ ! -f "$APP_ROOT/install/install.lock" ]; then
+  echo "INIT_ERROR=Existing database is missing install/install.lock; restore the matching install volume or migrate manually"
+  exit 1
+else
+  LOCK_VERSION=$(normalize_version "$(cat "$APP_ROOT/install/install.lock")")
+  case "$LOCK_VERSION" in
+    1.4.6|1.4.7|"$APP_VERSION_NORMALIZED")
+      printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
+      ;;
+    *)
+      CURRENT_BASELINE_COUNT=$(mysql --defaults-extra-file="$MYSQL_CNF" -N -B "$DB_NAME" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='$DB_NAME' AND table_name='t_article'; SELECT COUNT(*) FROM t_payment WHERE alias IN ('paypal','uzhifu','vpayalipay','vpaywx');" | awk '{sum += $1} END {print sum}')
+      if [ "$CURRENT_BASELINE_COUNT" = "5" ]; then
+        printf '%s\n' "$APP_VERSION_NORMALIZED" > "$APP_ROOT/install/install.lock"
+      else
+        echo "INIT_ERROR=Unsupported existing install.lock version $LOCK_VERSION for Docker image $APP_VERSION_NORMALIZED"
+        exit 1
+      fi
+      ;;
+  esac
 fi
 
 chown -R www-data:www-data "$APP_ROOT/conf" "$APP_ROOT/install" "$APP_ROOT/log" "$APP_ROOT/temp" "$APP_ROOT/public/res/upload"
