@@ -12,7 +12,7 @@ class UpgradeController extends AdminBasicController
 	public function init()
     {
         parent::init();
-		$this->all_version = ['1.0.0','1.0.2','1.0.3','1.0.4','1.0.5','1.0.6','1.0.7','1.0.8','1.0.9','1.1.0','1.1.1','1.1.2','1.1.3','1.1.4','1.1.5','1.1.6','1.1.7','1.1.8','1.1.9','1.2.0','1.2.1','1.2.2','1.2.3','1.2.4','1.2.5','1.2.6','1.2.7','1.2.8','1.2.9','1.3.0','1.3.1','1.3.3','1.3.4','1.3.5','1.3.6','1.3.7','1.3.8','1.3.9','1.4.0','1.4.1','1.4.2','1.4.3','1.4.4','1.4.5','1.4.6','1.4.7'];
+		$this->all_version = ['1.0.0','1.0.2','1.0.3','1.0.4','1.0.5','1.0.6','1.0.7','1.0.8','1.0.9','1.1.0','1.1.1','1.1.2','1.1.3','1.1.4','1.1.5','1.1.6','1.1.7','1.1.8','1.1.9','1.2.0','1.2.1','1.2.2','1.2.3','1.2.4','1.2.5','1.2.6','1.2.7','1.2.8','1.2.9','1.3.0','1.3.1','1.3.3','1.3.4','1.3.5','1.3.6','1.3.7','1.3.8','1.3.9','1.4.0','1.4.1','1.4.2','1.4.3','1.4.4','1.4.5','1.4.6','1.4.7','1.4.8'];
     }
 
     public function indexAction()
@@ -133,14 +133,15 @@ class UpgradeController extends AdminBasicController
 	//获取下一版本号
 	private function _getUpdateVersion($version)
 	{
-		$offset = array_search($version,$this->all_version);
-		if($offset>=0){
+		$version = $this->normalizeVersion($version);
+		$offset = array_search($version,$this->all_version,true);
+		if($offset !== false){
 			$k = $offset+1;
 			if(isset($this->all_version[$k])){
 				return $this->all_version[$k];
 			}
 		}
-		return end($this->all_version);
+		return '';
 	}
 
 	// 辅助：去掉前导 v 或空白，统一版本格式

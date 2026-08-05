@@ -1,6 +1,6 @@
 FROM php:7.4-fpm-bullseye
 
-ARG APP_VERSION=1.4.7
+ARG APP_VERSION=1.4.8
 ENV APP_VERSION=${APP_VERSION}
 
 RUN set -eux; \
