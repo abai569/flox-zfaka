@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.4.6-blue">
+  <img src="https://img.shields.io/badge/version-1.4.7-blue">
   <img src="https://img.shields.io/badge/PHP-7.x-blue">
   <a href="https://t.me/ZFAKA_dev">
     <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
@@ -39,7 +39,7 @@ bash install.sh backup
 bash install.sh restore /path/to/zfaka-YYYYMMDD-HHMMSS.sql.gz
 ```
 
-生产环境建议在 `/opt/flox-zfaka/.env` 中将 `ZFAKA_IMAGE` 固定为具体版本，例如 `ghcr.io/abai569/flox-zfaka:1.4.6`。修改 `.env` 后执行：
+生产环境建议在 `/opt/flox-zfaka/.env` 中将 `ZFAKA_IMAGE` 固定为具体版本，例如 `ghcr.io/abai569/flox-zfaka:1.4.7`。修改 `.env` 后执行：
 
 ```bash
 cd /opt/flox-zfaka
