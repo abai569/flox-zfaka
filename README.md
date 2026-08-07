@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.4.6-blue">
+  <img src="https://img.shields.io/badge/version-1.5.3-blue">
   <img src="https://img.shields.io/badge/PHP-7.x-blue">
   <a href="https://t.me/ZFAKA_dev">
     <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
@@ -118,8 +118,7 @@
 ## 2.2 修改默认管理员账号和密码
 
 安装完成后请访问后台（默认路径为Goadmin，实际取决于你安装过程中的配置）修改管理员账号和密码  
-默认管理员账号：demo@demo.com  
-默认密码：123456  
+Docker 安装默认管理员账号为 `admin@example.com`，初始密码由安装脚本随机生成并在安装完成时输出，同时保存在 `/opt/flox-zfaka/.env`。  
 
 ## 2.3 定时任务（可选）
 
