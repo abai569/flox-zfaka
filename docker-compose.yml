@@ -1,55 +1,60 @@
 services:
-  db:
+  mysql:
     image: mysql:8.0
+    container_name: zfaka-mysql
     restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME:-zfaka}
-      MYSQL_USER: ${DB_USER:-zfaka}
+      MYSQL_DATABASE: ${DB_NAME:-faka}
+      MYSQL_USER: ${DB_USER:-faka}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Shanghai
     volumes:
-      - mysql_data:/var/lib/mysql
+      - zfaka_mysql:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
-      interval: 5s
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
       timeout: 5s
-      retries: 30
+      retries: 20
+      start_period: 30s
 
-  web:
-    image: ${ZFAKA_IMAGE:-ghcr.io/abai569/flox-zfaka:1.4.7}
-    build:
-      context: .
-      dockerfile: Dockerfile
+  zfaka-web:
+    image: ${ZFAKA_IMAGE:-ghcr.io/abai569/flox-zfaka:latest}
+    container_name: zfaka-web
     restart: unless-stopped
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: ${DB_NAME:-zfaka}
-      DB_USER: ${DB_USER:-zfaka}
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: ${DB_NAME:-faka}
+      DB_USER: ${DB_USER:-faka}
       DB_PASSWORD: ${DB_PASSWORD}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      ADMIN_DIR: ${ADMIN_DIR:-Admin}
-      ZFAKA_VERSION: ${ZFAKA_VERSION:-1.4.7}
+      ADMIN_DIR: ${ADMIN_DIR:-Goadmin}
+      TZ: Asia/Shanghai
     ports:
       - "${ZFAKA_PORT:-8089}:80"
     volumes:
-      - logs_data:/var/www/html/log
-      - temp_data:/var/www/html/temp
-      - uploads_data:/var/www/html/public/res/upload
-      - install_data:/var/www/html/install
+      - zfaka_conf:/var/www/html/conf
+      - zfaka_install:/var/www/html/install
+      - zfaka_logs:/var/www/html/log
+      - zfaka_temp:/var/www/html/temp
+      - zfaka_uploads:/var/www/html/public/res/upload
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost/ >/dev/null"]
-      interval: 10s
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1/"]
+      interval: 15s
       timeout: 5s
-      retries: 12
+      retries: 10
+      start_period: 90s
 
 volumes:
-  mysql_data:
-  logs_data:
-  temp_data:
-  uploads_data:
-  install_data:
+  zfaka_mysql:
+  zfaka_conf:
+  zfaka_install:
+  zfaka_logs:
+  zfaka_temp:
+  zfaka_uploads:
