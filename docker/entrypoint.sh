@@ -11,7 +11,8 @@ set -eu
 : "${ADMIN_EMAIL:=demo@demo.com}"
 : "${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}"
 
-mkdir -p "$APP_PATH/conf" "$APP_PATH/install" "$APP_PATH/log/php" "$APP_PATH/log/request" "$APP_PATH/log/sqld" "$APP_PATH/log/crontab" "$APP_PATH/log/yewu" "$APP_PATH/log/upgrade" "$APP_PATH/temp" "$APP_PATH/public/res/upload"
+mkdir -p "$APP_PATH/conf" "$APP_PATH/install" "$APP_PATH/log/php" "$APP_PATH/log/request" "$APP_PATH/log/sqld" "$APP_PATH/log/crontab" "$APP_PATH/log/yewu" "$APP_PATH/log/upgrade" "$APP_PATH/temp/sessions" "$APP_PATH/public/res/upload"
+chmod 1733 "$APP_PATH/temp/sessions"
 
 if [ ! -f "$APP_PATH/conf/application.ini" ]; then
     envsubst < "$APP_PATH/conf/application.ini.template" > "$APP_PATH/conf/application.ini"
@@ -40,6 +41,14 @@ if [ ! -f "$APP_PATH/install/docker-data-v2.lock" ]; then
     mysql --protocol=tcp -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" < /usr/local/share/zfaka/docker-data-repair.sql
     rm -f "$APP_PATH/temp/config.json" "$APP_PATH/temp/payment.json"
     printf '%s' "$ZFAKA_VERSION" > "$APP_PATH/install/docker-data-v2.lock"
+fi
+
+if [ ! -f "$APP_PATH/install/docker-product-images.lock" ]; then
+    until mysqladmin ping -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --silent; do
+        sleep 2
+    done
+    mysql --protocol=tcp -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" < /usr/local/share/zfaka/docker-product-images.sql
+    printf '%s' "$ZFAKA_VERSION" > "$APP_PATH/install/docker-product-images.lock"
 fi
 
 # Docker image updates ship the complete schema and application together. Keep
