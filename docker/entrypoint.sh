@@ -10,7 +10,7 @@ set -eu
 : "${ADMIN_DIR:=Admin}"
 : "${ADMIN_EMAIL:=admin@example.com}"
 : "${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}"
-: "${ZFAKA_VERSION:=1.4.7}"
+: "${ZFAKA_VERSION:=1.4.9}"
 
 mkdir -p "$APP_PATH/conf" "$APP_PATH/install" "$APP_PATH/log/php" "$APP_PATH/log/request" "$APP_PATH/log/sqld" "$APP_PATH/log/crontab" "$APP_PATH/log/yewu" "$APP_PATH/log/upgrade" "$APP_PATH/temp" "$APP_PATH/public/res/upload"
 
@@ -34,6 +34,8 @@ if [ ! -f "$APP_PATH/install/install.lock" ]; then
     php "$APP_PATH/docker/scripts/init-admin.php" "$ADMIN_EMAIL" "$ADMIN_PASSWORD"
     printf '%s' "$ZFAKA_VERSION" > "$APP_PATH/install/install.lock"
 fi
+
+echo "INIT_DONE"
 
 chown -R www-data:www-data "$APP_PATH/log" "$APP_PATH/temp" "$APP_PATH/public/res/upload"
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
