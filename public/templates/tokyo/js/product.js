@@ -209,7 +209,7 @@ layui.define(['layer', 'form', 'laytpl', 'element'], function(exports){
         });
     }
 
-    // Image zoom - custom modal
+    // Image zoom - custom modal with prev/next
     document.querySelectorAll('[data-product-gallery]').forEach(function(gallery) {
         var image = gallery.querySelector('#detail-image');
         var thumbnails = Array.prototype.slice.call(gallery.querySelectorAll('[data-gallery-index]'));
@@ -240,47 +240,68 @@ layui.define(['layer', 'form', 'laytpl', 'element'], function(exports){
                 showImage((activeIndex + offset + thumbnails.length) % thumbnails.length);
             });
         });
-    });
 
-    var zoomBtn = document.getElementById('image-zoom-btn');
-    if (zoomBtn) {
-        zoomBtn.addEventListener('click', function() {
-            var img = document.getElementById('detail-image');
-            if (img) {
-                var modal = document.createElement('div');
-                modal.className = 'tokyo-image-modal';
-                modal.innerHTML = '<div class="tokyo-image-modal-overlay"></div>' +
-                    '<div class="tokyo-image-modal-content"><img src="' + img.src + '" alt="原图">' +
-                    '<button class="tokyo-image-modal-close" aria-label="关闭">&times;</button></div>';
-                document.body.appendChild(modal);
-                document.body.style.overflow = 'hidden';
-                var closeBtn = modal.querySelector('.tokyo-image-modal-close');
-                var overlay = modal.querySelector('.tokyo-image-modal-overlay');
-                var onImageModalEscape;
-                var closeModal = function() {
-                    if (modal.classList.contains('is-closing')) return;
-                    modal.classList.add('is-closing');
-                    document.removeEventListener('keydown', onImageModalEscape);
-                    setTimeout(function() {
-                        modal.remove();
-                        document.body.style.overflow = '';
-                    }, 180);
-                };
-                onImageModalEscape = function(e) {
-                    if (e.key === 'Escape') closeModal();
-                };
-                closeBtn.addEventListener('click', closeModal);
-                overlay.addEventListener('click', closeModal);
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) closeModal();
-                });
-                document.addEventListener('keydown', onImageModalEscape);
-                modal.querySelector('.tokyo-image-modal-content').addEventListener('click', function(e) {
+        function openZoom() {
+            var modal = document.createElement('div');
+            modal.className = 'tokyo-image-modal';
+            modal.innerHTML = '<div class="tokyo-image-modal-overlay"></div>' +
+                '<div class="tokyo-image-modal-content"><img src="' + image.src + '" alt="原图">' +
+                '<button class="tokyo-image-modal-close" aria-label="关闭">&times;</button></div>';
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            var modalImg = modal.querySelector('img');
+            var closeBtn = modal.querySelector('.tokyo-image-modal-close');
+            var overlay = modal.querySelector('.tokyo-image-modal-overlay');
+            var onImageModalEscape;
+
+            if (thumbnails.length > 1) {
+                var prevArrow = document.createElement('button');
+                prevArrow.className = 'tokyo-modal-arrow tokyo-modal-prev';
+                prevArrow.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+                prevArrow.addEventListener('click', function(e) {
                     e.stopPropagation();
+                    showImage((activeIndex - 1 + thumbnails.length) % thumbnails.length);
+                    modalImg.src = image.src;
                 });
+                var nextArrow = document.createElement('button');
+                nextArrow.className = 'tokyo-modal-arrow tokyo-modal-next';
+                nextArrow.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+                nextArrow.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showImage((activeIndex + 1) % thumbnails.length);
+                    modalImg.src = image.src;
+                });
+                modal.querySelector('.tokyo-image-modal-content').appendChild(prevArrow);
+                modal.querySelector('.tokyo-image-modal-content').appendChild(nextArrow);
             }
-        });
-    }
+
+            var closeModal = function() {
+                if (modal.classList.contains('is-closing')) return;
+                modal.classList.add('is-closing');
+                document.removeEventListener('keydown', onImageModalEscape);
+                setTimeout(function() {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                }, 180);
+            };
+            onImageModalEscape = function(e) {
+                if (e.key === 'Escape') closeModal();
+            };
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', onImageModalEscape);
+            modal.querySelector('.tokyo-image-modal-content').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        image.addEventListener('click', openZoom);
+        var zoomBtn = document.getElementById('image-zoom-btn');
+        if (zoomBtn) zoomBtn.addEventListener('click', openZoom);
+    });
 
     // Wholesale discount popup
     $('#view-youhui').on('click', function(event) {

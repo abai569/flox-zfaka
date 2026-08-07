@@ -14,3 +14,8 @@
 - Commit and push only files related to the current task.
 - Use Chinese commit messages.
 - Do not monitor GitHub Actions after pushing a release tag unless the user explicitly requests monitoring.
+
+## UI Release Fast Path
+
+- When the user explicitly requests a release and says "不要测试" / "不要搞乱七八糟的测试" / "直接发布" or equivalent: skip all browser QA, visual reviews, and oracle subagents. Run only the mandatory native-language syntax checks on changed files, then commit, push, and tag immediately.
+- If a required language runtime is unavailable locally, rely on GitHub Actions validation and proceed with the release.

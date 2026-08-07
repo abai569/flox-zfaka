@@ -11,15 +11,6 @@
                     }
                     ?>
                     <div class="tokyo-detail-gallery" data-product-gallery>
-                        <div class="tokyo-detail-image-box">
-                            <img src="<?php echo $detailImages[0]['imgurl'];?>" alt="<?php echo $product['name'];?> 图片 1" class="tokyo-detail-image" id="detail-image" width="800" height="800" fetchpriority="high">
-                            <?php if(count($detailImages)>1):?>
-                            <button class="tokyo-gallery-arrow tokyo-gallery-prev" type="button" data-gallery-direction="previous" aria-label="上一张图片"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
-                            <button class="tokyo-gallery-arrow tokyo-gallery-next" type="button" data-gallery-direction="next" aria-label="下一张图片"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
-                            <span class="tokyo-gallery-counter" aria-live="polite"><span data-gallery-current>1</span> / <?php echo count($detailImages);?></span>
-                            <?php endif;?>
-                            <button class="tokyo-image-zoom" id="image-zoom-btn" type="button"><i class="fa-solid fa-expand"></i> 查看原图</button>
-                        </div>
                         <?php if(count($detailImages)>1):?>
                         <div class="tokyo-gallery-thumbnails" aria-label="商品图片">
                             <?php foreach($detailImages AS $index=>$image):?>
@@ -29,6 +20,15 @@
                             <?php endforeach;?>
                         </div>
                         <?php endif;?>
+                        <div class="tokyo-detail-image-box">
+                            <img src="<?php echo $detailImages[0]['imgurl'];?>" alt="<?php echo $product['name'];?> 图片 1" class="tokyo-detail-image" id="detail-image" width="800" height="800" fetchpriority="high">
+                            <?php if(count($detailImages)>1):?>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-prev" type="button" data-gallery-direction="previous" aria-label="上一张图片"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-next" type="button" data-gallery-direction="next" aria-label="下一张图片"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                            <span class="tokyo-gallery-counter" aria-live="polite"><span data-gallery-current>1</span> / <?php echo count($detailImages);?></span>
+                            <?php endif;?>
+                            <button class="tokyo-image-zoom" id="image-zoom-btn" type="button"><i class="fa-solid fa-expand"></i> 查看原图</button>
+                        </div>
                     </div>
                 </div>
                 <div class="tokyo-detail-info">

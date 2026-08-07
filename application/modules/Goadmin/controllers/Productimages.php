@@ -23,8 +23,8 @@ class ProductimagesController extends AdminBasicController
         }
 
         $images = $this->m_products_image->Where(array('pid'=>$pid))->Select();
-        if (count($images) >= 10) {
-            Helper::response(array('code'=>1001, 'msg'=>'每个商品最多上传10张图片'));
+        if (count($images) >= 6) {
+            Helper::response(array('code'=>1001, 'msg'=>'每个商品最多上传6张图片'));
         }
 
         $file = $_FILES['file'];

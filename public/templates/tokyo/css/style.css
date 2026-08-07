@@ -813,14 +813,16 @@ img {
 
 .tokyo-detail-gallery {
     width: min(100%, 540px);
-    display: grid;
+    display: flex;
     gap: 12px;
+    align-items: flex-start;
 }
 
 .tokyo-detail-image-box {
     position: relative;
     display: block;
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     border-radius: 20px;
@@ -831,9 +833,9 @@ img {
     top: 50%;
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(255,255,255,0.55);
+    border: 1px solid rgba(255,255,255,0.3);
     border-radius: 50%;
-    background: rgba(255,255,255,0.72);
+    background: rgba(255,255,255,0.28);
     color: var(--tokyo-text);
     cursor: pointer;
     transform: translateY(-50%);
@@ -842,7 +844,7 @@ img {
 
 .tokyo-gallery-arrow:hover,
 .tokyo-gallery-arrow:focus-visible {
-    background: var(--tokyo-card);
+    background: rgba(255,255,255,0.6);
     border-color: var(--tokyo-primary);
 }
 
@@ -862,10 +864,13 @@ img {
 
 .tokyo-gallery-thumbnails {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 100%;
     padding: 2px;
     scrollbar-width: thin;
+    flex-shrink: 0;
 }
 
 .tokyo-gallery-thumbnail {
@@ -3067,6 +3072,29 @@ body.tokyo-member-page {
     background: var(--tokyo-error);
     color: #fff;
 }
+
+.tokyo-modal-arrow {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    background: rgba(0,0,0,0.25);
+    color: #fff;
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: var(--tokyo-transition);
+    z-index: 1;
+}
+
+.tokyo-modal-arrow:hover,
+.tokyo-modal-arrow:focus-visible {
+    background: rgba(0,0,0,0.5);
+}
+
+.tokyo-modal-prev { left: -20px; }
+.tokyo-modal-next { right: -20px; }
 
 @keyframes tokyoImageModalFadeIn {
     from { opacity: 0; }

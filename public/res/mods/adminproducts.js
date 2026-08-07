@@ -132,11 +132,11 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 		imageFiles = Array.prototype.slice.call(this.files || []);
 		var oversized = imageFiles.some(function(file){ return file.size > 5 * 1024 * 1024; });
 		var invalidType = imageFiles.some(function(file){ return ['image/jpeg','image/png','image/gif','image/webp'].indexOf(file.type) === -1; });
-		var tooMany = imageFiles.length + Number($('#product_image_pid').data('image-count') || 0) > 10;
+		var tooMany = imageFiles.length + Number($('#product_image_pid').data('image-count') || 0) > 6;
 		if (oversized || invalidType || tooMany) {
 			imageFiles = [];
 			this.value = '';
-			var message = oversized ? '单张图片不能超过5MB' : (invalidType ? '仅支持 JPG、PNG、GIF 和 WebP 图片' : '每个商品最多上传10张图片');
+			var message = oversized ? '单张图片不能超过5MB' : (invalidType ? '仅支持 JPG、PNG、GIF 和 WebP 图片' : '每个商品最多上传6张图片');
 			layer.msg(message, {icon:2, time:5000});
 		}
 		$('#product_image_queue').text(imageFiles.length ? '已选择 '+imageFiles.length+' 张图片' : '');
