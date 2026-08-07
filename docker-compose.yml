@@ -32,7 +32,10 @@ services:
       DB_NAME: ${DB_NAME:-faka}
       DB_USER: ${DB_USER:-faka}
       DB_PASSWORD: ${DB_PASSWORD}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       ADMIN_DIR: ${ADMIN_DIR:-Admin}
+      ZFAKA_VERSION: ${ZFAKA_VERSION:-1.4.9}
       TZ: Asia/Shanghai
     ports:
       - "${ZFAKA_PORT:-8089}:80"

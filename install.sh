@@ -69,12 +69,17 @@ install_zfaka() {
   curl -fsSL "$SCRIPT_URL" -o install.sh
   chmod 0755 install.sh
   umask 077
+  admin_email="admin@example.com"
+  admin_password=$(random_secret)
   cat > .env <<EOF
 MYSQL_ROOT_PASSWORD=$(random_secret)
 DB_NAME=faka
 DB_USER=faka
 DB_PASSWORD=$(random_secret)
+ADMIN_EMAIL=$admin_email
+ADMIN_PASSWORD=$admin_password
 ADMIN_DIR=$admin_dir
+ZFAKA_VERSION=1.4.9
 ZFAKA_PORT=$port
 ZFAKA_IMAGE=ghcr.io/abai569/flox-zfaka:latest
 EOF
@@ -86,7 +91,7 @@ EOF
     if curl -fsS "http://127.0.0.1:$port/" >/dev/null 2>&1; then
       echo "[OK] ZFAKA is available at http://SERVER_IP:$port/"
       echo "[INFO] Admin URL: http://SERVER_IP:$port/$admin_dir/login"
-      echo "[INFO] Initial account: demo@demo.com / 123456"
+      echo "[INFO] Initial account: $admin_email / $admin_password"
       echo "[IMPORTANT] Change the initial account and password immediately"
       return
     fi
