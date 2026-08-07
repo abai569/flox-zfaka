@@ -46,7 +46,7 @@
 在服务器执行：
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/install.sh)"
+bash <(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/install.sh)
 ```
 
 脚本会询问访问端口，直接按回车使用默认端口 `8089`。
