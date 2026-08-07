@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.5.3-blue">
+  <img src="https://img.shields.io/badge/version-1.5.4-blue">
   <img src="https://img.shields.io/badge/PHP-7.x-blue">
   <a href="https://t.me/ZFAKA_dev">
     <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
