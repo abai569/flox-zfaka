@@ -32,8 +32,14 @@
                         </div>
                         <div class="product-image-actions">
                             <?php if(!$image['is_primary']):?><button type="button" class="layui-btn layui-btn-xs set-primary">设为主图</button><?php endif;?>
+                            <?php if(!$image['is_primary']):?>
+                            <?php if($index>1):?>
                             <button type="button" class="layui-btn layui-btn-primary layui-btn-xs move-image" data-direction="before">前移</button>
+                            <?php endif;?>
+                            <?php if($index<count($images)-1):?>
                             <button type="button" class="layui-btn layui-btn-primary layui-btn-xs move-image" data-direction="after">后移</button>
+                            <?php endif;?>
+                            <?php endif;?>
                             <button type="button" class="layui-btn layui-btn-danger layui-btn-xs delete-image">删除</button>
                         </div>
                     </article>
