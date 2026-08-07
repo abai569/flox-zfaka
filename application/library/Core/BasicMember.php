@@ -8,6 +8,8 @@
 
 class MemberBasicController extends BasicController
 {
+	const LOGIN_TTL = 8 * 60 * 60;
+
 	//用户标识
 	protected $uinfo = array();
 	//用户ID
@@ -39,7 +41,7 @@ class MemberBasicController extends BasicController
 		if(is_array($uinfo) AND !empty($uinfo) AND $uinfo['expiretime']>time()){
 			$groupName=$this->load('user_group')->getConfig();
 			$uinfo['groupName'] = $groupName[$uinfo['groupid']];
-			$uinfo['expiretime'] = time() + 15*60;
+			$uinfo['expiretime'] = time() + self::LOGIN_TTL;
 			$this->setSession('uinfo',$uinfo);
 			$data['login']=$this->login=true;
 			$data['uinfo']= $this->uinfo=$uinfo;

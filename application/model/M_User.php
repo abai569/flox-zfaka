@@ -103,7 +103,7 @@ class M_User extends Model
 	private function _session($params)
 	{
 		if(!empty($params)){
-			$params['expiretime']= time() + 15*60;
+			$params['expiretime']= time() + 8 * 60 * 60;
 			\Yaf\Session::getInstance()->__set('uinfo', $params);
 		}
 	}
