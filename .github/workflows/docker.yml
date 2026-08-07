@@ -35,8 +35,90 @@ jobs:
       - name: Validate PHP syntax
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
 
-  build-amd64:
+  smoke-amd64:
     needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Normalize release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build smoke-test image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          push: false
+          tags: flox-zfaka:smoke
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.version }}
+          cache-from: type=gha
+
+      - name: Verify dynamic routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cleanup() {
+            docker rm -f zfaka-ci-web zfaka-ci-mysql >/dev/null 2>&1 || true
+            docker network rm zfaka-ci >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          docker network create zfaka-ci
+          docker run -d --name zfaka-ci-mysql --network zfaka-ci \
+            -e MYSQL_ROOT_PASSWORD=ci_root_password \
+            -e MYSQL_DATABASE=zfaka \
+            -e MYSQL_USER=zfaka \
+            -e MYSQL_PASSWORD=ci_database_password \
+            mysql:8.0 \
+            --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+          for attempt in $(seq 1 60); do
+            if docker exec zfaka-ci-mysql mysqladmin ping -uroot -pci_root_password --silent; then
+              break
+            fi
+            if [ "$attempt" -eq 60 ]; then
+              docker logs zfaka-ci-mysql
+              exit 1
+            fi
+            sleep 2
+          done
+
+          docker run -d --name zfaka-ci-web --network zfaka-ci -p 18089:80 \
+            -e DB_HOST=zfaka-ci-mysql \
+            -e DB_NAME=zfaka \
+            -e DB_USER=zfaka \
+            -e DB_PASSWORD=ci_database_password \
+            -e ADMIN_EMAIL=admin@example.com \
+            -e ADMIN_PASSWORD=ci_admin_password \
+            -e ADMIN_DIR=Goadmin \
+            flox-zfaka:smoke
+
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:18089/ >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 60 ]; then
+              docker logs zfaka-ci-web
+              exit 1
+            fi
+            sleep 3
+          done
+
+          admin_login_page=$(curl -fsS http://127.0.0.1:18089/Goadmin/login)
+          grep -q '<title>登录-管理系统</title>' <<<"$admin_login_page"
+          grep -q '<form class="layui-form">' <<<"$admin_login_page"
+          ! grep -q '商品分类' <<<"$admin_login_page"
+
+  build-amd64:
+    needs: smoke-amd64
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
