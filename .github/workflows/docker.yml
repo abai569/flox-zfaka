@@ -1,0 +1,257 @@
+name: Build and publish Docker image
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/flox-zfaka
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Validate shell scripts
+        run: |
+          bash -n install.sh
+          sh -n docker/entrypoint.sh
+
+      - name: Validate Docker Compose
+        run: docker compose --env-file .env.example config --quiet
+
+      - name: Set up PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+
+      - name: Validate PHP syntax
+        run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+
+  smoke-amd64:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Normalize release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build smoke-test image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          push: false
+          tags: flox-zfaka:smoke
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.version }}
+          cache-from: type=gha
+
+      - name: Verify dynamic routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cleanup() {
+            docker rm -f zfaka-ci-web zfaka-ci-mysql >/dev/null 2>&1 || true
+            docker network rm zfaka-ci >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          docker network create zfaka-ci
+          docker run -d --name zfaka-ci-mysql --network zfaka-ci \
+            -e MYSQL_ROOT_PASSWORD=ci_root_password \
+            -e MYSQL_DATABASE=zfaka \
+            -e MYSQL_USER=zfaka \
+            -e MYSQL_PASSWORD=ci_database_password \
+            mysql:8.0 \
+            --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+          for attempt in $(seq 1 60); do
+            if docker exec zfaka-ci-mysql mysqladmin ping -uroot -pci_root_password --silent; then
+              break
+            fi
+            if [ "$attempt" -eq 60 ]; then
+              docker logs zfaka-ci-mysql
+              exit 1
+            fi
+            sleep 2
+          done
+
+          docker run -d --name zfaka-ci-web --network zfaka-ci -p 18089:80 \
+            -e DB_HOST=zfaka-ci-mysql \
+            -e DB_NAME=zfaka \
+            -e DB_USER=zfaka \
+            -e DB_PASSWORD=ci_database_password \
+            -e ADMIN_EMAIL=admin@example.com \
+            -e ADMIN_PASSWORD=ci_admin_password \
+            -e ADMIN_DIR=Goadmin \
+            flox-zfaka:smoke
+
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:18089/ >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 60 ]; then
+              docker inspect --format '{{json .State}}' zfaka-ci-web
+              docker logs zfaka-ci-web
+              exit 1
+            fi
+            sleep 3
+          done
+
+          docker exec zfaka-ci-web sh -c "printf '1.5.1' > /var/www/html/install/install.lock"
+          docker restart zfaka-ci-web >/dev/null
+          for attempt in $(seq 1 30); do
+            if [ "$(docker exec zfaka-ci-web cat /var/www/html/install/install.lock 2>/dev/null)" = "${{ steps.version.outputs.version }}" ]; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              docker logs zfaka-ci-web
+              exit 1
+            fi
+            sleep 2
+          done
+
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18089/ >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              docker logs zfaka-ci-web
+              exit 1
+            fi
+            sleep 2
+          done
+
+          admin_login_page=$(curl -fsS http://127.0.0.1:18089/Goadmin/login)
+          if ! grep -q '<title>登录-管理系统</title>' <<<"$admin_login_page" || \
+             ! grep -q '<form class="layui-form">' <<<"$admin_login_page" || \
+             grep -q '商品分类' <<<"$admin_login_page"; then
+            printf '%s\n' "$admin_login_page"
+            docker exec zfaka-ci-web sh -c 'printf "REQUEST_URI test failed\n"; nginx -T'
+            docker logs zfaka-ci-web
+            exit 1
+          fi
+
+  build-amd64:
+    needs: smoke-amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Normalize release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+
+      - name: Build and push linux/amd64
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tags }}
+            ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}-amd64
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-arm64:
+    needs: build-amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Normalize release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push linux/arm64
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}-arm64
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  merge-manifest:
+    needs: build-arm64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Normalize release version
+        id: version
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }} \
+            -t ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }} \
+            -t ${{ env.IMAGE_NAME }}:latest \
+            ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}-amd64 \
+            ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}-arm64
