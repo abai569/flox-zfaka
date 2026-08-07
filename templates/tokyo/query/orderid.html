@@ -1,0 +1,39 @@
+<?php include $tplBase.'/common/header.html';?>
+<main class="tokyo-main tokyo-page">
+    <section class="tokyo-shell">
+        <section class="tokyo-query-layout">
+            <div class="panel tokyo-query-panel">
+                <div class="panel-header">
+                    <div class="tokyo-index-heading-copy">
+                        <span class="panel-kicker">Order ID Query</span>
+                        <h2 class="panel-title">订单号查询</h2>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="tokyo-query-tabs">
+                        <a href="/product/query/?zlkbmethod=cookie">浏览器缓存</a>
+                        <span>订单号查询</span>
+                        <?php if(isset($config['querycontactswitch']) AND $config['querycontactswitch']>0):?><a href="/product/query/?zlkbmethod=contact">安全密码查询</a><?php endif;?>
+                    </div>
+                    <p class="tokyo-query-hint">输入订单号精确查询订单详情。</p>
+                    <form class="tokyo-query-form" id="orderid-query-form" action="/product/query/ajax/" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token;?>">
+                        <input type="hidden" name="zlkbmethod" value="orderid">
+                        <div class="tokyo-form-group">
+                            <input type="text" class="tokyo-form-input" name="orderid" placeholder="请输入订单号" required>
+                        </div>
+                        <button type="submit" class="tokyo-button tokyo-button-dark">
+                            <i class="fa-solid fa-magnifying-glass"></i> 查询
+                        </button>
+                    </form>
+                    <div id="tokyo-query-result" class="tokyo-query-result" hidden></div>
+                    <?php if(isset($msg) AND strlen($msg)>0):?>
+                    <div class="tokyo-alert tokyo-alert-error"><?php echo $msg;?></div>
+                    <?php endif;?>
+                </div>
+            </div>
+        </section>
+    </section>
+</main>
+<script src="/templates/tokyo/js/productquery.js?v=<?php echo VERSION;?>"></script>
+<?php include $tplBase.'/common/footer.html';?>

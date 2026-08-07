@@ -271,7 +271,7 @@ INSERT INTO `t_config` (`catid`, `name`, `value`, `tag`, `lock`, `updatetime`) V
   (1, 'webdescription', '本系统由资料空白开发并免费提供', '当前站点描述', 1, 0),
   (1, 'yzmswitch', '0', '验证码开关', 1, 0),
   (1, 'orderinputtype', '1', '订单输入类型', 1, 0),
-  (1, 'tpl', 'tokyo', '全新的整站模版', 1, 0),
+  (1, 'tpl', 'choice', '全新的整站模版', 1, 0),
   (1, 'querycontactswitch', '1', '安全密码查询开关', 1, 0),
   (1, 'loginswitch', '1', '登录开关', 1, 0),
   (1, 'forgetpwdswitch', '0', '找回密码开关', 1, 0),
