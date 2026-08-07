@@ -8,7 +8,7 @@ set -eu
 : "${DB_USER:=zfaka}"
 : "${DB_PASSWORD:?DB_PASSWORD is required}"
 : "${ADMIN_DIR:=Goadmin}"
-: "${ADMIN_EMAIL:=admin@example.com}"
+: "${ADMIN_EMAIL:=demo@demo.com}"
 : "${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}"
 
 mkdir -p "$APP_PATH/conf" "$APP_PATH/install" "$APP_PATH/log/php" "$APP_PATH/log/request" "$APP_PATH/log/sqld" "$APP_PATH/log/crontab" "$APP_PATH/log/yewu" "$APP_PATH/log/upgrade" "$APP_PATH/temp" "$APP_PATH/public/res/upload"
@@ -31,6 +31,15 @@ if [ ! -f "$APP_PATH/install/install.lock" ]; then
 
     mysql --protocol=tcp -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" < /usr/local/share/zfaka/docker-seed.sql
     php "$APP_PATH/docker/scripts/init-admin.php" "$ADMIN_EMAIL" "$ADMIN_PASSWORD"
+fi
+
+if [ ! -f "$APP_PATH/install/docker-data-v2.lock" ]; then
+    until mysqladmin ping -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" --silent; do
+        sleep 2
+    done
+    mysql --protocol=tcp -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" < /usr/local/share/zfaka/docker-data-repair.sql
+    rm -f "$APP_PATH/temp/config.json" "$APP_PATH/temp/payment.json"
+    printf '%s' "$ZFAKA_VERSION" > "$APP_PATH/install/docker-data-v2.lock"
 fi
 
 # Docker image updates ship the complete schema and application together. Keep

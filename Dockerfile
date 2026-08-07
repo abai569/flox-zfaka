@@ -14,7 +14,7 @@ RUN apt-get update \
     && docker-php-ext-install -j"$(nproc)" gd mysqli pdo_mysql zip opcache \
     && pecl install yaf-3.3.5 \
     && docker-php-ext-enable yaf opcache \
-    && printf '%s\n' 'yaf.use_namespace=1' 'date.timezone=Asia/Shanghai' > /usr/local/etc/php/conf.d/zfaka.ini \
+    && printf '%s\n' 'yaf.use_namespace=1' 'date.timezone=Asia/Shanghai' 'upload_max_filesize=64M' 'post_max_size=66M' 'max_execution_time=600' > /usr/local/etc/php/conf.d/zfaka.ini \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
@@ -28,8 +28,9 @@ COPY docker/nginx/default.conf /etc/nginx/sites-enabled/default
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/entrypoint.sh /usr/local/bin/zfaka-entrypoint
 COPY install/docker-seed.sql /usr/local/share/zfaka/docker-seed.sql
+COPY install/docker-data-repair.sql /usr/local/share/zfaka/docker-data-repair.sql
 
-RUN rm -f conf/application.ini install/install.lock install/ka_abai_eu_org.sql install/docker-seed.sql \
+RUN rm -f conf/application.ini install/install.lock install/ka_abai_eu_org.sql install/docker-seed.sql install/docker-data-repair.sql \
     && chmod +x /usr/local/bin/zfaka-entrypoint \
     && mkdir -p /run/nginx /var/log/php-fpm
 
