@@ -121,6 +121,7 @@ if ( ! function_exists('_U2_Utf8_Gb')){
 		
 		return iconv('UTF-8', 'GB2312', $_String);
 	}
+}
 
 if ( ! function_exists('_Array_Combine')){
 	function _Array_Combine($_Arr1, $_Arr2){
