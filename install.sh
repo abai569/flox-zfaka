@@ -54,8 +54,8 @@ install_zfaka() {
 
   read -r -p "Access port [8089]: " port
   port="${port:-8089}"
-  read -r -p "Admin path [Admin]: " admin_dir
-  admin_dir="${admin_dir:-Admin}"
+  read -r -p "Admin path [Goadmin]: " admin_dir
+  admin_dir="${admin_dir:-Goadmin}"
   if ! [[ "$port" =~ ^[0-9]{1,5}$ ]] || [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
     echo "[ERROR] Port must be between 1 and 65535"
     exit 1
@@ -78,7 +78,7 @@ DB_USER=faka
 DB_PASSWORD=$(random_secret)
 ADMIN_EMAIL=$admin_email
 ADMIN_PASSWORD=$admin_password
-ADMIN_DIR=$admin_dir
+ADMIN_DIR=Goadmin
 ZFAKA_VERSION=1.4.9
 ZFAKA_PORT=$port
 ZFAKA_IMAGE=ghcr.io/abai569/flox-zfaka:latest
