@@ -138,8 +138,9 @@ jobs:
           done
 
           admin_login_page=$(curl -fsS http://127.0.0.1:18089/Goadmin/login)
-          if ! grep -q '<title>登录-管理系统</title>' <<<"$admin_login_page" || \
-             ! grep -q '<form class="layui-form">' <<<"$admin_login_page" || \
+          if ! grep -q '<title>后台登录</title>' <<<"$admin_login_page" || \
+             ! grep -q 'tokyo-admin-login-page' <<<"$admin_login_page" || \
+             ! grep -q '<form class="layui-form ' <<<"$admin_login_page" || \
              grep -q '商品分类' <<<"$admin_login_page"; then
             printf '%s\n' "$admin_login_page"
             docker exec zfaka-ci-web sh -c 'printf "REQUEST_URI test failed\n"; nginx -T'
