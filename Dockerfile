@@ -13,6 +13,7 @@ RUN apt-get update \
     && docker-php-ext-install -j"$(nproc)" gd mysqli pdo_mysql zip opcache \
     && pecl install yaf-3.3.5 \
     && docker-php-ext-enable yaf opcache \
+    && printf '%s\n' 'yaf.use_namespace=1' 'date.timezone=Asia/Shanghai' > /usr/local/etc/php/conf.d/zfaka.ini \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
