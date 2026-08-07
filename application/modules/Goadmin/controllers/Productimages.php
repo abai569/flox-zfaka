@@ -143,9 +143,15 @@ class ProductimagesController extends AdminBasicController
         foreach ($images as $index=>$image) {
             if ((int)$image['id'] === (int)$id) $position = $index;
         }
+        if ($position !== null && (int)$images[$position]['is_primary'] === 1) {
+            Helper::response(array('code'=>1001, 'msg'=>'主图固定在第一位，不能移动'));
+        }
         $swap = $direction === 'before' ? $position - 1 : $position + 1;
         if ($position === null || !isset($images[$swap])) {
             Helper::response(array('code'=>1001, 'msg'=>'图片已在边界位置'));
+        }
+        if ((int)$images[$swap]['is_primary'] === 1) {
+            Helper::response(array('code'=>1001, 'msg'=>'普通图片不能移动到主图之前'));
         }
 
         $currentSort = $images[$position]['sort_num'];

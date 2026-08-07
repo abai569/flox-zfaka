@@ -11,7 +11,7 @@ class M_Products_image extends Model
     public function getByProduct($pid)
     {
         return $this->Where(array('pid'=>$pid))
-            ->Order(array('sort_num'=>'DESC', 'id'=>'ASC'))
+            ->Order(array('is_primary'=>'DESC', 'sort_num'=>'DESC', 'id'=>'ASC'))
             ->Select();
     }
 }
