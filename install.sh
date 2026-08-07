@@ -54,14 +54,8 @@ install_zfaka() {
 
   read -r -p "Access port [8089]: " port
   port="${port:-8089}"
-  read -r -p "Admin path [Goadmin]: " admin_dir
-  admin_dir="${admin_dir:-Goadmin}"
   if ! [[ "$port" =~ ^[0-9]{1,5}$ ]] || [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
     echo "[ERROR] Port must be between 1 and 65535"
-    exit 1
-  fi
-  if ! [[ "$admin_dir" =~ ^[A-Z][a-z]{3,10}$ ]]; then
-    echo "[ERROR] Admin path must start with one uppercase letter followed by 3-10 lowercase letters"
     exit 1
   fi
 
@@ -79,7 +73,6 @@ DB_PASSWORD=$(random_secret)
 ADMIN_EMAIL=$admin_email
 ADMIN_PASSWORD=$admin_password
 ADMIN_DIR=Goadmin
-ZFAKA_VERSION=1.4.9
 ZFAKA_PORT=$port
 ZFAKA_IMAGE=ghcr.io/abai569/flox-zfaka:latest
 EOF
@@ -90,7 +83,7 @@ EOF
   for _ in $(seq 1 60); do
     if curl -fsS "http://127.0.0.1:$port/" >/dev/null 2>&1; then
       echo "[OK] ZFAKA is available at http://SERVER_IP:$port/"
-      echo "[INFO] Admin URL: http://SERVER_IP:$port/$admin_dir/login"
+      echo "[INFO] Admin URL: http://SERVER_IP:$port/Goadmin/login"
       echo "[INFO] Initial account: $admin_email / $admin_password"
       echo "[IMPORTANT] Change the initial account and password immediately"
       return
