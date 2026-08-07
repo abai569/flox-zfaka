@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Chongqing');
 define('ENV', strtoupper(ini_get('yaf.environ')));
-define('VERSION', '1.4.7');
+define('VERSION', getenv('ZFAKA_VERSION') ?: '1.4.7');
 define('WEB_NAME',"ZFAKA平台");
 define('URL_KEY', 'faG2#@@1');
 define('CUR_DATE', date('Y-m-d'));
@@ -9,7 +9,7 @@ define('CUR_DATETIME', date('Y-m-d H:i:s'));
 define('CUR_TIMESTAMP', time());
 define('TB_PK',        'id');
 define('TB_PREFIX',    't_');
-define('ADMIN_DIR',    'Admin');
+define('ADMIN_DIR', getenv('ADMIN_DIR') ?: 'Goadmin');
 define('LIB_PATH',     APP_PATH.'/application/library/');
 define('CORE_PATH',    LIB_PATH.'/Core/');
 define('MODEL_PATH',   APP_PATH.'/application/model/');
