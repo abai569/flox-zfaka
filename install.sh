@@ -63,8 +63,8 @@ install_zfaka() {
   curl -fsSL "$SCRIPT_URL" -o install.sh
   chmod 0755 install.sh
   umask 077
-  admin_email="admin@example.com"
-  admin_password=$(random_secret)
+  admin_email="demo@demo.com"
+  admin_password="admin123"
   cat > .env <<EOF
 MYSQL_ROOT_PASSWORD=$(random_secret)
 DB_NAME=faka
