@@ -11,6 +11,7 @@ class ProductsController extends AdminBasicController
 	private $m_products;
 	private $m_products_type;
 	private $m_products_card;
+	private $m_products_image;
 	
     public function init()
     {
@@ -18,6 +19,7 @@ class ProductsController extends AdminBasicController
 		$this->m_products = $this->load('products');
 		$this->m_products_type = $this->load('products_type');
 		$this->m_products_card = $this->load('products_card');
+		$this->m_products_image = $this->load('products_image');
     }
 
     public function indexAction()
@@ -103,7 +105,12 @@ class ProductsController extends AdminBasicController
 		if($id AND $id>0){
 			$data = array();
 			$product=$this->m_products->SelectByID('',$id);
+			if (!$product) {
+				$this->redirect('/'.ADMIN_DIR.'/products');
+				return FALSE;
+			}
 			$data['product'] = $product;
+			$data['images'] = $this->m_products_image->getByProduct($id);
 			$this->getView()->assign($data);
 		}else{
             $this->redirect('/'.ADMIN_DIR."/products");
