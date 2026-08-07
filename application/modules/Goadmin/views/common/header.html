@@ -104,8 +104,8 @@ document.getElementById('admin-nav-toggle').addEventListener('click', function()
             items[i].classList.add('is-active');
         }
     }
-    // Settings sub-routes: email, payment
-    if (path.indexOf('/' + ADMIN_DIR + '/email') > -1 || path.indexOf('/' + ADMIN_DIR + '/payment') > -1) {
+    // Settings sub-routes: email, payment, database
+    if (path.indexOf('/' + ADMIN_DIR + '/email') > -1 || path.indexOf('/' + ADMIN_DIR + '/payment') > -1 || path.indexOf('/' + ADMIN_DIR + '/database') > -1) {
         var settingItem = document.querySelector('.tokyo-nav-links [data-nav="setting"]');
         if (settingItem) settingItem.classList.add('is-active');
     }
