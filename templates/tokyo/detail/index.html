@@ -4,13 +4,31 @@
         <section class="tokyo-detail-layout">
             <div class="panel tokyo-detail-panel">
                 <div class="tokyo-detail-image-wrap">
-                    <div class="tokyo-detail-image-box">
-                        <?php if(isset($product['imgurl']) AND strlen($product['imgurl'])>0):?>
-                        <img src="<?php echo $product['imgurl'];?>" alt="<?php echo $product['name'];?>" class="tokyo-detail-image" id="detail-image">
-                        <?php else:?>
-                        <img src="/templates/tokyo/images/noimg.jpg" alt="<?php echo $product['name'];?>" class="tokyo-detail-image" id="detail-image">
+                    <?php
+                    $detailImages = isset($images) && is_array($images) ? $images : array();
+                    if (empty($detailImages)) {
+                        $detailImages[] = array('imgurl'=>isset($product['imgurl']) && strlen($product['imgurl'])>0 ? $product['imgurl'] : '/templates/tokyo/images/noimg.jpg');
+                    }
+                    ?>
+                    <div class="tokyo-detail-gallery" data-product-gallery>
+                        <div class="tokyo-detail-image-box">
+                            <img src="<?php echo $detailImages[0]['imgurl'];?>" alt="<?php echo $product['name'];?> 图片 1" class="tokyo-detail-image" id="detail-image" width="800" height="800" fetchpriority="high">
+                            <?php if(count($detailImages)>1):?>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-prev" type="button" data-gallery-direction="previous" aria-label="上一张图片"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-next" type="button" data-gallery-direction="next" aria-label="下一张图片"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                            <span class="tokyo-gallery-counter" aria-live="polite"><span data-gallery-current>1</span> / <?php echo count($detailImages);?></span>
+                            <?php endif;?>
+                            <button class="tokyo-image-zoom" id="image-zoom-btn" type="button"><i class="fa-solid fa-expand"></i> 查看原图</button>
+                        </div>
+                        <?php if(count($detailImages)>1):?>
+                        <div class="tokyo-gallery-thumbnails" aria-label="商品图片">
+                            <?php foreach($detailImages AS $index=>$image):?>
+                            <button class="tokyo-gallery-thumbnail<?php if($index===0):?> is-active<?php endif;?>" type="button" aria-label="查看商品图片 <?php echo $index + 1;?>" aria-pressed="<?php echo $index===0 ? 'true' : 'false';?>" data-gallery-index="<?php echo $index;?>" data-gallery-src="<?php echo $image['imgurl'];?>" data-gallery-alt="<?php echo $product['name'];?> 图片 <?php echo $index + 1;?>">
+                                <img src="<?php echo $image['imgurl'];?>" alt="" width="72" height="72" loading="lazy">
+                            </button>
+                            <?php endforeach;?>
+                        </div>
                         <?php endif;?>
-                        <button class="tokyo-image-zoom" id="image-zoom-btn" type="button"><i class="fa-solid fa-expand"></i> 查看原图</button>
                     </div>
                 </div>
                 <div class="tokyo-detail-info">

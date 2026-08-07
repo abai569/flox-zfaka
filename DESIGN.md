@@ -39,6 +39,13 @@ Preserve the existing Tokyo admin shell and Layui controls. Product image manage
 
 - Show the existing placeholder image and a direct upload action.
 
+### Product Detail Gallery
+
+- Start with the primary image and preserve the existing square product-image stage.
+- Show previous and next controls only when multiple images exist.
+- Use a horizontally scrollable thumbnail strip with a visible current-image state.
+- Keep image switching immediate and user-driven; do not auto-advance while the customer is completing the purchase form.
+
 ## 6. Responsive Behavior
 
 - Desktop: multiple tiles per row.
