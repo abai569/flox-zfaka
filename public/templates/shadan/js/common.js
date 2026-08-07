@@ -36,7 +36,7 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 	};
 
 	console.group("欢迎使用ZFAKA开源开卡程序");
-		console.log("github地址：https://github.com/zfaka/zfaka/");
+		console.log("github地址：https://github.com/abai569/flox-zfaka");
 		console.log("欢迎前来围观、吐槽、点赞、捐赠、STAR......");
 	console.groupEnd();
 
@@ -167,4 +167,3 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
   exports('common',null);
 
 });
-
