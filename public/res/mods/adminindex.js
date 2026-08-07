@@ -29,9 +29,7 @@ layui.define(['jquery', 'layer', 'form'], function(exports){
 						return;
 					} else {
                     	var allVersions = res.data.all_versions || [];
-						var latestVersionSource = allVersions[0]?.source || 'github';
-						var downloadUrl = latestVersionSource !== 'github' ? res.data.fallback_zip : res.data.zip;
-                    	var popupContent = '';
+						var popupContent = '';
 
                     	allVersions.forEach(function(version, index) {
                     	    var body = version.body
@@ -39,9 +37,7 @@ layui.define(['jquery', 'layer', 'form'], function(exports){
                     	        .replace(/- (.*?)(<br>|$)/g, '• $1$2') // 列表项优化
                     	        .replace(/\# (.*?)(<br>|$)/g, '<strong class="layui-text-red">$1</strong>$2'); // 标题加粗标红
 
-                    	    var sourceTip = version.source === 'github' 
-                    	        ? '<span class="layui-badge layui-bg-blue">来源：GitHub</span>' 
-                    	        : '<span class="layui-badge layui-bg-orange">来源：备用地址(无法连接到GitHub)</span>';
+							var sourceTip = '<span class="layui-badge layui-bg-blue">来源：GitHub</span>';
 
                     	    popupContent += `
                     	        <div style="margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px dashed #eee;">
@@ -60,15 +56,11 @@ layui.define(['jquery', 'layer', 'form'], function(exports){
                     	    area: ['850px', '650px'],
                     	    shadeClose: true,
                     	    content: `<div style="padding: 25px;">${popupContent}</div>`,
-                    	    btn: ['自动更新', '下载ZIP包', '拒绝更新'], 
-                    	    success: function(layero){
+							btn: ['查看版本', '关闭'], 
+							success: function(layero){
 								  var btn = layero.find('.layui-layer-btn');
 								  btn.find('.layui-layer-btn0').attr({
-									href: '/' + ADMIN_DIR + '/upgrade'
-									,target: '_blank'
-								  });
-								  btn.find('.layui-layer-btn1').attr({
-									href: downloadUrl
+									href: res.data.version_url
 									,target: '_blank'
 								  });
 							},
