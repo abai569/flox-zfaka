@@ -27,7 +27,7 @@ class RegisterController extends MemberBasicController
             $this->redirect("/product/");
             return FALSE;
 		}
-
+		
 		$data = array();
 		$data['title'] = "注册";
         $this->getView()->assign($data);

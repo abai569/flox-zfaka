@@ -36,7 +36,7 @@ class zfbweb
 			'order_no' => $params['orderid'],
 			'amount' => $params['money'],
 			'subject' => $params['productname'],
-			'body' => $this->paymethod,
+			'body' => $this->paymethod, 
 		];
 		try {
 			$url = Charge::run(Config::ALI_CHANNEL_WEB, $config, $data);
@@ -52,13 +52,13 @@ class zfbweb
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
 	}
-
+	
 	public function notify(array $payconfig)
 	{
 		try {
 			file_put_contents(YEWU_FILE, CUR_DATETIME.'-'.json_encode($_POST).PHP_EOL, FILE_APPEND);
 			unset($_POST['paymethod']);
-
+			
 			$config = [
 				'use_sandbox' => false,
 				'app_id' => $payconfig['app_id'],
@@ -67,7 +67,7 @@ class zfbweb
 				'rsa_private_key' => $payconfig['rsa_private_key'],
 				'return_raw' => true
 			];
-
+			
 			$callback = new \Pay\zfbweb\callback();
 			$ret = Notify::run("ali_charge", $config,$callback);// 处理回调，内部进行了签名检查
 			file_put_contents(YEWU_FILE, CUR_DATETIME.'-'.json_encode($ret).PHP_EOL, FILE_APPEND);
@@ -78,5 +78,5 @@ class zfbweb
 			exit;
 		}
 	}
-
+	
 }

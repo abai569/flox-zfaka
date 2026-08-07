@@ -2,7 +2,7 @@
 /**
  * File: vpayalipay.php
  * Functionality: V免签 -支付宝扫码支付
- * Author:
+ * Author: 
  * Date: 2025-05-13
  */
 namespace Pay\vpayalipay;
@@ -11,7 +11,7 @@ use \Pay\notify;
 class vpayalipay
 {
 	private $paymethod ="vpayalipay";
-
+	
 	//处理请求
 	public function pay($payconfig,$params)
 	{
@@ -52,7 +52,7 @@ class vpayalipay
             curl_close($ch);
 
             $tmdpay_data = json_decode($tmdpay_json,true);
-
+           
 			if(is_array($tmdpay_data))
 			{
 				if($tmdpay_data['code']<1)
@@ -60,11 +60,11 @@ class vpayalipay
 					return array('code'=>1002,'msg'=>$tmdpay_data['msg'],'data'=>'');
 				}else
 				{
-                    $qr = $tmdpay_data['data']['payUrl'];
+                    $qr = $tmdpay_data['data']['payUrl'];                   
 					$money = isset($tmdpay_data['data']['reallyPrice'])?$tmdpay_data['data']['reallyPrice']:$params['money'];
 					//计算关闭时间
                      $closetime = $payconfig['overtime'];
-
+                    
 					$result = array('type'=>0,'subjump'=>0,'subjumpurl'=>$tmdpay_data['data']['payUrl'],'paymethod'=>$this->paymethod,'qr' => $params['qrserver'] . urlencode($tmdpay_data['data']['payUrl']),'payname'=>$payconfig['payname'],'overtime'=>$closetime,'money'=>$money);
 					return array('code'=>1,'msg'=>'success','data'=>$result);
 				}
@@ -72,8 +72,8 @@ class vpayalipay
 			{
 				return array('code'=>1001,'msg'=>"支付接口请求失败",'data'=>'');
 			}
-		}
-		catch (\Exception $e)
+		} 
+		catch (\Exception $e) 
 		{
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
@@ -115,5 +115,5 @@ class vpayalipay
             }
         }
     }
-
+	
 }

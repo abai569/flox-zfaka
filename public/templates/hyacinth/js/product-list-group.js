@@ -14,7 +14,7 @@ layui.define(['layer', 'table'], function(exports){
 				{field: 'name', title: '分类',templet: '#name',minWidth:120},
 				{field: 'opt', title: '操作', width:80, templet: '#opt',align:'center',fixed: 'right'},
 			]]
-		});
+		});	
 	}else{
 		table.render({
 			elem: '#table',
@@ -29,7 +29,7 @@ layui.define(['layer', 'table'], function(exports){
 		});
 	}
 	//首页广告弹窗
-	var layerad = $("#layerad").html();
+	var layerad = $("#layerad").html(); 
 	if(typeof(layerad)!="undefined"){
 		if(layerad.length>0){
 			layer.open({

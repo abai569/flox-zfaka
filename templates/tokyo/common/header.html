@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN"<?php if(isset($config['backgroundimage']) AND strlen($config['backgroundimage'])>0):?> style="background-size: cover; background-image: url(<?php echo $config['backgroundimage'];?>);"<?php endif;?>>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="<?php echo $config['webname'];?>,发卡平台,自动发卡"/>
+    <meta name="description" content="<?php echo $config['webdescription'];?>">
+    <title><?php echo $title.' - '.$config['webname'];?></title>
+    <?php if(isset($config['shortcuticon']) AND strlen($config['shortcuticon'])>0):?>
+    <link rel="shortcut icon" href="<?php echo $config['shortcuticon'];?>" />
+    <?php else:?>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <?php endif;?>
+    <link rel="stylesheet" href="/res/layui/css/layui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/templates/tokyo/css/style.css?v=<?php echo VERSION;?>.20260807.1">
+    <script>
+    var TOKEN = "<?php echo $csrf_token;?>";
+    if (self != top) {
+        top.location = self.location;
+    }
+    </script>
+</head>
+<body class="tokyo-theme">
+<div class="tokyo-page-frame">
+    <header class="tokyo-nav-shell">
+        <div class="tokyo-nav-wrap">
+            <nav class="navbar navbar-expand-xl tokyo-nav">
+                <div class="tokyo-brand-wrap">
+                    <a class="tokyo-brand" href="/">
+                        <?php if(isset($config['logo']) AND strlen($config['logo'])>0):?>
+                        <img class="tokyo-brand-logo" src="<?php echo $config['logo'];?>" alt="<?php echo $config['webname'];?>">
+                        <?php else:?>
+                        <img class="tokyo-brand-logo" src="/res/images/logo.png" alt="<?php echo $config['webname'];?>">
+                        <?php endif;?>
+                        <span class="tokyo-brand-name"><?php echo $config['webname'];?></span>
+                    </a>
+                </div>
+                <button class="navbar-toggler tokyo-nav-toggle" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#tokyoNavMenu" aria-controls="tokyoNavMenu" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="tokyoNavMenu">
+                    <div class="tokyo-nav-main">
+                        <ul class="navbar-nav tokyo-nav-links">
+                            <li class="nav-item">
+                                <a class="nav-link tokyo-nav-pill<?php if(strpos($_SERVER['REQUEST_URI'],'/product/query')===false AND (strpos($_SERVER['REQUEST_URI'],'/product')!==false OR parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)==='/')):?> is-active<?php endif;?>" href="/">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    <span>购物</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link tokyo-nav-pill<?php if(strpos($_SERVER['REQUEST_URI'],'/product/query')!==false):?> is-active<?php endif;?>" href="/product/query">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                    <span>订单查询</span>
+                                </a>
+                            </li>
+                            <?php if(isset($config['notice']) AND strlen($config['notice'])>0):?>
+                            <li class="nav-item">
+                                <button type="button" class="nav-link tokyo-nav-pill tokyo-notice-trigger" aria-expanded="false">
+                                    <i class="fa-solid fa-bullhorn"></i>
+                                    <span>公告</span>
+                                </button>
+                            </li>
+                            <?php endif;?>
+                        </ul>
+                        <div class="tokyo-nav-tools">
+                            <?php if($login):?>
+                            <div class="tokyo-user-info">
+                                <span class="tokyo-user-name"><i class="fa-solid fa-user"></i> <?php echo $uinfo['nickname'];?></span>
+                                <a class="tokyo-button tokyo-button-light" href="/member/logout/">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span>退出</span>
+                                </a>
+                            </div>
+                            <?php else:?>
+                            <div class="tokyo-auth-actions">
+                                <?php if(isset($config['loginswitch']) AND $config['loginswitch']>0):?>
+                                <a class="tokyo-button tokyo-button-light" href="/member/login/">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                    <span>登录</span>
+                                </a>
+                                <?php endif;?>
+                                <?php if(isset($config['registerswitch']) AND $config['registerswitch']>0):?>
+                                <a class="tokyo-button tokyo-button-dark" href="/member/register/">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    <span>创建账号</span>
+                                </a>
+                                <?php endif;?>
+                            </div>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <?php if(isset($config['notice']) AND strlen($config['notice'])>0):?>
+    <div id="tokyo-notice-modal" class="tokyo-notice-modal" role="dialog" aria-modal="true" aria-labelledby="tokyo-notice-title" aria-describedby="tokyo-notice-body" hidden>
+        <div class="tokyo-notice-overlay"></div>
+        <div class="tokyo-notice-dialog">
+            <div class="tokyo-notice-header-group">
+                <div class="tokyo-notice-kicker">NOTICE</div>
+                <div class="tokyo-notice-header">
+                    <span class="tokyo-notice-icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
+                    <h2 id="tokyo-notice-title" class="tokyo-notice-title">公告</h2>
+                </div>
+            </div>
+            <div id="tokyo-notice-body" class="tokyo-notice-body">
+                <?php echo $config['notice'];?>
+            </div>
+            <div class="tokyo-notice-footer">
+                <div class="tokyo-notice-actions">
+                    <button type="button" class="tokyo-notice-btn tokyo-notice-btn-cancel" data-notice-action="cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i> 取消</button>
+                    <button type="button" class="tokyo-notice-btn tokyo-notice-btn-confirm" data-notice-action="confirm"><i class="fa-solid fa-check" aria-hidden="true"></i> 我已阅读</button>
+                </div>
+                <div class="tokyo-notice-reminder">点击“我已阅读”后，1 小时内不再弹出。</div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+    <div id="pjax-container">

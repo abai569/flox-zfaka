@@ -1,140 +1,139 @@
 <?php include '../templates/choice/common/header.html';?>
 <div class="layui-container fly-marginTop fly-user-main">
-    <div class="zf-catalog-wrap">
+    <div class="layui-row">
+		<!-- 公告-->
 		<?php if(isset($config['notice']) AND $config['notice']):?>
-		<div class="zf-catalog-notice">
+		<blockquote class="layui-elem-quote layui-text" style="background-color: #ffffff;">
 			<i class="layui-icon layui-icon-speaker"></i><?php echo $config['notice'];?>
-		</div>
+		</blockquote>
 		<?php endif;?>
+        <div class="layui-col-md6">
+            <div class="layui-card layui-form-pane">
+                <div class="layui-card-header layui-hide-xs">购买商品</div>
+				<div class="layui-tab-brief layui-hide-md"><ul class="layui-tab-title"><li class="layui-this">购买商品</li><li class=""><a href="/product/query">查询订单</a></li></ul></div>
 
-		<div class="zf-catalog-topbar">
-			<button class="zf-category-toggle" id="zf-category-toggle" type="button">
-				<i class="layui-icon layui-icon-list"></i> 分类
-			</button>
-			<div class="zf-search-wrap">
-				<i class="layui-icon layui-icon-search zf-search-icon"></i>
-				<input type="text" class="zf-search-pill" id="zf-search-input" placeholder="搜索商品..." autocomplete="off" />
-			</div>
-		</div>
-
-		<div class="zf-catalog-layout">
-			<div class="zf-category-panel" id="zf-category-panel">
-				<div class="zf-category-title">商品分类</div>
-				<ul class="zf-category-list" id="zf-category-list">
-					<li class="zf-category-item zf-category-active" data-tid="0">全部商品<span class="zf-category-count" id="zf-count-all"><?php echo count($products);?></span></li>
-					<?php if(!empty($products_type)):?>
-					<?php foreach($products_type AS $type):?>
-					<li class="zf-category-item" data-tid="<?php echo $type['id'];?>"><?php echo $type['name'];?></li>
-					<?php endforeach;?>
-					<?php endif;?>
-				</ul>
-			</div>
-
-			<div class="zf-catalog-panel">
-				<div class="zf-catalog-grid" id="zf-catalog-grid">
-					<?php if(!empty($products)):?>
-					<?php foreach($products AS $p):?>
-					<?php
-						$isSoldOut = ($p['stockcontrol'] > 0 && $p['qty'] == 0);
-						$imgSrc = (strlen($p['imgurl']) > 0) ? $p['imgurl'] : '/templates/choice/images/noimg.jpg';
-					?>
-					<div class="zf-product-card<?php if($isSoldOut):?> zf-sold-out<?php endif;?>" data-typeid="<?php echo $p['typeid'];?>" data-name="<?php echo htmlspecialchars($p['name']);?>">
-						<a href="/product/<?php echo $p['id'];?>.html">
-							<div class="zf-product-img">
-								<img src="<?php echo $imgSrc;?>" alt="<?php echo htmlspecialchars($p['name']);?>" loading="lazy" />
-							</div>
-							<div class="zf-product-body">
-								<div class="zf-product-name"><?php echo htmlspecialchars($p['name']);?></div>
-								<div class="zf-product-meta">
-									<span class="zf-product-price">&yen;<?php echo $p['price'];?></span>
-									<span class="zf-product-sales"><?php echo $p['qty_sell'];?>人付款</span>
-								</div>
-								<div class="zf-product-badges">
-									<?php if($p['auto'] > 0):?>
-									<span class="layui-badge layui-bg-green">自动发货</span>
-									<?php else:?>
-									<span class="layui-badge layui-bg-black">手工发货</span>
-									<?php endif;?>
-									<?php if(isset($p['iszhekou']) && $p['iszhekou'] > 0):?>
-									<span class="layui-badge layui-bg-orange">有折扣</span>
-									<?php endif;?>
-									<?php if($p['stockcontrol'] > 0):?>
-									<span class="layui-badge layui-bg-gray">库存:<?php echo $p['qty'];?></span>
-									<?php endif;?>
-								</div>
-								<div class="zf-product-action">
-									<span class="zf-product-stock"><?php if($p['stockcontrol'] > 0):?>库存 <?php echo $p['qty'];?><?php else:?>不限量<?php endif;?></span>
-									<?php if($isSoldOut):?>
-									<span class="layui-btn layui-btn-xs layui-btn-disabled">已售罄</span>
-									<?php else:?>
-									<span class="layui-btn layui-btn-xs layui-btn-warm">购买</span>
-									<?php endif;?>
+                <div class="layui-card-body" id="prodcut_num">
+                    <form class="layui-form" action="">
+						<div id="product_input">
+							<div class="layui-form-item productname">
+								<label class="layui-form-label">商品分类</label>
+								<div class="layui-input-block">
+									<select name="typeid" id="typeid" lay-filter="typeid" lay-verify="required">
+										<option value="">请选择</option>
+										<?php if(!empty($products_type)):?>
+										<?php foreach($products_type AS $type):?>
+											<?php if(isset($type['password'])):?>
+											<option value="<?php echo $type['id'];?>" data-type="<?php if(strlen($type['password'])>0):?>1<?php else:?>0<?php endif;?>"><?php echo $type['name'];?></option>
+											<?php else:?>
+											<option value="<?php echo $type['id'];?>" data-type="0"><?php echo $type['name'];?></option>
+											<?php endif;?>
+										<?php endforeach;?>
+										<?php endif;?>
+									</select>
 								</div>
 							</div>
-						</a>
-					</div>
-					<?php endforeach;?>
-					<?php else:?>
-					<div class="zf-catalog-empty">
-						<i class="layui-icon layui-icon-cart-simple"></i>
-						<p>暂无商品</p>
-					</div>
-					<?php endif;?>
-				</div>
-			</div>
-		</div>
-	</div>
+							<div class="layui-form-item productname">
+								<label class="layui-form-label">商品列表</label>
+								<div class="layui-input-block">
+									<select name="pid" id="productlist" lay-filter="productlist" lay-verify="required">
+	  
+									</select>
+								</div>
+							</div>
+							
+							<div class="layui-col-md12 layui-col-xs6">
+								<div class="layui-form-item">
+									<label class="layui-form-label">商品单价</label>
+									<div class="layui-input-block">
+										<input type="text" name="price" id="price" readonly disabled class="layui-input" style="color: red;">
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-md12 layui-col-xs6">
+								<div class="layui-form-item">
+									<label class="layui-form-label">订单金额</label>
+									<div class="layui-input-block">
+										<input type="text" name="money" id="money" readonly disabled class="layui-input" value ="" style="color: red;">
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-md12 layui-col-xs6">
+								<div class="layui-form-item">
+									<label class="layui-form-label">商品库存</label>
+									<div class="layui-input-block">
+										<input type="text" name="qty" id="qty" readonly disabled class="layui-input">
+									</div>
+								</div>
+							</div>
+							<div class="layui-col-md12 layui-col-xs6">
+								<div class="layui-form-item">
+									<label class="layui-form-label">购买数量</label>
+									<div class="layui-input-block">
+										<input type="number" name="number" maxlength=10 id="number" value="1" class="layui-input" lay-verify="required|numberCheck">
+									</div>
+								</div>
+							</div>
+							<?php if($login):?>
+							<div class="layui-form-item">
+								<label class="layui-form-label">邮箱账户</label>
+								<div class="layui-input-block">
+									<input type="text" name="email" id="email" value="<?php echo $uinfo['email'];?>" readonly class="layui-input">
+								</div>
+							</div>
+							<?php else:?>
+								<?php if(isset($config['orderinputtype']) AND $config['orderinputtype'] == '2'):?>
+								<div class="layui-form-item">
+									<label class="layui-form-label">QQ</label>
+									<div class="layui-input-block">
+										<input type="number" name="qq" id="qq" class="layui-input" required lay-verify="required|number">
+									</div>
+								</div>
+								<?php else:?>
+								<div class="layui-form-item">
+									<label class="layui-form-label">邮箱账户</label>
+									<div class="layui-input-block">
+										<input type="text" name="email" id="email" class="layui-input" required lay-verify="required|email">
+									</div>
+								</div>
+								<?php endif;?>
+							<?php endif;?>
+							
+							<?php if(isset($config['querycontactswitch']) AND $config['querycontactswitch']>0):?>
+							<div class="layui-form-item">
+									<label class="layui-form-label">安全密码</label>
+								<div class="layui-input-block">
+										<input type="text" name="chapwd" id="chapwd" class="layui-input" required lay-verify="required|chapwd" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" readonly onfocus="this.removeAttribute('readonly');" placeholder="将作为自助查询订单重要依据">
+								</div>
+							</div>
+							<?php endif;?>
+						</div>	
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+								<input type="hidden" name="limitorderqty" id="limitorderqty" value="<?php echo $config['limitorderqty'];?>">
+								<input type="hidden" name="stockcontrol" id="stockcontrol" value="0">
+                                <button class="layui-btn" id="buy" disabled="disabled" lay-submit lay-filter="buy">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6 <?php if(isset($config['mprodcutdescriptionswitch'])):?><?php if($config['mprodcutdescriptionswitch']=="0"):?>layui-hide-xs<?php endif;?><?php else:?>layui-hide-xs<?php endif;?>">
+            <div class="layui-card">
+                <div class="layui-card-header">商品详情</div>
+                <div class="layui-card-body" id="prodcut_description">
+				<?php if(isset($config['ad'])):?><?php echo $config['ad'];?><?php endif;?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="layerad" style="display: none;"><?php echo $config['layerad'];?></div>
+<!--引入公共底文件-->
 <?php include '../templates/choice/common/footer.html';?>
+<!--首页广告-->
 <script>
 layui.use('product');
 var PIFA = "";
-(function(){
-	var $ = layui.jquery;
-	var activeTid = '0';
-
-	$('#zf-category-list').on('click', '.zf-category-item', function(){
-		var $item = $(this);
-		var tid = $item.attr('data-tid');
-		$('#zf-category-list .zf-category-item').removeClass('zf-category-active');
-		$item.addClass('zf-category-active');
-		activeTid = tid;
-		filterProducts();
-	});
-
-	$('#zf-search-input').on('input', function(){
-		filterProducts();
-	});
-
-	$('#zf-category-toggle').on('click', function(){
-		$('#zf-category-panel').toggleClass('zf-category-open');
-	});
-
-	function filterProducts(){
-		var keyword = $.trim($('#zf-search-input').val()).toLowerCase();
-		var visible = 0;
-		$('.zf-product-card').each(function(){
-			var $card = $(this);
-			var tid = $card.attr('data-typeid');
-			var name = ($card.attr('data-name') || '').toLowerCase();
-			var matchTid = (activeTid === '0' || tid === activeTid);
-			var matchKw = (!keyword || name.indexOf(keyword) !== -1);
-			if(matchTid && matchKw){
-				$card.show();
-				visible++;
-			}else{
-				$card.hide();
-			}
-		});
-		if(visible === 0){
-			if($('#zf-catalog-grid .zf-catalog-empty').length === 0){
-				$('#zf-catalog-grid').append('<div class="zf-catalog-empty"><i class="layui-icon layui-icon-search"></i><p>未找到匹配商品</p></div>');
-			}
-			$('#zf-catalog-grid .zf-catalog-empty').show();
-		}else{
-			$('#zf-catalog-grid .zf-catalog-empty').hide();
-		}
-	}
-})();
 </script>

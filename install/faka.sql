@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS `t_config` (
   `id` int(11) NOT NULL,
   `catid` int(11) NOT NULL DEFAULT '1' COMMENT '分类ID',
   `name` varchar(32) NOT NULL DEFAULT '' COMMENT '配置名',
-  `value` text NOT NULL DEFAULT ('') COMMENT '配置内容',
-  `tag` text NOT NULL DEFAULT ('') COMMENT '备注',
+  `value` text NOT NULL DEFAULT '' COMMENT '配置内容',
+  `tag` text NOT NULL DEFAULT '' COMMENT '备注',
   `lock` tinyint(1) NOT NULL DEFAULT '0' COMMENT '锁',
   `updatetime` int(11) NOT NULL DEFAULT '0' COMMENT '最后修改时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='基础配置';
@@ -76,15 +76,15 @@ CREATE TABLE IF NOT EXISTS `t_config` (
 
 INSERT INTO `t_config` (`id`, `catid`, `name`, `value`, `tag`, `lock`, `updatetime`) VALUES
 (1, 1, 'registerswitch', '0', '是否开放注册功能,1是开放,0是关闭', 1, 1453452674),
-(2, 1, 'limitiporder', '3', '同一ip当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
-(3, 1, 'limitemailorder', '3', '同一email当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
-(4, 1, 'weburl', 'http://faka.zlkb.net', '当前网站地址,用于支付站点异步返回，务必修改正确', 1, 1453452674),
+(2, 1, 'limitiporder', '0', '同一ip当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
+(3, 1, 'limitemailorder', '0', '同一email当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
+(4, 1, 'weburl', 'https://ka.abai.eu.org', '当前网站地址,用于支付站点异步返回，务必修改正确', 1, 1453452674),
 (5, 1, 'adminemail', 'demo@demo.com', '管理员邮箱,用于接收邮件提醒用', 1, 1453452674),
 (6, 1, 'webname', 'ZFAKA平台', '当前站点名称', 1, 1453452674),
 (7, 1, 'webdescription', '本系统由资料空白开发并免费提供', '当前站点描述', 1, 1453452674),
-(8, 1, 'notice', '本系统商品均可正常购买。开源下载地址：github地址:&lt;a href=&quot;https://github.com/zfaka/zfaka/&quot; target=&quot;_blank&quot;&gt;https://github.com/zfaka/zfaka/&lt;/a&gt;', '首页公告', 1, 1453452674),
+(8, 1, 'notice', '本系统商品均可正常购买。问题反馈：&lt;a href=&quot;https://t.me/erflvx/&quot; target=&quot;_blank&quot;&gt;TG群组&lt;/a&gt;', '首页公告', 1, 1453452674),
 (9, 1, 'ad', '&lt;image src=&quot;/res/images/pay/supportme.jpg&quot;&gt;', '购买页默认内容', 1, 1453452674),
-(10, 1, 'yzmswitch', '1', '验证码开关(1开，0关)', 1, 1453452674),
+(10, 1, 'yzmswitch', '0', '验证码开关(1开，0关)', 1, 1453452674),
 (11, 1, 'orderinputtype', '1', '订单必填输入框选择: 1邮箱 2QQ', 1, 1453452674),
 (13, 1, 'logo', '/res/images/logo.png', 'LOGO地址,默认：/res/images/logo.png', 1, 1453452674),
 (14, 1, 'tongji', '<!--统计js-->', '统计脚本', 1, 1453452674),
@@ -95,7 +95,7 @@ INSERT INTO `t_config` (`id`, `catid`, `name`, `value`, `tag`, `lock`, `updateti
 (20, 1, 'layerad', '', '弹窗广告', 1, 1453452674),
 (21, 1, 'loginswitch', '1', '登录开关', 1, 1453452674),
 (22, 1, 'forgetpwdswitch', '0', '找回密码开关', 1, 1453452674),
-(23, 1, 'adminyzmswitch', '1', '后台登录验证码开关', 1, 1453452674),
+(23, 1, 'adminyzmswitch', '0', '后台登录验证码开关', 1, 1453452674),
 (24, 1, 'shortcuticon', '', 'ICO图标,格式必须是png或者ico或者gif', 1, 1453452674),
 (25, 1, 'limitorderqty', '5', '单笔订单数量限制', 1, 1453452674),
 (26, 1, 'discountswitch', '0', '折扣开关', 1, 1453452674),
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `t_email_code` (
   `email` varchar(255) NOT NULL DEFAULT '' COMMENT '邮箱',
   `code` varchar(50) NOT NULL DEFAULT '' COMMENT '内容',
   `ip` varchar(50) NOT NULL DEFAULT '' COMMENT 'IP',
-  `result` text NOT NULL DEFAULT ('') COMMENT '结果',
+  `result` text NOT NULL DEFAULT '' COMMENT '结果',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '结果0未发送 1已发送',
   `checkedStatus` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未校验，1已校验'
@@ -174,10 +174,10 @@ CREATE TABLE IF NOT EXISTS `t_email_queue` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL DEFAULT '' COMMENT ' 收件人',
   `subject` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
-  `content` text NOT NULL DEFAULT ('') COMMENT '内容',
+  `content` text NOT NULL DEFAULT '' COMMENT '内容',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
   `sendtime` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
-  `sendresult` text NOT NULL DEFAULT ('') COMMENT '发送错误',
+  `sendresult` text NOT NULL DEFAULT '' COMMENT '发送错误',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0,未发送 ，1已发送，-1,失败',
   `isdelete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未删除,1已删除'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `t_help` (
   `id` int(11) NOT NULL,
   `typeid` int(11) NOT NULL DEFAULT '1' COMMENT '类型',
   `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
-  `content` text NOT NULL DEFAULT ('') COMMENT '内容',
+  `content` text NOT NULL DEFAULT '' COMMENT '内容',
   `isactive` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1是激活，0是不激活',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
@@ -229,9 +229,9 @@ CREATE TABLE IF NOT EXISTS `t_order` (
   `tradeid` varchar(255) NOT NULL DEFAULT '' COMMENT '外部订单id',
   `paymethod` varchar(255) NOT NULL DEFAULT '' COMMENT '支付渠道',
   `paymoney` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付总金额',
-  `kami` text NOT NULL DEFAULT ('') COMMENT '卡密',
-  `configure1` text NOT NULL DEFAULT ('') COMMENT '额外配置1',
-  `addons` text NOT NULL DEFAULT ('') COMMENT '备注',
+  `kami` text NOT NULL DEFAULT '' COMMENT '卡密',
+  `configure1` text NOT NULL DEFAULT '' COMMENT '额外配置1',
+  `addons` text NOT NULL DEFAULT '' COMMENT '备注',
   `isdelete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未删除,1已删除'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -250,13 +250,13 @@ CREATE TABLE IF NOT EXISTS `t_payment` (
   `sign_type` enum('RSA','RSA2','MD5','HMAC-SHA256') NOT NULL DEFAULT 'RSA2',
   `app_id` varchar(255) NOT NULL DEFAULT '',
   `app_secret` varchar(255) NOT NULL DEFAULT '',
-  `ali_public_key` text NOT NULL DEFAULT ('') COMMENT '配置1',
-  `rsa_private_key` text NOT NULL DEFAULT ('') COMMENT '配置2',
-  `configure3` text NOT NULL DEFAULT ('') COMMENT '配置3',
-  `configure4` text NOT NULL DEFAULT ('') COMMENT '配置4',
+  `ali_public_key` text NOT NULL DEFAULT '' COMMENT '配置1',
+  `rsa_private_key` text NOT NULL DEFAULT '' COMMENT '配置2',
+  `configure3` text NOT NULL DEFAULT '' COMMENT '配置3',
+  `configure4` text NOT NULL DEFAULT '' COMMENT '配置4',
   `overtime` int(11) NOT NULL DEFAULT '0' COMMENT '支付超时,0是不限制',
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未激活,1已激活'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 --
 -- 转存表中的数据 `t_payment`
@@ -270,7 +270,9 @@ INSERT INTO `t_payment` (`id`, `payment`, `payname`, `payimage`, `alias`, `sign_
 (5, 'PAYPAL', 'PAYPAL', '/res/images/pay/paypal.jpg', 'paypal', 'RSA2', '', '', '', '', 'live','7', 0, 0),
 (6, 'V免签微信', '微信', '/res/images/pay/weixin.jpg', 'vpaywx', 'MD5', '', '', '', '', '','', 0, 0),
 (7, 'V免签支付宝', '支付宝', '/res/images/pay/alipay.jpg', 'vpayalipay', 'MD5', '', '', '', '', '','', 0, 0),
-(8, 'U支付', 'USDT', '/res/images/pay/usdt.jpg', 'uzhifu', 'MD5', '', '', '', '', '', '', 6000, 0);
+(8, 'U支付', 'USDT', '/res/images/pay/usdt.jpg', 'uzhifu', 'MD5', '', '', '', '', '', '', 6000, 0),
+(9, '易支付', '易支付', '/res/images/pay/yipay.jpg', 'yipay', 'MD5', '', '', 'alipay+wxpay', '', '', 'epay', 600, 0),
+(10, 'GMPay USDT', 'USDT', '/res/images/pay/gmpay.jpg', 'gmpay', 'MD5', '', '', '', '', '', 'tron', 600, 0);
 -- --------------------------------------------------------
 
 --
@@ -283,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `t_products` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未激活 1激活',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '产品名',
   `password` varchar(60) NOT NULL DEFAULT '' COMMENT '密码',
-  `description` text NOT NULL DEFAULT ('') COMMENT '描述',
+  `description` text NOT NULL DEFAULT '' COMMENT '描述',
   `stockcontrol` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0不控制,1控制',
   `qty` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
   `qty_virtual` int(11) NOT NULL DEFAULT '0' COMMENT '虚拟库存',
@@ -292,11 +294,11 @@ CREATE TABLE IF NOT EXISTS `t_products` (
   `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价',
   `price_ori` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价',
   `auto` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0手动,1自动',
-  `addons` text NOT NULL DEFAULT ('') COMMENT '备注',
+  `addons` text NOT NULL DEFAULT '' COMMENT '备注',
   `sort_num` int(11) NOT NULL DEFAULT '1' COMMENT '排序',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `isdelete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未删除,1已删除',
-  `imgurl` text NOT NULL DEFAULT ('') COMMENT '产品图片',
+  `imgurl` text NOT NULL DEFAULT '' COMMENT '产品图片',
   `iszhekou` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0无折扣,1有折扣'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
@@ -316,7 +318,7 @@ INSERT INTO `t_products` (`id`, `typeid`, `active`, `name`, `password`,`descript
 CREATE TABLE IF NOT EXISTS `t_products_card` (
   `id` int(11) NOT NULL,
   `pid` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
-  `card` text NOT NULL DEFAULT ('') COMMENT '卡密',
+  `card` text NOT NULL DEFAULT '' COMMENT '卡密',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0可用 1已使用',
   `isdelete` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未删除,1已删除'
@@ -385,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `t_ticket` (
   `typeid` int(11) NOT NULL DEFAULT '1' COMMENT '类型',
   `priority` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0不重要 1重要',
   `subject` varchar(255) NOT NULL DEFAULT '' COMMENT '主题',
-  `content` text NOT NULL DEFAULT ('') COMMENT '内容',
+  `content` text NOT NULL DEFAULT '' COMMENT '内容',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0,刚创建;1,已回复;5已完结',
   `addtime` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -661,7 +663,7 @@ ALTER TABLE `t_user_group`
 
 ALTER TABLE `t_products_pifa`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
+  
 ALTER TABLE `t_user_login_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 

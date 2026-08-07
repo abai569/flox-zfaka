@@ -6,7 +6,7 @@
  */
 
 namespace Safe;
-class MyInt extends \Safe\Base
+class MyInt extends \Safe\Base 
 {
     public function __construct($str=null)
     {

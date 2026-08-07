@@ -24,3 +24,4 @@ class PayPalHttpClient extends HttpClient
         return UserAgent::getValue();
     }
 }
+

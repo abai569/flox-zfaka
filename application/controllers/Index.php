@@ -45,7 +45,7 @@ class IndexController extends ProductBasicController
 				$data['products_type_active'] = $products_type_active;
 				$data['products'] = $items;
 			}
-
+			
 			$data['title'] = "购买商品";
 			if($this->tpl){
 				$this->display($this->tpl, $data);

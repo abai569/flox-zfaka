@@ -1,60 +1,44 @@
-<?php include MEMBER_COMMON_PATH.'/header.html';?>
-<div class="layui-container fly-marginTop">
-    <div class="zf-auth-wrap">
-        <div class="zf-auth-card">
-            <div class="layui-tab layui-tab-brief" lay-filter="user">
-                <ul class="layui-tab-title">
-                    <li class="layui-this">登录</li>
-                    <?php if(isset($config['registerswitch']) AND $config['registerswitch']>0):?><li><a href="/member/register/">注册</a></li><?php endif;?>
-                </ul>
-                <div class="layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
-                    <div class="layui-tab-item layui-show">
-                        <div class="layui-form-pane">
-                            <?php if(isset($config['loginswitch']) AND $config['loginswitch']>0):?>
-                            <form class="layui-form">
-                                <div class="layui-form-item">
-                                    <label for="L_email" class="layui-form-label">邮箱</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" id="L_email" name="email" required lay-verify="required|email" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <label for="L_pass" class="layui-form-label">密码</label>
-                                    <div class="layui-input-inline">
-                                        <input type="password" id="L_pass" name="password" required lay-verify="required|passwd" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                                <?php if(isset($config['yzmswitch']) AND $config['yzmswitch']>0):?>
-                                <div class="layui-form-item" style="position: relative;">
-                                    <label for="L_vercode" class="layui-form-label">图形验证</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" id="L_vercode" name="vercode" required lay-verify="required|vercode" placeholder="" autocomplete="off" class="layui-input">
-                                    </div>
-                                    <div class="zlkb_yzm">
-                                        <img src="/Captcha?t=login" alt="图片验证码" height="36" class="loadcode">
-                                    </div>
-                                </div>
-                                <?php endif;?>
-                                <div class="layui-form-item">
-                                    <button class="layui-btn" lay-filter="login" lay-submit>立即登录</button>
-                                </div>
-                                <div class="zf-auth-footer">
-                                    <?php if(isset($config['forgetpwdswitch']) AND $config['forgetpwdswitch']>0):?><a href="/member/forgetpwd">忘记密码？</a><?php endif;?>
-                                </div>
-                            </form>
-                            <?php else:?>
-                            <blockquote class="layui-elem-quote">
-                                <p>本系统已经关闭登录功能；</p>
-                            </blockquote>
-                            <?php endif;?>
-                        </div>
-                    </div>
+<?php $hideArticleNav = true; include MEMBER_COMMON_PATH.'/header.html';?>
+<div class="tokyo-auth-container">
+    <div class="tokyo-auth-panel">
+        <div class="tokyo-auth-header">
+            <h1 class="tokyo-auth-title">登录</h1>
+            <p class="tokyo-auth-subtitle">登录您的账户以继续</p>
+        </div>
+        <?php if(isset($config['loginswitch']) AND $config['loginswitch']>0):?>
+        <form class="layui-form layui-form-pane tokyo-auth-form" method="post">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_email" name="email" required lay-verify="required|email" autocomplete="off" class="layui-input" placeholder="请输入邮箱地址">
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_pass" name="password" required lay-verify="required|passwd" autocomplete="off" class="layui-input" placeholder="请输入密码">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="login" lay-submit>立即登录</button>
+            </div>
+        </form>
+        <div class="tokyo-auth-links">
+            <?php if(isset($config['forgetpwdswitch']) AND $config['forgetpwdswitch']>0):?>
+            <a href="/member/forgetpwd">忘记密码？</a>
+            <?php endif;?>
+            <?php if(isset($config['registerswitch']) AND $config['registerswitch']>0):?>
+            <?php if(isset($config['forgetpwdswitch']) AND $config['forgetpwdswitch']>0):?> &middot; <?php endif;?>
+            <a href="/member/register/">注册新账号</a>
+            <?php endif;?>
         </div>
+        <?php else:?>
+        <blockquote class="layui-elem-quote">
+            <p>本系统已经关闭登录功能；</p>
+        </blockquote>
+        <?php endif;?>
     </div>
 </div>
-<!--引入公共底文件-->
 <?php include MEMBER_COMMON_PATH.'/footer.html';?>
 <script>
     layui.use('memberlogin');

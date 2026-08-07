@@ -9,7 +9,7 @@ namespace Safe;
 class Base
 {
     public $value;
-
+	
     public function __construct($str=null)
     {
         $this->value = $str;
@@ -17,7 +17,7 @@ class Base
 
 	/**
 	* 通用函数
-	*
+	* 
 	* return object
 	*/
     public function __call($name, $args)
@@ -29,40 +29,40 @@ class Base
 
 	/**
 	* 获取内容
-	*
+	* 
 	* return int
 	*/
     public function getValue()
     {
         return $this->value;
     }
-
+	
 	/**
 	* 获取长度
-	*
+	* 
 	* return int
 	*/
     public function strlen()
     {
         return strlen($this->value);
     }
-
+	
 	/**
 	* 去除二边的空格
-	*
+	* 
 	* return object
-	*/
+	*/	
 	public function trim()
 	{
 		$this->value = trim($this->value);
 		return $this;
 	}
-
+	
 	/**
 	* 去除所有的空格
-	*
+	* 
 	* return object
-	*/
+	*/		
 	public function trimall()
 	{
 		$oldchar = array(" ","　","\t","\n","\r");
@@ -70,6 +70,6 @@ class Base
 		$this->value = str_replace($oldchar,$newchar,$this->value);
 		return $this;
 	}
-
-
+	
+	
 }

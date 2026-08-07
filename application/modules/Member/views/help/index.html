@@ -1,6 +1,6 @@
 <?php include MEMBER_COMMON_PATH.'/header.html';?>
 <div class="layui-container fly-marginTop fly-user-main">
-    <?php include MEMBER_COMMON_PATH.'/help-nav.html';?>
+	<?php include MEMBER_COMMON_PATH.'/help-nav.html';?>
     <div class="fly-panel fly-panel-user" pad20>
         <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title" id="LAY_mine">
@@ -8,9 +8,9 @@
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;">
                 <div class="layui-form-pane layui-tab-item layui-show">
-                    <div class="zf-table-wrap">
-                        <table class="layui-table" id="question"></table>
-                    </div>
+                    <!-- <div class="layui-form-item">
+                        <p>敬请期待!</p>
+                    </div> -->
                     <script type="text/html" id="details">
                         <a class="layui-btn layui-btn-warm layui-btn-xs" href="/member/help/index/detail/?id={{d.id}}">查看</a>
                     </script>
@@ -36,6 +36,7 @@
                     <script type="text/html" id="addtime">
                         {{ createTime(d.addtime) }}
                     </script>
+                    <table class="layui-table" id="question"></table>
                 </div>
             </div>
         </div>

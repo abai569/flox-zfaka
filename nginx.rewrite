@@ -3,3 +3,5 @@ location / {
                 rewrite ^/(.*)$ /index.php?$1 last;
         }
 }
+
+

@@ -65,11 +65,11 @@ layui.define(['layer', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.href = '/member/login/';
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.href = '/member/login/';
 					}
 				});
-
+				
 			} else {
 				layer.msg(res.msg,{icon:2,time:5000});
 			}

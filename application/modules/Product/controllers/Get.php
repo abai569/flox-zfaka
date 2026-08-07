@@ -18,18 +18,11 @@ class GetController extends ProductBasicController
 		$this->m_products_type = $this->load('products_type');
 		$this->m_products_pifa = $this->load('products_pifa');
     }
-
+	
     public function indexAction()
     {
 		$tid = $this->get('tid');
-		$keyword = $this->get('keyword', false);
-		$keyword = is_string($keyword) ? trim(strip_tags($keyword)) : '';
-		$keywordCondition = '';
-		if(strlen($keyword)>0){
-			$keywordCondition = " and LOCATE(CONVERT(0x".bin2hex($keyword)." USING utf8), p1.name)>0";
-		}
 		if($tid AND is_numeric($tid) AND $tid>0){
-			$tid = (int)$tid;
 			//1.先查询是否为密码分类
 			$products_type = $this->m_products_type->Where(array('id'=>$tid,'active'=>1,'isdelete'=>0))->SelectOne();
 			if(!empty($products_type)){
@@ -37,22 +30,20 @@ class GetController extends ProductBasicController
 					$password = $this->get('password');
 					if(!$password){
 						$data = array('code'=>1000,'count'=>0,'data'=>array(),'msg'=>'参数错误');
-						Helper::response($data);
+						Helper::response($result);
 					}
 					if($products_type['password']!=$password){
 						$data = array('code'=>1000,'count'=>0,'data'=>array(),'msg'=>'密码错误');
 						Helper::response($data);
 					}
 				}
-
-				$condition = "p1.active=1 and p1.isdelete=0 and p1.typeid={$tid}{$keywordCondition}";
-				$countSql = "SELECT COUNT(*) AS total FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid=p2.id where {$condition}";
-				$countItems = $this->m_products->Query($countSql);
-				$total = (int)$countItems[0]['total'];
+					
+				$where = array('active'=>1,'isdelete'=>0,'typeid'=>$tid);
+				$total=$this->m_products->Where($where)->Total();
 				if ($total > 0) {
 					$page = $this->get('page');
 					$page = is_numeric($page) ? $page : 1;
-
+					
 					$limit = $this->get('limit');
 					$limit = is_numeric($limit) ? $limit : 10;
 					if ($page > 0 && $page < (ceil($total / $limit) + 1)) {
@@ -60,10 +51,10 @@ class GetController extends ProductBasicController
 					} else {
 						$pagenum = 0;
 					}
-
+					
 					$limits = "{$pagenum},{$limit}";
-
-					$sql = "SELECT p1.* FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid=p2.id where {$condition} order by p2.sort_num DESC, p1.sort_num DESC LIMIT {$limits}";
+					
+					$sql = "SELECT p1.* FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid =p2.id where p1.active=1 and p1.isdelete=0 and p1.typeid ={$tid} order by p2.sort_num DESC, p1.sort_num DESC LIMIT {$limits}";
 					$items = $this->m_products->Query($sql);
 					if (empty($items)) {
 						$data = array('code'=>0,'count'=>0,'data'=>array(),'msg'=>'无数据');
@@ -87,20 +78,18 @@ class GetController extends ProductBasicController
 			}
 			Helper::response($data);
 		}else{
-			$condition = "p1.active=1 and p1.isdelete=0 and p2.active=1 and p2.isdelete=0{$keywordCondition}";
-			$countSql = "SELECT COUNT(*) AS total FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid=p2.id where {$condition}";
-			$countItems = $this->m_products->Query($countSql);
-			$total = (int)$countItems[0]['total'];
+			$where = array('active'=>1,'isdelete'=>0);
+			$total=$this->m_products->Where($where)->Total();
 			if ($total > 0) {
 				$page = $this->get('page');
 				$page = is_numeric($page) ? $page : 1;
-
+				
 				$limit = $this->get('limit');
 				$limit = is_numeric($limit) ? $limit : 10;
 				if ($page > 0 && $page < (ceil($total / $limit) + 1)) {
 					$pagenum = ($page - 1) * $limit;
 					$limits = "{$pagenum},{$limit}";
-					$sql = "SELECT p1.* FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid=p2.id where {$condition} order by p2.sort_num DESC, p1.sort_num DESC LIMIT {$limits}";
+					$sql = "SELECT p1.* FROM `t_products` as p1 left join t_products_type as p2 on p1.typeid =p2.id where p1.active=1 and p1.isdelete=0 and p2.active=1 and p2.isdelete=0 order by p2.sort_num DESC, p1.sort_num DESC LIMIT {$limits}";
 					$items = $this->m_products->Query($sql);
 					if (empty($items)) {
 						$data = array('code'=>0,'count'=>0,'data'=>array(),'msg'=>'无数据');
@@ -126,7 +115,7 @@ class GetController extends ProductBasicController
 			Helper::response($data);
 		}
     }
-
+	
     public function grouplistAction()
     {
 		$where = array('active'=>1,'isdelete'=>0);
@@ -134,7 +123,7 @@ class GetController extends ProductBasicController
 		if ($total > 0) {
 			$page = $this->get('page');
 			$page = is_numeric($page) ? $page : 1;
-
+			
 			$limit = $this->get('limit');
 			$limit = is_numeric($limit) ? $limit : 10;
             if ($page > 0 && $page < (ceil($total / $limit) + 1)) {
@@ -142,7 +131,7 @@ class GetController extends ProductBasicController
             } else {
                 $pagenum = 0;
             }
-
+			
             $limits = "{$pagenum},{$limit}";
 			$order = array('sort_num' => 'DESC');
 			$items = $this->m_products_type->Where(array('active'=>1,'isdelete'=>0))->Order($order)->Limit($limits)->Select();
@@ -157,20 +146,20 @@ class GetController extends ProductBasicController
 						}
 				$result = array('code'=>0,'count'=>$total,'data'=>$items,'msg'=>'有数据');
 			}else{
-
+				
 				$result = array('code'=>0,'count'=>0,'data'=>array(),'msg'=>'无数据');
 			}
 		}else{
 			 $result = array('code'=>0,'count'=>0,'data'=>array(),'msg'=>'无数据');
 		}
         Helper::response($result);
-    }
-
+    }	
+	
     public function proudctlistAction()
     {
 		$tid = $this->getPost('tid');
 		$csrf_token = $this->getPost('csrf_token', false);
-
+		
 		if($tid AND is_numeric($tid) AND $tid>0 AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				//1.先查询是否为密码分类
@@ -187,7 +176,7 @@ class GetController extends ProductBasicController
 							Helper::response($result);
 						}
 					}
-
+					
 					$data = array();
 					$order = array('sort_num' => 'DESC');
 					$field = array('id', 'name','password');
@@ -213,7 +202,7 @@ class GetController extends ProductBasicController
 		}
         Helper::response($result);
     }
-
+	
 	public function proudctinfoAction()
 	{
 		$pid = $this->getPost('pid');
@@ -245,8 +234,8 @@ class GetController extends ProductBasicController
 							$data['pifa'] = $pifa;
 						}
 					}
-
-					$data['product'] = $product;
+					
+					$data['product'] = $product;	
 					if($product['addons']){
 						$addons = explode(',',$product['addons']);
 						$data['addons'] = $addons;
@@ -254,7 +243,7 @@ class GetController extends ProductBasicController
 						$data['addons'] = array();
 					}
 					$result = array('code' => 1, 'msg' => 'success','data'=>$data);
-
+					
 				}else{
 					$result = array('code' => 1002, 'msg' => '商品不存在');
 				}

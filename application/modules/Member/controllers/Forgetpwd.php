@@ -11,7 +11,7 @@ class ForgetpwdController extends MemberBasicController
 	private $m_user;
 	private $m_email_code;
     private $m_email;
-
+	
 	public function init()
     {
         parent::init();
@@ -33,7 +33,7 @@ class ForgetpwdController extends MemberBasicController
 		$data['title'] = "找回密码";
 		$this->getView()->assign($data);
     }
-
+	
 	public function resetAction()
 	{
 		if(isset($this->config['forgetpwdswitch']) AND $this->config['forgetpwdswitch']<1){
@@ -50,10 +50,10 @@ class ForgetpwdController extends MemberBasicController
                 $id = (int)$key_array[1];
 				$email = $key_array[2];
 				$email = strtolower($email);
-
+				
 				$code_string = new \Safe\MyString($code);
 				$code = $code_string->trimall()->qufuhao2()->getValue();
-
+				
                 if (false != $code AND is_numeric($id) AND $id > 0 AND isEmail($email)) {
                     //从数据库中读取
                     $where = array('email' => $email, 'id' => $id, 'code' => $code, 'status' => 1,'action'=>'forgetpwd');
@@ -80,7 +80,7 @@ class ForgetpwdController extends MemberBasicController
 		$data['title'] = "找回密码";
 		$this->getView()->assign($data);
 	}
-
+	
 	//找回密码 2.重设
 	public function resetajaxAction()
 	{
@@ -92,9 +92,9 @@ class ForgetpwdController extends MemberBasicController
 		$code = $this->getPost('code');
 		$password = $this->getPost('password');
 		$csrf_token = $this->getPost('csrf_token', false);
-
+		
 		$data = array();
-
+		
 		if($email AND $code AND $password AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				$email = strtolower($email);
@@ -124,7 +124,7 @@ class ForgetpwdController extends MemberBasicController
 		}
 		Helper::response($data);
 	}
-
+	
 	//找回密码 1.验证邮箱
 	public function ajaxAction()
 	{
@@ -134,9 +134,9 @@ class ForgetpwdController extends MemberBasicController
 		}
 		$email    = $this->getPost('email');
 		$csrf_token = $this->getPost('csrf_token', false);
-
+		
 		$data = array();
-
+		
 		if($email AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				$email = strtolower($email);
@@ -154,8 +154,8 @@ class ForgetpwdController extends MemberBasicController
 							$data = array('code' => 1000, 'msg' => '丢失参数');
 							Helper::response($data);
 						}
-					}
-
+					}	
+					
 
 						$checkEmailUser = $this->m_user->checkEmail($email);
 						if(!empty($checkEmailUser)){
@@ -179,7 +179,7 @@ class ForgetpwdController extends MemberBasicController
 										'checkedStatus'=>0
 									);
 									$m['id'] = $this->m_email_code->Insert($m);
-
+									
 									//3.发送邮件
 									try {
 										$key=base64_encode("{$m['code']}-{$m['id']}-{$email}");
@@ -206,7 +206,7 @@ class ForgetpwdController extends MemberBasicController
 									} catch (\Exception $e) {
 										$data = array('code' => 1006, 'msg' => $e->getMessage());
 									}
-
+									
 									//4.记录发送失败
 									if($data['code']>1){
 										$this->m_email_code->UpdateByID(array('status'=>0,'result'=>$data['msg']),$m['id']);
@@ -214,7 +214,7 @@ class ForgetpwdController extends MemberBasicController
 										$this->m_email_code->UpdateByID(array('status'=>1,'result'=>$data['msg']),$m['id']);
 									}
 								}
-
+								
 						}else{
 							$data = array('code' => 1002, 'msg' =>'邮箱不存在');
 						}

@@ -23,7 +23,7 @@ class QueryController extends ProductBasicController
 		if(!in_array($zlkbmethod,$this->method_array)){
 			$zlkbmethod = "orderid";
 		}
-
+		
 		if($zlkbmethod == "auto"){
 			$data['order'] = $data['cnstatus'] = array();
 			//如果有订单号过来，就是直接去自动查询页面
@@ -34,10 +34,10 @@ class QueryController extends ProductBasicController
 				}else{
 					$order_email = $this->getSession('order_email');
 				}
-
+				
 				$orderid_string = new \Safe\MyString($orderid);
 				$orderid = $orderid_string->trimall()->qufuhao2()->getValue();
-
+				
 				if($order_email AND isEmail($order_email)){
 					$order = $this->m_order->Where(array('orderid'=>$orderid,'email'=>$order_email))->Where(array('isdelete'=>0))->SelectOne();
 					if(!empty($order)){
@@ -50,15 +50,15 @@ class QueryController extends ProductBasicController
 
 		if($zlkbmethod == "contact" AND isset($this->config['querycontactswitch']) AND $this->config['querycontactswitch']<0){
 			$this->show_message('error','当前查询方式已关闭','/');
-			return FALSE;
+			return FALSE; 
 		}
-
+		
 		$data['title'] = "订单查询";
 		$tpl = $zlkbmethod;
 		$this->display($tpl, $data);
 		return FALSE;
     }
-
+	
 	public function ajaxAction()
 	{
 		$zlkbmethod = $this->getPost('zlkbmethod');
@@ -89,7 +89,7 @@ class QueryController extends ProductBasicController
 										Helper::response($data);
 									}
 								}
-
+								
 								if(isset($this->config['yzmswitch']) AND $this->config['yzmswitch']>0){
 									$vercode = $this->getPost('vercode');
 									if($vercode){
@@ -104,10 +104,10 @@ class QueryController extends ProductBasicController
 										Helper::response($data);
 									}
 								}
-
+								
 								$chapwd_string = new \Safe\MyString($chapwd);
 								$chapwd = $chapwd_string->trimall()->qufuhao2()->getValue();
-
+								
 								$starttime = strtotime("-1 month");
 								$order = $this->m_order->Where(array('email'=>$email,'chapwd'=>$chapwd))->Where(array('isdelete'=>0))->Where("addtime>={$starttime}")->Order(array('id'=>'desc'))->Select();
 								if(empty($order)){
@@ -122,7 +122,7 @@ class QueryController extends ProductBasicController
 							$data = array('code' => 1000, 'msg' => '丢失参数');
 						}
 					}
-				//订单号查询
+				//订单号查询	
 				}elseif($zlkbmethod == 'orderid'){
 					$orderid  = $this->getPost('orderid');
 					if($orderid){
@@ -141,10 +141,10 @@ class QueryController extends ProductBasicController
 									Helper::response($data);
 								}
 							}
-
+							
 							$orderid_string = new \Safe\MyString($orderid);
 							$orderid = $orderid_string->trimall()->qufuhao2()->getValue();
-
+							
 							$starttime = strtotime("-1 month");
 							//20190115,通过订单查询增加IP条件
 							$ip = getClientIP();
@@ -167,10 +167,10 @@ class QueryController extends ProductBasicController
 						if ($this->VerifyCsrfToken($csrf_token)) {
 							$l_encryption = new Encryption();
 							$cookie_oid = $l_encryption->decrypt($orderid);
-
+							
 							$orderid_string = new \Safe\MyString($cookie_oid);
 							$cookie_oid = $orderid_string->trimall()->qufuhao2()->getValue();
-
+							
 							$starttime = strtotime("-1 month");
 							$order = $this->m_order->Where(array('orderid'=>$cookie_oid))->Where(array('isdelete'=>0))->Where("addtime>={$starttime}")->Order(array('id'=>'desc'))->Select();
 							if(empty($order)){
@@ -195,7 +195,7 @@ class QueryController extends ProductBasicController
 		}
 		Helper::response($data);
 	}
-
+	
 	public function kamiAction()
 	{
 		$orderid    = $this->getPost('orderid');
@@ -224,7 +224,7 @@ class QueryController extends ProductBasicController
 		}
 		Helper::response($data);
 	}
-
+	
 	public function payAction()
 	{
 		$oid    = $this->getPost('oid');

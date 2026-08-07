@@ -38,7 +38,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});

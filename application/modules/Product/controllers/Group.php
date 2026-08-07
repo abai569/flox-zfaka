@@ -36,7 +36,7 @@ class GroupController extends ProductBasicController
 				}
 			}else{
 				$this->redirect("/product/");
-				return FALSE;
+				return FALSE;	
 			}
 		}else{
 			$this->redirect("/product/");

@@ -25,7 +25,7 @@ if ( ! function_exists('Pinyin')){
 		"|xi|xia|xian|xiang|xiao|xie|xin|xing|xiong|xiu|xu|xuan|xue|xun|ya|yan|yang|yao|ye|yi|yin|ying|yo|yong|you".
 		"|yu|yuan|yue|yun|za|zai|zan|zang|zao|ze|zei|zen|zeng|zha|zhai|zhan|zhang|zhao|zhe|zhen|zheng|zhi|zhong|".
 		"zhou|zhu|zhua|zhuai|zhuan|zhuang|zhui|zhun|zhuo|zi|zong|zou|zu|zuan|zui|zun|zuo";
-
+		
 		$_DataValue = "-20319|-20317|-20304|-20295|-20292|-20283|-20265|-20257|-20242|-20230|-20051|-20036|-20032|-20026|-20002|-19990".
 		"|-19986|-19982|-19976|-19805|-19784|-19775|-19774|-19763|-19756|-19751|-19746|-19741|-19739|-19728|-19725".
 		"|-19715|-19540|-19531|-19525|-19515|-19500|-19484|-19479|-19467|-19289|-19288|-19281|-19275|-19270|-19263".
@@ -53,28 +53,28 @@ if ( ! function_exists('Pinyin')){
 		"|-11052|-11045|-11041|-11038|-11024|-11020|-11019|-11018|-11014|-10838|-10832|-10815|-10800|-10790|-10780".
 		"|-10764|-10587|-10544|-10533|-10519|-10331|-10329|-10328|-10322|-10315|-10309|-10307|-10296|-10281|-10274".
 		"|-10270|-10262|-10260|-10256|-10254";
-
+		
 		$_TDataKey   = explode('|', $_DataKey);
 		$_TDataValue = explode('|', $_DataValue);
 		$_Data = (PHP_VERSION>='5.0') ? array_combine($_TDataKey, $_TDataValue) : _Array_Combine($_TDataKey, $_TDataValue);
-
+		
 		arsort($_Data);
 		reset($_Data);
-
+		
 		if($_Code != 'gb2312'){
 			$_String = _U2_Utf8_Gb($_String);
 		}
-
+		
 		$_Res = '';
 		for($i=0; $i<strlen($_String); $i++){
 			$_P = ord(substr($_String, $i, 1));
-			if($_P>160) {
-				$_Q = ord(substr($_String, ++$i, 1)); $_P = $_P*256 + $_Q - 65536;
+			if($_P>160) { 
+				$_Q = ord(substr($_String, ++$i, 1)); $_P = $_P*256 + $_Q - 65536; 
 			}
-
+			
 			$_Res .= _Pinyin($_P, $_Data, $first);
 		}
-
+		
 		return preg_replace("/[^a-z0-9]*/", '', $_Res);
 	}
 }
@@ -86,15 +86,15 @@ if ( ! function_exists('_Pinyin')){
 		}elseif($_Num<-20319 || $_Num>-10247){
 			return '';
 		}else{
-			foreach($_Data as $k=>$v){
-				if($v<=$_Num) break;
+			foreach($_Data as $k=>$v){ 
+				if($v<=$_Num) break; 
 			}
-
+			
 			// 只返回第一个字母的小写形式
 			if($first){
 				return strtolower(substr($k, 0, 1));
 			}
-
+			
 			return $k;
 		}
 	}
@@ -118,10 +118,9 @@ if ( ! function_exists('_U2_Utf8_Gb')){
 			$_String .= chr(0x80 | $_C>>6 & 0x3F);
 			$_String .= chr(0x80 | $_C & 0x3F);
 		}
-
+		
 		return iconv('UTF-8', 'GB2312', $_String);
 	}
-}
 
 if ( ! function_exists('_Array_Combine')){
 	function _Array_Combine($_Arr1, $_Arr2){

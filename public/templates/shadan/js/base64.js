@@ -9,7 +9,7 @@ layui.define(function(exports){
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  * 2013/02/10
  **/
-
+ 
 var jQuery = layui.jquery;
 
 ;(function($) {

@@ -20,7 +20,7 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 	if(device.ie && device.ie < 8){
 		layer.alert('如果您非得使用 IE 浏览器访问本站点，那么请使用 IE8+');
 	}
-
+	
 	layui.focusInsert = function(obj, str){
 		var result, val = obj.value;
 		obj.focus();
@@ -90,7 +90,7 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 		$('body').removeClass('site-mobile');
 		$('html,body').removeClass('ovfHiden');
 	});
-
+  
 	$('#main-menu-mobile-switch').on('click', function(){
 		if($("#main-menu-mobile").is(":hidden")){
 			$('body').addClass('main-menu-mobile_body');
@@ -109,13 +109,13 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 		$('html,body').removeClass('ovfHiden');
 		$('#main-menu-mobile').hide();
 	});
-	//全局删除信息提示
+ 	//全局删除信息提示
 	table.on('tool(table)', function(obj) {
 		var layEvent = obj.event;
 
 		var url = $(this).data('href');
         var deltip = $(this).data('deltip') || '真的要删除该记录吗？';
-
+		
 		if (layEvent === 'del') { //删除
 			layer.confirm(deltip, function(index) {
 				layer.close(index);
@@ -131,7 +131,7 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
                         obj.del();
                         layer.msg(res.msg,{icon:1})
                     } else {
-	layer.msg(res.msg,{icon:2})
+                    	layer.msg(res.msg,{icon:2})
                     }
 				})
 				.fail(function() {
@@ -153,7 +153,7 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 				if ( res.code == '1' ) {
                     layer.msg(res.msg,{icon:1,time:1500},function(){location.reload();})
                 } else {
-	layer.msg(res.msg,{icon:2,time:3000})
+                	layer.msg(res.msg,{icon:2,time:3000})
                 }
 			})
 			.fail(function() {
@@ -163,7 +163,8 @@ layui.define(['layer', 'laytpl', 'form', 'element','table'], function(exports){
 				layer.close(loading);
 			});
 		}
-	});
+	}); 
   exports('common',null);
 
 });
+

@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.4.7-blue">
+  <img src="https://img.shields.io/badge/version-1.4.6-blue">
   <img src="https://img.shields.io/badge/PHP-7.x-blue">
   <a href="https://t.me/ZFAKA_dev">
     <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
@@ -14,58 +14,12 @@
 
 >**郑重申明：本项目为开源程序，仅做技术交流使用**
 
-## Docker 一键部署
+演示地址：https://zk-cash.com/  
+永久免费、完全开源，欢迎提供各种需求和意见与建议。  
+[加入群组](https://t.me/ZFAKA_group)  
+历史漏洞已修复，可放心使用  
 
-Docker 版本包含 PHP 7.4、Yaf、Nginx、Supervisor 和 MySQL 8.0。首次启动会自动初始化数据库，无需运行网页安装向导。
-
-在已使用 root 登录的 Linux 服务器执行：
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/install.sh)
-```
-
-安装脚本默认将文件保存到 `/opt/flox-zfaka`，自动生成数据库密码，并提示访问地址。默认端口为 `8089`，默认后台路径为 `/Admin/login`。
-
-首次登录账号为 `demo@demo.com`，密码为 `123456`。登录后必须立即修改账号和密码。
-
-### 常用命令
-
-```bash
-cd /opt/flox-zfaka
-bash install.sh status
-bash install.sh logs
-bash install.sh update
-bash install.sh backup
-bash install.sh restore /path/to/zfaka-YYYYMMDD-HHMMSS.sql.gz
-```
-
-生产环境建议在 `/opt/flox-zfaka/.env` 中将 `ZFAKA_IMAGE` 固定为具体版本，例如 `ghcr.io/abai569/flox-zfaka:1.4.7`。修改 `.env` 后执行：
-
-```bash
-cd /opt/flox-zfaka
-docker compose pull
-docker compose up -d
-```
-
-数据库、配置、安装锁、日志、临时文件和上传文件分别保存在 Docker 命名卷中。`backup` 命令会备份 MySQL 数据库和 `.env`；迁移或升级前，还应在宿主机或存储层备份以下命名卷：
-
-```text
-flox-zfaka_zfaka_mysql
-flox-zfaka_zfaka_conf
-flox-zfaka_zfaka_install
-flox-zfaka_zfaka_logs
-flox-zfaka_zfaka_temp
-flox-zfaka_zfaka_uploads
-```
-
-Docker 部署应通过镜像标签升级，不要使用后台的源码在线升级功能。回滚时，将 `.env` 中的 `ZFAKA_IMAGE` 改回旧版本并恢复升级前的数据库和卷备份。
-
-演示地址：https://zk-cash.com/
-永久免费、完全开源，欢迎提供各种需求和意见与建议。
-[加入群组](https://t.me/ZFAKA_group)
-历史漏洞已修复，可放心使用
-
-[![Telegram](https://img.shields.io/badge/Telegram-联系作者-blue?logo=telegram&style=for-the-badge)](https://t.me/ZFAKA_dev)
+[![Telegram](https://img.shields.io/badge/Telegram-联系作者-blue?logo=telegram&style=for-the-badge)](https://t.me/ZFAKA_dev)  
 # 模板展示
 
 模板1
@@ -84,14 +38,14 @@ Docker 部署应通过镜像标签升级，不要使用后台的源码在线升�
 
 <img width="800" alt="article1" src="https://github.com/user-attachments/assets/109985da-554a-4c8b-9bc4-ed80960e4b29" />
 
-# 系统优势
+# 系统优势  
 * 支持USDT收款
-* 支持windows和linux
-* SEO优化：新增文章模块
-* 安全：旧版漏洞已修复
-* 全部开源，永久免费，长期技术更新支持
-* 丰富的前端模板
-* 易于扩展，可自行添加支付方式和前端模板
+* 支持windows和linux  
+* SEO优化：新增文章模块  
+* 安全：旧版漏洞已修复  
+* 全部开源，永久免费，长期技术更新支持  
+* 丰富的前端模板  
+* 易于扩展，可自行添加支付方式和前端模板  
 
 # 一、系统介绍
 >包含自动/手工发卡功能，有会员中心和后台中心。
@@ -100,7 +54,7 @@ Docker 部署应通过镜像标签升级，不要使用后台的源码在线升�
 * 默认情况下，不支持注册，当然后台可以开放注册；
 
 * 注册成会员可查看历史购买记录。
-
+	
 1.2 购买模块
 * 支持自动发卡和手工发卡模式；
 
@@ -109,7 +63,7 @@ Docker 部署应通过镜像标签升级，不要使用后台的源码在线升�
 
 1.4 文章模块
 * 支持在后台编辑并发布文章；
-
+	
 1.5 支付渠道
 * 官方接口－U支付 （USDT TRC20） （教程：[配置支付方式‐U支付（USDT TRC20）](https://github.com/ZFAKA/ZFAKA/wiki/%E9%85%8D%E7%BD%AE%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E2%80%90U%E6%94%AF%E4%BB%98%EF%BC%88USDT-TRC20%EF%BC%89)）
 
@@ -163,9 +117,9 @@ Docker 部署应通过镜像标签升级，不要使用后台的源码在线升�
 
 ## 2.2 修改默认管理员账号和密码
 
-安装完成后请访问后台（默认路径为Goadmin，实际取决于你安装过程中的配置）修改管理员账号和密码
-默认管理员账号：demo@demo.com
-默认密码：123456
+安装完成后请访问后台（默认路径为Goadmin，实际取决于你安装过程中的配置）修改管理员账号和密码  
+默认管理员账号：demo@demo.com  
+默认密码：123456  
 
 ## 2.3 定时任务（可选）
 

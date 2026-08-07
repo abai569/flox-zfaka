@@ -10,8 +10,8 @@ abstract class Model {
 
 	private static $obj;
 	private static $conn;
-	private $result = NULL;
-	protected $table;
+	private $result = NULL;				
+	protected $table;				
 	private $options;            // SQL 中的 field, where, orderby, limit
 	private $selectOne = FALSE;  // 是否是 SelectOne, 不需要 updateOne, deleteOne
 
@@ -39,7 +39,7 @@ abstract class Model {
 	 */
 	private function connect($type = 'WRITE') {
 		$config = Yaf\Application::app()->getConfig();
-
+		
 		$db     = $config['Default'];
 		$driver = $config['TYPE'];
 		$host   = $config[$type.'_HOST'];
@@ -107,11 +107,11 @@ abstract class Model {
 		if (self::$conn === null) {
 			$this->connect();
 		}
-
+		
 		if (self::$conn !== null) {
 			return self::$conn->quote($value);
 		}
-
+		
 		// Fallback if connection fails
 		return "'" . addslashes($value) . "'";
 	}
@@ -155,7 +155,7 @@ abstract class Model {
 		}else{
 			$this->options['between'] = $str;
 		}
-
+		
 		return $this;
 	}
 
@@ -243,7 +243,7 @@ abstract class Model {
 		}else{
 			$this->options['where'] = $str;
 		}
-
+		
 		unset($str, $i, $total, $where, $connector);
 
 		return $this;
@@ -304,11 +304,11 @@ abstract class Model {
 	final private function _reset() {
 		unset($this->options);
 	}
-
+	
 
 	/**
 	 * Select records
-	 * @return records on success or FALSE on failure
+	 * @return records on success or FALSE on failure 
 	 */
 	final public function Select(){
 		$this->sql = $this->generateSQL();
@@ -653,7 +653,7 @@ abstract class Model {
 			return $this->Exec();
 		}
 	}
-
+	
 	/*
      *  Update one record
      */

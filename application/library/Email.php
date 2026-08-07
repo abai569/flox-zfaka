@@ -373,11 +373,11 @@ class Email {
 		$config['protocol'] = 'smtp';
 		$config['charset'] = 'utf-8';
 		$config['wordwrap'] = TRUE;
-		$config['validate'] = FALSE;
+		$config['validate'] = FALSE;		
 		$config['mailtype' ]= 'html' ;
 		$config['smtp_timeout'] = 30;
 		$config['crlf']="\r\n";
-		$config['newline']="\r\n";
+		$config['newline']="\r\n";		
 		if (count($config) > 0)
 		{
 			$this->initialize($config);

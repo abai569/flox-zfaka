@@ -24,7 +24,7 @@ class RefundOrder
     }
 
     /**
-     * This function can be used to preform refund on the capture.
+     * This function can be used to preform refund on the capture. 
      */
     public static function refundOrder($captureId, $debug=false)
     {

@@ -6,7 +6,7 @@ layui.define(['layer','jquery','laytpl','element','flow'], function(exports){
 	var flow = layui.flow;
 	var total_page = 2;
 	var device = layui.device();
-
+	
 	function getProduct(p)
 	{
 		var limit = 8;
@@ -43,9 +43,9 @@ layui.define(['layer','jquery','laytpl','element','flow'], function(exports){
 			layer.close(i);
 		});
 	};
-
+	
 	//首页广告弹窗
-	var layerad = $("#layerad").html();
+	var layerad = $("#layerad").html(); 
 	if(typeof(layerad)!="undefined"){
 		if(layerad.length>0){
 			layer.open({
@@ -62,15 +62,15 @@ layui.define(['layer','jquery','laytpl','element','flow'], function(exports){
 			});
 		}
 	}
-
+	
 	//流媒体
 	flow.load({
 		elem: '#more'
 		,done: function(page, next){
 			getProduct(page);
-			next('', page < total_page);
+			next('', page < total_page);  
 		}
 	});
-
+	
 	exports('product-list-two',null)
 });

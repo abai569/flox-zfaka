@@ -6,7 +6,7 @@
  * Date: 2018-05-21
  */
 
-class M_User_login_logs extends Model
+class M_User_login_logs extends Model 
 {
 
 	public function __construct()

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="<?php echo $config['webname'];?>,发卡平台,后台管理">
+    <meta name="author" content="ZFAKA">
+    <meta name="version" content="<?php echo VERSION;?>">
+    <link rel="stylesheet" href="/res/layui/css/layui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/res/css/global.css">
+    <link rel="stylesheet" href="/templates/tokyo/css/style.css?v=<?php echo VERSION;?>.20260806.26">
+    <?php if(isset($config['shortcuticon']) AND strlen($config['shortcuticon'])>0):?>
+    <link rel="shortcut icon" href="<?php echo $config['shortcuticon'];?>" />
+    <?php else:?>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <?php endif;?>
+    <script>
+    var TOKEN = "<?php echo $csrf_token;?>";
+    var ADMIN_DIR = "<?php echo ADMIN_DIR;?>";
+    if (self != top) {
+        top.location = self.location;
+    }
+    </script>
+</head>
+<body class="tokyo-theme tokyo-admin-page">
+<div class="tokyo-page-frame">
+    <header class="tokyo-nav-shell">
+        <div class="tokyo-nav-wrap">
+            <nav class="tokyo-nav">
+                <div class="tokyo-brand-wrap">
+                    <a class="tokyo-brand" href="/<?php echo ADMIN_DIR;?>/">
+                        <?php if(isset($config['logo']) AND strlen($config['logo'])>0):?>
+                        <img class="tokyo-brand-logo" src="<?php echo $config['logo'];?>" alt="<?php echo $config['webname'];?>">
+                        <?php endif;?>
+                        <span class="tokyo-brand-name">后台管理</span>
+                    </a>
+                    <button class="tokyo-nav-toggle" id="admin-nav-toggle" type="button" aria-label="Toggle navigation">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="tokyo-nav-main" id="admin-nav-menu">
+                    <ul class="tokyo-nav-links" id="webmenu">
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="index" href="/<?php echo ADMIN_DIR;?>/"><i class="fa-solid fa-gauge"></i> 账户中心</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="setting" href="/<?php echo ADMIN_DIR;?>/setting"><i class="fa-solid fa-gear"></i> 设置中心</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="user" href="/<?php echo ADMIN_DIR;?>/user"><i class="fa-solid fa-users"></i> 用户管理</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="products" href="/<?php echo ADMIN_DIR;?>/products"><i class="fa-solid fa-box"></i> 商品管理</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="article" href="/<?php echo ADMIN_DIR;?>/article"><i class="fa-solid fa-newspaper"></i> 文章管理</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="order" href="/<?php echo ADMIN_DIR;?>/order"><i class="fa-solid fa-receipt"></i> 订单管理</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" data-nav="report" href="/<?php echo ADMIN_DIR;?>/report"><i class="fa-solid fa-chart-bar"></i> 统计报表</a>
+                        </li>
+                        <li class="tokyo-nav-item">
+                            <a class="tokyo-nav-pill" href="/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> 站点</a>
+                        </li>
+                    </ul>
+                    <div class="tokyo-nav-tools">
+                        <div class="tokyo-admin-user">
+                            <span class="tokyo-admin-email"><i class="fa-solid fa-user"></i> <?php echo $AdminUser['email'];?></span>
+                            <div class="tokyo-admin-dropdown">
+                                <a href="/<?php echo ADMIN_DIR;?>/profiles/"><i class="fa-solid fa-user-gear"></i> 基本设置</a>
+                                <a href="/<?php echo ADMIN_DIR;?>/"><i class="fa-solid fa-house"></i> 我的主页</a>
+                                <hr>
+                                <a href="/<?php echo ADMIN_DIR;?>/logout/"><i class="fa-solid fa-right-from-bracket"></i> 退出</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main class="tokyo-admin-main">
+<script>
+// Mobile nav toggle
+document.getElementById('admin-nav-toggle').addEventListener('click', function() {
+    var menu = document.getElementById('admin-nav-menu');
+    menu.classList.toggle('is-expanded');
+});
+</script>
+<script>
+(function(){
+    var path = window.location.pathname;
+    var items = document.querySelectorAll('.tokyo-nav-links [data-nav]');
+    for (var i = 0; i < items.length; i++) {
+        var nav = items[i].getAttribute('data-nav');
+        if (nav === 'index' && path === '/' + ADMIN_DIR + '/') {
+            items[i].classList.add('is-active');
+        } else if (path.indexOf('/' + ADMIN_DIR + '/' + nav) > -1) {
+            items[i].classList.add('is-active');
+        }
+    }
+    // Settings sub-routes: email, payment
+    if (path.indexOf('/' + ADMIN_DIR + '/email') > -1 || path.indexOf('/' + ADMIN_DIR + '/payment') > -1) {
+        var settingItem = document.querySelector('.tokyo-nav-links [data-nav="setting"]');
+        if (settingItem) settingItem.classList.add('is-active');
+    }
+    // Products sub-routes: productscard, productspifa, productstype
+    if (path.indexOf('/' + ADMIN_DIR + '/productscard') > -1 || path.indexOf('/' + ADMIN_DIR + '/productspifa') > -1 || path.indexOf('/' + ADMIN_DIR + '/productstype') > -1) {
+        var prodItem = document.querySelector('.tokyo-nav-links [data-nav="products"]');
+        if (prodItem) prodItem.classList.add('is-active');
+    }
+    // Order sub-routes: emailqueue
+    if (path.indexOf('/' + ADMIN_DIR + '/emailqueue') > -1) {
+        var orderItem = document.querySelector('.tokyo-nav-links [data-nav="order"]');
+        if (orderItem) orderItem.classList.add('is-active');
+    }
+})();
+</script>

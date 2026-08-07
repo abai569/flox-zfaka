@@ -2,19 +2,19 @@
 DELETE FROM `t_payment` WHERE `alias` IN ('codepayalipay', 'codepayqq', 'codepaywx', 'yzpay', 'coinpay');
 
 -- 更新支付方式数据
-UPDATE `t_payment` SET
+UPDATE `t_payment` SET 
   `id` = 2
 WHERE `payment` = '支付宝电脑网站支付(WEB)';
 
-UPDATE `t_payment` SET
+UPDATE `t_payment` SET 
   `id` = 3
 WHERE `payment` = '微信扫码支付';
 
-UPDATE `t_payment` SET
+UPDATE `t_payment` SET 
   `id` = 4
 WHERE `payment` = '微信H5支付';
 
-UPDATE `t_payment` SET
+UPDATE `t_payment` SET 
   `payment` = 'PAYPAL',
   `payname` = 'PAYPAL',
   `payimage` = '/res/images/pay/paypal.jpg',

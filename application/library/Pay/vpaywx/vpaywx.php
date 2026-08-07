@@ -2,7 +2,7 @@
 /**
  * File: vpaywx.php
  * Functionality: V免签 -微信扫码支付
- * Author:
+ * Author: 
  * Date: 2025-05-13
  */
 namespace Pay\vpaywx;

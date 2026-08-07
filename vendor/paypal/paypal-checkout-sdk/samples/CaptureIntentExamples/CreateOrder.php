@@ -10,11 +10,11 @@ use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
 class CreateOrder
 {
-
+    
     /**
      * Setting up the JSON request body for creating the Order. The Intent in the
      * request body should be set as "CAPTURE" for capture intent flow.
-     *
+     * 
      */
     private static function buildRequestBody()
     {
@@ -173,3 +173,6 @@ if (!count(debug_backtrace()))
 {
     CreateOrder::createOrder(true);
 }
+
+
+

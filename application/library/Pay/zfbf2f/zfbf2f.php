@@ -31,15 +31,15 @@ class zfbf2f
 			'notify_url' => $params['weburl'] . 'product/notify/?paymethod='.$this->paymethod,
 			'return_raw' => true
 		];
-
+	
 		//20181217,支付宝当面付对subject不支持特殊字符 "="号
 		$params['productname'] = str_replace("=","",$params['productname']);
-
+		
 		$data = [
 			'order_no' => $params['orderid'],
 			'amount' => $params['money'],
 			'subject' => $params['productname'],
-			'body' => $this->paymethod,
+			'body' => $this->paymethod, 
 		];
 		try {
 			$qr = Charge::run(Config::ALI_CHANNEL_QR, $config, $data);
@@ -55,17 +55,17 @@ class zfbf2f
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
 	}
-
+	
 	public function notify(array $payconfig)
 	{
 		try {
 			file_put_contents(YEWU_FILE, CUR_DATETIME.'-'.json_encode($_POST).PHP_EOL, FILE_APPEND);
 			unset($_POST['paymethod']);
 			$callback = new \Pay\zfbf2f\callback();
-			return $ret = Notify::run("ali_charge", $payconfig,$callback);// 处理回调，内部进行了签名检查
+			return $ret = Notify::run("ali_charge", $payconfig,$callback);// 处理回调，内部进行了签名检查	
 		} catch (\Exception $e) {
 			return 'error|Exception:'.$e->getMessage();
 		}
 	}
-
+	
 }

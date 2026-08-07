@@ -16,7 +16,7 @@ class GetOrder
      */
     public static function getOrder($orderId)
     {
-
+        
         $client = PayPalClient::client();
         $response = $client->execute(new OrdersGetRequest($orderId));
         /**
@@ -43,7 +43,7 @@ class GetOrder
 /**
  * This is the driver function which invokes the getOrder function to retrieve
  * an sample order.
- *
+ * 
  * To get the correct Order id, we are using the createOrder to create new order
  * and then we are using the newly created order id.
  */

@@ -14,11 +14,11 @@ class M_Products_pifa extends Model
 		$this->table = TB_PREFIX.'products_pifa';
 		parent::__construct();
 	}
-
+	
 	public function getPifa($pid)
 	{
 		$result = array();
 		$result = $this->Field(array('qty','discount'))->Where(array('pid'=>$pid,'isdelete'=>0))->Order(array('qty'=>'DESC'))->Select();
 		return $result;
-	}
+	}  
 }

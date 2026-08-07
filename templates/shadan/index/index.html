@@ -1,140 +1,105 @@
 <?php include '../templates/shadan/common/header.html';?>
 <div class="layui-container fly-marginTop fly-user-main">
-    <div class="zf-catalog-wrap">
+    <div class="layui-row">
+		<!-- 公告-->
 		<?php if(isset($config['notice']) AND $config['notice']):?>
-		<div class="zf-catalog-notice">
+		<blockquote class="layui-elem-quote layui-text" style="background-color: #ffffff;">
 			<i class="layui-icon layui-icon-speaker"></i><?php echo $config['notice'];?>
-		</div>
+		</blockquote>
 		<?php endif;?>
-
-		<div class="zf-catalog-topbar">
-			<button class="zf-category-toggle" id="zf-category-toggle" type="button">
-				<i class="layui-icon layui-icon-list"></i> 分类
-			</button>
-			<div class="zf-search-wrap">
-				<i class="layui-icon layui-icon-search zf-search-icon"></i>
-				<input type="text" class="zf-search-pill" id="zf-search-input" placeholder="搜索商品..." autocomplete="off" />
-			</div>
-		</div>
-
-		<div class="zf-catalog-layout">
-			<div class="zf-category-panel" id="zf-category-panel">
-				<div class="zf-category-title">商品分类</div>
-				<ul class="zf-category-list" id="zf-category-list">
-					<li class="zf-category-item zf-category-active" data-tid="0">全部商品<span class="zf-category-count"><?php echo count($products);?></span></li>
-					<?php if(!empty($products_type)):?>
-					<?php foreach($products_type AS $type):?>
-					<li class="zf-category-item" data-tid="<?php echo $type['id'];?>"><?php echo $type['name'];?></li>
-					<?php endforeach;?>
-					<?php endif;?>
-				</ul>
-			</div>
-
-			<div class="zf-catalog-panel">
-				<div class="zf-catalog-grid" id="zf-catalog-grid">
-					<?php if(!empty($products)):?>
+        
+		<!--电脑端-->
+		<?php if(!empty($products)):?>
+			<?php foreach($products_type_active AS $type):?>
+			<div class="layui-card layui-hide-xs">
+				<div class="layui-card-header"><?php echo $type['name'];?></div>
+				<div class="layui-card-body">
+					<table class="layui-table">
+						<colgroup>
+							<col>
+							<col width="100">
+							<col width="80">
+							<col width="80">
+							<col width="80">
+							<col width="120">
+						</colgroup>
+						<thead>
+							<tr>
+								<th>商品名称</th>
+								<th>发货模式</th>
+								<th>库存</th>
+								<th>销量</th>
+								<th>单价</th>
+								<th align="center" style="text-align: center !important;">操作</th>
+							</tr> 
+						 </thead>
+						 <tbody>
 					<?php foreach($products AS $p):?>
-					<?php
-						$isSoldOut = ($p['stockcontrol'] > 0 && $p['qty'] == 0);
-						$imgSrc = (strlen($p['imgurl']) > 0) ? $p['imgurl'] : '/templates/shadan/images/noimg.jpg';
-					?>
-					<div class="zf-product-card<?php if($isSoldOut):?> zf-sold-out<?php endif;?>" data-typeid="<?php echo $p['typeid'];?>" data-name="<?php echo htmlspecialchars($p['name']);?>">
+						<?php if($p['typeid']==$type['id']):?>
+							<tr>
+								<td><?php echo $p['name'];?></td>
+								<td><?php if($p['auto']>0):?><span class="layui-badge layui-bg-green">自动发货</span><?php else:?><span class="layui-badge layui-bg-gray">手工发货</span><?php endif;?></td>
+								<td><?php if($p['stockcontrol']>0):?><?php echo $p['qty'];?><?php else:?>不限量<?php endif;?></td>
+								<td><?php echo $p['qty_sell'];?></td>
+								<td><?php echo $p['price'];?></td>
+								<td align="center"><a class="layui-btn layui-btn-warm layui-btn-xs" href="/product/<?php echo $p['id'];?>.html">购买</a></td>
+							</tr>
+						<?php endif;?>
+					<?php endforeach;?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<?php endforeach;?>
+		<?php endif;?>
+		
+		<!--移动端-->
+		<?php if(!empty($products)):?>
+			<?php foreach($products_type_active AS $type):?>
+			<div class="layui-card layui-hide-md">
+				<div class="layui-card-header"><?php echo $type['name'];?></div>
+				<div class="layui-card-body">
+
+					<?php foreach($products AS $p):?>
+						<?php if($p['typeid']==$type['id']):?>
 						<a href="/product/<?php echo $p['id'];?>.html">
-							<div class="zf-product-img">
-								<img src="<?php echo $imgSrc;?>" alt="<?php echo htmlspecialchars($p['name']);?>" loading="lazy" />
-							</div>
-							<div class="zf-product-body">
-								<div class="zf-product-name"><?php echo htmlspecialchars($p['name']);?></div>
-								<div class="zf-product-meta">
-									<span class="zf-product-price">&yen;<?php echo $p['price'];?></span>
-									<span class="zf-product-sales"><?php echo $p['qty_sell'];?>人付款</span>
-								</div>
-								<div class="zf-product-badges">
-									<?php if($p['auto'] > 0):?>
-									<span class="layui-badge layui-bg-green">自动发货</span>
-									<?php else:?>
-									<span class="layui-badge layui-bg-gray">手工发货</span>
-									<?php endif;?>
-									<?php if(isset($p['iszhekou']) && $p['iszhekou'] > 0):?>
-									<span class="layui-badge layui-bg-orange">有折扣</span>
-									<?php endif;?>
-									<?php if($p['stockcontrol'] > 0):?>
-									<span class="layui-badge layui-bg-gray">库存:<?php echo $p['qty'];?></span>
-									<?php endif;?>
-								</div>
-								<div class="zf-product-action">
-									<span class="zf-product-stock"><?php if($p['stockcontrol'] > 0):?>库存 <?php echo $p['qty'];?><?php else:?>不限量<?php endif;?></span>
-									<?php if($isSoldOut):?>
-									<span class="layui-btn layui-btn-xs layui-btn-disabled">已售罄</span>
-									<?php else:?>
-									<span class="layui-btn layui-btn-xs layui-btn-warm">购买</span>
-									<?php endif;?>
+							<div class="layui-col-md3 layui-col-sm4 goodsdetail">
+								<div class="goodsdetail-mobile">
+									<div class="goodsdetail-mobile-img">
+										<?php if(strlen($p['imgurl'])>0):?>
+											<img src="<?php echo $p['imgurl'];?>"> 
+										<?php else:?>
+											<img src="/res/images/noimg.jpg"> 
+										<?php endif;?>
+									</div>
+									<div class="goodsdetail-mobile-text">
+										<p class="biaozhi"> 
+											<?php if($p['auto']>0):?><span class="layui-badge layui-bg-green">自动发货</span><?php else:?><span class="layui-badge layui-bg-gray">手工发货</span><?php endif;?>
+											<?php if($p['iszhekou']>0):?><span class="layui-badge layui-bg-orange">有折扣</span><?php endif;?>
+										</p>
+										<p class="title"><?php echo $p['name'];?></p>
+										<p>
+											<span>库存: <?php if($p['stockcontrol']>0):?><?php echo $p['qty'];?><?php else:?>不限量<?php endif;?>&nbsp;|&nbsp;销量: <?php echo $p['qty_sell'];?>&nbsp;|&nbsp;</span>
+											<span class="price"><b>￥<?php echo $p['price'];?></b></span>
+										</p>
+									</div>
 								</div>
 							</div>
 						</a>
-					</div>
+						<?php endif;?>
 					<?php endforeach;?>
-					<?php else:?>
-					<div class="zf-catalog-empty">
-						<i class="layui-icon layui-icon-cart-simple"></i>
-						<p>暂无商品</p>
-					</div>
-					<?php endif;?>
+
 				</div>
 			</div>
-		</div>
-	</div>
+			<?php endforeach;?>
+		<?php endif;?>
+		
+    </div>
 </div>
 <div id="layerad" style="display: none;"><?php echo $config['layerad'];?></div>
+<!--引入公共底文件-->
 <?php include '../templates/shadan/common/footer.html';?>
 <script>
-layui.use('product');
-var PIFA = "";
-(function(){
-	var $ = layui.jquery;
-	var activeTid = '0';
-
-	$('#zf-category-list').on('click', '.zf-category-item', function(){
-		var $item = $(this);
-		var tid = $item.attr('data-tid');
-		$('#zf-category-list .zf-category-item').removeClass('zf-category-active');
-		$item.addClass('zf-category-active');
-		activeTid = tid;
-		filterProducts();
-	});
-
-	$('#zf-search-input').on('input', function(){
-		filterProducts();
-	});
-
-	$('#zf-category-toggle').on('click', function(){
-		$('#zf-category-panel').toggleClass('zf-category-open');
-	});
-
-	function filterProducts(){
-		var keyword = $.trim($('#zf-search-input').val()).toLowerCase();
-		var visible = 0;
-		$('.zf-product-card').each(function(){
-			var $card = $(this);
-			var tid = $card.attr('data-typeid');
-			var name = ($card.attr('data-name') || '').toLowerCase();
-			var matchTid = (activeTid === '0' || tid === activeTid);
-			var matchKw = (!keyword || name.indexOf(keyword) !== -1);
-			if(matchTid && matchKw){
-				$card.show();
-				visible++;
-			}else{
-				$card.hide();
-			}
-		});
-		if(visible === 0){
-			if($('#zf-catalog-grid .zf-catalog-empty').length === 0){
-				$('#zf-catalog-grid').append('<div class="zf-catalog-empty"><i class="layui-icon layui-icon-search"></i><p>未找到匹配商品</p></div>');
-			}
-			$('#zf-catalog-grid .zf-catalog-empty').show();
-		}else{
-			$('#zf-catalog-grid .zf-catalog-empty').hide();
-		}
-	}
-})();
+	layui.use('product');
+	var PIFA = "";
 </script>

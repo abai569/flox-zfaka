@@ -6,7 +6,7 @@
                 <clear />
                 <rule name="tool.apizl.com rewriteTools3" patternSyntax="ECMAScript" stopProcessing="false">
                     <match url=".*" ignoreCase="false" />
-
+                    
                     <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
                     <action type="Rewrite" url="index.php" appendQueryString="false" />
                 </rule>

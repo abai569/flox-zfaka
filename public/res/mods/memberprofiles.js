@@ -44,7 +44,7 @@ layui.define(['layer', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -82,7 +82,7 @@ layui.define(['layer', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});

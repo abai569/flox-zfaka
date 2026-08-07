@@ -61,25 +61,25 @@ if (!function_exists('array2Object')){
 // 通过数组的值获取数组的 key
 if (!function_exists('getArrayKey')){
 	function getArrayKey($arr, $value){
-		if(!is_array($arr)){
-			return null;
-		}
-		foreach($arr as $k =>$v){
-			$return = getArrayKey($v, $value);
-			if($v == $value){
-				return $k;
-			}
-			if(!is_null($return)){
-				return $return;
-			}
-		}
+	 	if(!is_array($arr)){
+	 		return null;
+	 	}
+	 	foreach($arr as $k =>$v){
+	  		$return = getArrayKey($v, $value);
+	  		if($v == $value){
+	   			return $k;
+	  		}
+	  		if(!is_null($return)){
+	   			return $return;
+	  		}
+	 	}
 	}
 }
 //判断某个字符串是否包含一个数组中的某个值
 if (!function_exists('check_in')){
 	function check_in($arr, $text){
 	    if(!is_array($arr)){
-		return null;
+	     	return null;
 	    }
 	    foreach($arr as $key){
 			if(strstr($text, $key) != ''){
@@ -123,22 +123,22 @@ if (!function_exists('unique_arr')){
 		if($stkeep){    //一级数组键可以为非数字
 			$stArr = array_keys($array2D);
 		}
-
+		
 		if($ndformat){   //二级数组键必须相同
 			$ndArr = array_keys(end($array2D));
 		}
-
+		
 		foreach ($array2D as $v){  //降维
 			$v = join(',', $v);
 			$temp[] = $v;
 		}
-
+		
 		$temp = array_unique($temp);
 		foreach ($temp as $k => $v){  //数组重新组合
 			if($stkeep){
 				$k = $stArr[$k];
 			}
-
+			
 			if($ndformat){
 				$tempArr = explode(",",$v);
 				foreach($tempArr as $ndkey => $ndval){
@@ -152,7 +152,7 @@ if (!function_exists('unique_arr')){
 	}
 }
 /**
- *
+ * 
  * 将二维数组转换成一维数组
  * @param array $array 待转换的二维数组
  * @param string $glue 需要转换的键  如id
@@ -165,12 +165,12 @@ if (!function_exists('swapDoubleToSingle')){
 				$tmp[] = $v[$glue];
 			}
 		}
-
+		
 	    return $tmp;
 	}
-}
+}    
 /**
- *
+ * 
  * 将二维数组转换成对应格式的二维数组
  * @param array $array 待转换的二维数组
  * @param string $glue 需要转换的键,如id

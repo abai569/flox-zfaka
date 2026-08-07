@@ -5,11 +5,11 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 	var form = layui.form;
 	var layedit = layui.layedit;
 	var upload = layui.upload;
-
+	
 	var edit_description=layedit.build('description',{
 		tool: ['strong','italic','underline','|','del','left','center','right','link','unlink','face']
 	});	 //建立编辑器
-
+		
 	table.render({
 		elem: '#table',
 		url: '/'+ADMIN_DIR+'/products/ajax',
@@ -37,16 +37,16 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 			$('#qty').val('0');
 			$("#qty").attr("disabled","true");
 		}
-	});
-
+	});  
+	
 	form.on('radio(auto)', function(data){
 		if(data.value=='1'){
 			$('#addonsinput').hide();
 		}else{
 			$('#addonsinput').show();
 		}
-	});
-
+	});  
+	
 	//更新库存
 	$("#products_form").on("click","#updateQty",function(event){
 		event.preventDefault();
@@ -66,7 +66,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 						yes: function(index, layero){
 							location.reload();
 						},
-						cancel: function(){
+						cancel: function(){ 
 							location.reload();
 						}
 					});
@@ -77,7 +77,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
             }
         });
 	});
-
+	
 	//修改
 	form.on('submit(edit)', function(data){
 		layedit.sync(edit_description);
@@ -99,7 +99,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -116,7 +116,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
     form.on('submit(search)', function(data){
         table.reload('table', {
             url: '/'+ADMIN_DIR+'/products/ajax',
@@ -124,8 +124,8 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
         });
         return false;
     });
-
-
+	
+	
 	//普通图片上传
 	var uploadInst = upload.render({
 		elem: '#upload'
@@ -153,7 +153,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 				$('#preview').attr('src', result); //图片链接（base64）
 			});
 		}
-	});
+	});	
 	//上传
 	form.on('submit(upload)', function(data){
 		data.field.csrf_token = TOKEN;
@@ -176,7 +176,7 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -193,6 +193,6 @@ layui.define(['layer', 'table', 'form','layedit','upload'], function(exports){
 
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
 	exports('adminproducts',null)
 });

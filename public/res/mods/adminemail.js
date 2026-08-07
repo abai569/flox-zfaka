@@ -50,7 +50,7 @@ layui.define(['layer', 'form', 'table'], function(exports){
 			$('#mailpassword').attr('lay-verify','');
 			$('#port').attr('lay-verify','');
 		}
-	});
+	}); 
 
 
 	//修改资料
@@ -72,7 +72,7 @@ layui.define(['layer', 'form', 'table'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});

@@ -55,13 +55,13 @@ $request->body = [
                      "redirect_urls" => [
                           "cancel_url" => "https://example.com/cancel",
                           "return_url" => "https://example.com/return"
-                     ]
+                     ] 
                  ];
 
 try {
     // Call API with your client and get a response for your call
     $response = $client->execute($request);
-
+    
     // If call returns body in response, you can get the deserialized version from the result attribute of the response
     print_r($response);
 }catch (HttpException $ex) {
@@ -112,7 +112,7 @@ $request->body ={};
 try {
     // Call API with your client and get a response for your call
     $response = $client->execute($request);
-
+    
     // If call returns body in response, you can get the deserialized version from the result attribute of the response
     print_r($response);
 }catch (HttpException $ex) {
@@ -161,3 +161,5 @@ $ composer integration
 You can start off by trying out [creating and capturing an order](/samples/CaptureIntentExamples/RunAll.php)
 
 To try out different samples for both create and authorize intent check [this link](/samples)
+
+

@@ -24,6 +24,6 @@ class IndexController extends BasicController
 			$this->getView()->assign($data);
 		}
     }
-
+	
 
 }

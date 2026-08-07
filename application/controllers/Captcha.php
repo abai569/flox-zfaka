@@ -13,7 +13,7 @@ class CaptchaController extends BasicController
     }
 
     public function indexAction()
-	{
+	{ 
         $t = $this->get('t');
 		$l_captcha = new \Captcha\Captcha();
 		$code=$l_captcha->getPhrase();
@@ -36,7 +36,7 @@ class CaptchaController extends BasicController
 			}
 		}else{
 			$data=array('code'=>0,'msg'=>'丢失参数');
-		}
+		}	
 		Helper::response($data);
     }
 }

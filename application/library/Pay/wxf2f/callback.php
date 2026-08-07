@@ -13,7 +13,7 @@ use \Pay\notify;
 
 class callback implements PayNotifyInterface
 {
-
+	
 	//处理返回回调callback
 	public function notifyProcess(array $params)
 	{
@@ -22,5 +22,5 @@ class callback implements PayNotifyInterface
 		$notify = new \Pay\notify();
 		return	$data = $notify->run($config);
 	}
-
+	
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * File: F_Basic.php
- * Functionality: Global basic functions
+ * Functionality: Global basic functions 
  * Author: 资料空白
  * Date: 2016-11-11再整理
  */
@@ -59,16 +59,16 @@ if (!function_exists('filter')){
 }
 //对字符串等进行过滤
 if (!function_exists('filterStr')){
-    function filterStr($arr) {
+    function filterStr($arr) {  
         if (!isset($arr)) {
             return null;
         }
 
         if (is_array($arr)) {
             foreach ($arr as $k => $v) {
-			if($v){
-				$arr[$k] = filter(stripSQLChars(stripHTML(trim($v), true)));
-			}
+    			if($v){
+    				$arr[$k] = filter(stripSQLChars(stripHTML(trim($v), true)));
+    			}
             }
         } else {
             $arr = filter(stripSQLChars(stripHTML(trim($arr), true)));
@@ -89,22 +89,22 @@ if (!function_exists('stripHTML')){
         $content = preg_replace($search, '', $content);
 
         if($xss){
-            $ra1 = array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link',
-            'style', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer',
+            $ra1 = array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 
+            'style', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 
             'layer', 'bgsound', 'title', 'base');
-
+                                    
             $ra2 = array('onabort', 'onactivate','onafterprint','onafterupdate', 'onbeforeactivate', 'onbeforecopy',
 			'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload',
 			'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect',
-			'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate',
-			'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate',
-			'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup',
+			'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 
+			'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 
+			'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 
 			'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout',
 			'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange',
 			'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete',
 			'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload');
             $ra = array_merge($ra1, $ra2);
-
+            
             $content = str_ireplace($ra, '', $content);
         }
 
@@ -123,15 +123,15 @@ if (!function_exists('removeXSS')){
             $val = preg_replace('/(&#0{0,8}'.ord($search[$i]).';?)/', $search[$i], $val); // with a ;
         }
 
-        $ra1 = Array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link',
-                                'style', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer',
+        $ra1 = Array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 
+                                'style', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 
                                 'layer', 'bgsound', 'title', 'base');
-
-        $ra2 = Array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut',
-		'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur',
-		'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable',
-		'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave',
-		'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin',
+                                
+        $ra2 = Array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 
+		'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 
+		'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 
+		'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 
+		'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 
 		'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown',
 		'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend',
 		'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart',
@@ -172,7 +172,7 @@ if (!function_exists('stripSQLChars')){
         $replace = array('SELECT', 'INSERT', 'DELETE', 'UPDATE', 'CREATE', 'DROP', 'VERSION', 'DATABASES',
             'TRUNCATE', 'HEX', 'UNHEX', 'CAST', 'DECLARE', 'EXEC', 'SHOW', 'CONCAT', 'TABLES', 'CHAR', 'FILE',
             'SCHEMA', 'DESCRIBE', 'UNION', 'JOIN', 'ALTER', 'RENAME', 'LOAD', 'FROM', 'SOURCE', 'INTO', 'LIKE', 'PING', 'PASSWD');
-
+        
         return str_ireplace($replace, '', $str);
     }
 }
@@ -200,7 +200,7 @@ if (!function_exists('calculateTime')){
 }
 /**
  * 裁剪中文
- *
+ * 
  * @param type $string
  * @param type $length
  * @param type $dot
@@ -208,66 +208,66 @@ if (!function_exists('calculateTime')){
  */
 if (!function_exists('cutstr')){
     function cutstr($string, $length, $dot = ' ...') {
-	if(strlen($string) <= $length) {
-		return $string;
-	}
+    	if(strlen($string) <= $length) {
+    		return $string;
+    	}
 
-	$pre = chr(1);
-	$end = chr(1);
-	$string = str_replace(array('&amp;', '&quot;', '&lt;', '&gt;'), array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), $string);
+    	$pre = chr(1);
+    	$end = chr(1);
+    	$string = str_replace(array('&amp;', '&quot;', '&lt;', '&gt;'), array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), $string);
 
-	$strcut = '';
-	if(strtolower(CHARSET) == 'utf-8') {
+    	$strcut = '';
+    	if(strtolower(CHARSET) == 'utf-8') {
 
-		$n = $tn = $noc = 0;
-		while($n < strlen($string)) {
+    		$n = $tn = $noc = 0;
+    		while($n < strlen($string)) {
 
-			$t = ord($string[$n]);
-			if($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
-				$tn = 1; $n++; $noc++;
-			} elseif(194 <= $t && $t <= 223) {
-				$tn = 2; $n += 2; $noc += 2;
-			} elseif(224 <= $t && $t <= 239) {
-				$tn = 3; $n += 3; $noc += 2;
-			} elseif(240 <= $t && $t <= 247) {
-				$tn = 4; $n += 4; $noc += 2;
-			} elseif(248 <= $t && $t <= 251) {
-				$tn = 5; $n += 5; $noc += 2;
-			} elseif($t == 252 || $t == 253) {
-				$tn = 6; $n += 6; $noc += 2;
-			} else {
-				$n++;
-			}
+    			$t = ord($string[$n]);
+    			if($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+    				$tn = 1; $n++; $noc++;
+    			} elseif(194 <= $t && $t <= 223) {
+    				$tn = 2; $n += 2; $noc += 2;
+    			} elseif(224 <= $t && $t <= 239) {
+    				$tn = 3; $n += 3; $noc += 2;
+    			} elseif(240 <= $t && $t <= 247) {
+    				$tn = 4; $n += 4; $noc += 2;
+    			} elseif(248 <= $t && $t <= 251) {
+    				$tn = 5; $n += 5; $noc += 2;
+    			} elseif($t == 252 || $t == 253) {
+    				$tn = 6; $n += 6; $noc += 2;
+    			} else {
+    				$n++;
+    			}
 
-			if($noc >= $length) {
-				break;
-			}
+    			if($noc >= $length) {
+    				break;
+    			}
 
-		}
-		if($noc > $length) {
-			$n -= $tn;
-		}
+    		}
+    		if($noc > $length) {
+    			$n -= $tn;
+    		}
 
-		$strcut = substr($string, 0, $n);
+    		$strcut = substr($string, 0, $n);
 
-	} else {
-		$_length = $length - 1;
-		for($i = 0; $i < $length; $i++) {
-			if(ord($string[$i]) <= 127) {
-				$strcut .= $string[$i];
-			} else if($i < $_length) {
-				$strcut .= $string[$i].$string[++$i];
-			}
-		}
-	}
+    	} else {
+    		$_length = $length - 1;
+    		for($i = 0; $i < $length; $i++) {
+    			if(ord($string[$i]) <= 127) {
+    				$strcut .= $string[$i];
+    			} else if($i < $_length) {
+    				$strcut .= $string[$i].$string[++$i];
+    			}
+    		}
+    	}
 
-	$strcut = str_replace(array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
+    	$strcut = str_replace(array($pre.'&'.$end, $pre.'"'.$end, $pre.'<'.$end, $pre.'>'.$end), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 
-	$pos = strrpos($strcut, chr(1));
-	if($pos !== false) {
-		$strcut = substr($strcut,0,$pos);
-	}
-	return $strcut.$dot;
+    	$pos = strrpos($strcut, chr(1));
+    	if($pos !== false) {
+    		$strcut = substr($strcut,0,$pos);
+    	}
+    	return $strcut.$dot;
     }
 }
 if (!function_exists('cn_json_encode')){
@@ -294,17 +294,17 @@ if (!function_exists('jsRedirect')){
     function jsRedirect($url, $die = true) {
         echo "<script type='text/javascript'>window.location.href=\"$url\"</script>";
         if($die){
-	die;
+        	die;
         }
     }
 }
 if (!function_exists('password')){
     function password($password, $secret=''){
-	$pwd = array();
-	$salt=substr(uniqid(rand()), -6);
-	$pwd['secret'] = $secret ? $secret : $salt;
-	$pwd['password'] = md5(md5(trim($password)).$pwd['secret'].'onepeople');
-	return $secret ? $pwd['password'] : $pwd;
+    	$pwd = array();
+    	$salt=substr(uniqid(rand()), -6);
+    	$pwd['secret'] = $secret ? $secret : $salt; 
+    	$pwd['password'] = md5(md5(trim($password)).$pwd['secret'].'onepeople');
+    	return $secret ? $pwd['password'] : $pwd;
     }
 }
 /**
@@ -318,14 +318,14 @@ if (!function_exists('password')){
  */
 if (!function_exists('templateTag')){
     function templateTag($string, $params = array()){
-	$matchs = null;
-	preg_match_all("/\{(.+?)\}/", $string, $matchs);
-	$froms = $tos = array();
-	foreach($matchs[1] as $match){
-		$froms[] = "{{$match}}";
-		$tos[] = $params[$match];
-	}
-	return str_replace($froms, $tos, $string);
+    	$matchs = null;
+    	preg_match_all("/\{(.+?)\}/", $string, $matchs);
+    	$froms = $tos = array();
+    	foreach($matchs[1] as $match){
+    		$froms[] = "{{$match}}";
+    		$tos[] = $params[$match];
+    	}
+    	return str_replace($froms, $tos, $string);
     }
 }
 
@@ -337,11 +337,11 @@ if (!function_exists('templateTag')){
  */
 if (!function_exists('diffBetweenDays')){
 	function diffBetweenDays($day1,$day2){
-		if(!is_numeric($day1)){
+ 		if(!is_numeric($day1)){
             $second1 = strtotime($day1);
 		}else{
 			$second1 =$day1;
-		}
+		}         
 		if(!is_numeric($day2)){
             $second2 = strtotime($day2);
 		}else{
@@ -359,6 +359,6 @@ if (! function_exists('paramscreate')) {
             $str.='?referer_url='.$url;
             $str.='&sign='.md5(URL_KEY.$url);
         }
-        return $str;
+        return $str;      
     }
 }

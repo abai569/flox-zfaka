@@ -20,14 +20,14 @@ class notify
 		$paymoney = $params['paymoney'];
 		//本站订单号
 		$orderid = $params['orderid'];
-
+		
 		$m_order =  \Helper::load('order');
 		$m_products_card = \Helper::load('products_card');
 		$m_email_queue = \Helper::load('email_queue');
 		$m_products = \Helper::load('products');
 		$m_config = \Helper::load('config');
 		$web_config = $m_config->getConfig();
-
+		
 		try{
 			//1. 通过orderid,查询order订单
 			$order = $m_order->Where(array('orderid'=>$orderid))->SelectOne();
@@ -42,14 +42,14 @@ class notify
 						$data =array('code'=>1005,'msg'=>'支付金额小于订单金额');
 						return $data;
 					}
-
+					
 					//2.先更新支付总金额
 					$update = array('status'=>1,'paytime'=>time(),'tradeid'=>$tradeid,'paymethod'=>$paymethod,'paymoney'=>$paymoney);
 					$u = $m_order->Where(array('orderid'=>$orderid,'status'=>0))->Update($update);
 					if(!$u){
 						$data =array('code'=>1004,'msg'=>'更新失败');
 						return $data;
-					}else{
+					}else{ 
 						//3.开始进行订单处理
 						$product = $m_products->SelectByID('auto,stockcontrol,qty',$order['pid']);
 						if(!empty($product)){
@@ -91,14 +91,14 @@ class notify
 										if(isEmail($order['email'])){
 											$content = '用户:' . $order['email'] . ',购买的商品['.$order['productname'].'],密码是:'.$card_mi_str;
 											$m[]=array('email'=>$order['email'],'subject'=>'商品购买成功','content'=>$content,'addtime'=>time(),'status'=>0);
-										}
+										}	
 									}
 									//3.1.4.2通知管理员,定时任务去执行
 									if(isEmail($web_config['adminemail'])){
 										$content = '用户:' . $order['email'] . ',购买的商品['.$order['productname'].'],密码发送成功'.$kucunNotic;
 										$m[]=array('email'=>$web_config['adminemail'],'subject'=>'用户购买商品','content'=>$content,'addtime'=>time(),'status'=>0);
 									}
-
+									
 									if(!empty($m)){
 										$m_email_queue->MultiInsert($m);
 										if($web_config['emailsendtypeswitch']>0){
@@ -125,7 +125,7 @@ class notify
 										$content = '用户:' . $order['email'] . ',购买的商品['.$order['productname'].'],由于库存不足暂时无法处理,请尽快处理!';
 										$m[] = array('email'=>$web_config['adminemail'],'subject'=>'用户购买商品','content'=>$content,'addtime'=>time(),'status'=>0);
 									}
-
+									
 									if(!empty($m)){
 										$m_email_queue->MultiInsert($m);
 										if($web_config['emailsendtypeswitch']>0){

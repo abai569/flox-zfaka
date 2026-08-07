@@ -1,88 +1,17 @@
 <?php include MEMBER_COMMON_PATH.'/header.html';?>
-<style>
-    .zf-msg-wrap {
-        max-width: 520px;
-        margin: var(--zf-space-10) auto;
-        padding: 0 var(--zf-space-5);
-    }
-    .zf-msg-card {
-        background: var(--zf-bg-surface);
-        border: 1px solid var(--zf-border-color);
-        border-radius: var(--zf-radius-md);
-        box-shadow: var(--zf-shadow-sm);
-        padding: var(--zf-space-12) var(--zf-space-8);
-        text-align: center;
-        transition: box-shadow var(--zf-transition-base);
-    }
-    .zf-msg-card:hover {
-        box-shadow: var(--zf-shadow-md);
-    }
-    .zf-msg-icon {
-        font-size: 80px !important;
-        line-height: 1;
-        margin-bottom: var(--zf-space-5);
-        display: block;
-    }
-    .zf-msg-icon.zf-msg-error {
-        color: var(--zf-danger);
-    }
-    .zf-msg-icon.zf-msg-success {
-        color: var(--zf-success);
-    }
-    .zf-msg-icon.zf-msg-info {
-        color: var(--zf-info);
-    }
-    .zf-msg-text {
-        font-size: var(--zf-font-size-lg);
-        color: var(--zf-text-primary);
-        line-height: 1.6;
-        margin-bottom: var(--zf-space-6);
-        word-break: break-word;
-    }
-    .zf-msg-countdown {
-        font-size: var(--zf-font-size-sm);
-        color: var(--zf-text-muted);
-        padding-top: var(--zf-space-3);
-        border-top: 1px solid var(--zf-border-color);
-        margin-top: var(--zf-space-4);
-    }
-    .zf-msg-countdown b {
-        color: var(--zf-accent);
-        font-weight: 600;
-        font-size: var(--zf-font-size-md);
-    }
-    .zf-msg-actions {
-        margin-top: var(--zf-space-6);
-    }
-    @media (max-width: 768px) {
-        .zf-msg-wrap {
-            margin: var(--zf-space-6) auto;
-            padding: 0 var(--zf-space-3);
-        }
-        .zf-msg-card {
-            padding: var(--zf-space-8) var(--zf-space-5);
-        }
-        .zf-msg-icon {
-            font-size: 60px !important;
-        }
-    }
-</style>
-<div class="zf-msg-wrap">
-    <div class="zf-msg-card">
-		<?php if($code =="error"):?>
-        <i class="layui-icon layui-icon-close-fill zf-msg-icon zf-msg-error"></i>
-		<?php elseif($code =="success"):?>
-		<i class="layui-icon layui-icon-ok-circle zf-msg-icon zf-msg-success"></i>
-		<?php else:?>
-		<i class="layui-icon layui-icon-about zf-msg-icon zf-msg-info"></i>
-		<?php endif;?>
-        <div class="zf-msg-text"><?php echo $msg;?></div>
-        <div class="zf-msg-actions">
-            <a href="/" class="layui-btn layui-btn-primary">
-                <i class="layui-icon layui-icon-home"></i> 返回首页
-            </a>
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel">
+        <div class="fly-none">
+			<?php if($code =="error"):?>
+            <h2><i class="layui-icon layui-icon-close-fill" style="font-size:300px;"></i></h2>
+			<?php elseif($code =="success"):?>
+			<h2><i class="layui-icon layui-icon-ok-circle" style="font-size:300px;"></i></h2>
+			<?php else:?>
+			<h2><i class="layui-icon layui-icon-about" style="font-size:300px;"></i></h2>
+			<?php endif;?>
+            <p><?php echo $msg;?></p>
+            <div class="countdown gray text-center" id="countdown" style="padding-top: 10px;"><b>5</b>秒后自动返回</div>
         </div>
-        <div class="zf-msg-countdown" id="countdown"><b>5</b> 秒后自动返回</div>
     </div>
 </div>
 <script type="text/javascript">

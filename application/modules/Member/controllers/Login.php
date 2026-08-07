@@ -10,7 +10,7 @@ class LoginController extends MemberBasicController
 {
 	private $m_user;
 	private $m_user_login_logs;
-
+	
     public function init()
     {
         parent::init();
@@ -32,8 +32,8 @@ class LoginController extends MemberBasicController
 		$data['title'] = "登录";
         $this->getView()->assign($data);
     }
-
-
+	
+	
 	public function ajaxAction()
 	{
 		if(isset($this->config['loginswitch']) AND $this->config['loginswitch']<1){
@@ -42,35 +42,21 @@ class LoginController extends MemberBasicController
 		}
 		$email    = $this->getPost('email',false);
 		$password = $this->getPost('password');
-
+		
 		//fix
 		//$password_string = new \Safe\MyString($password);
 		//$password = $password_string->trimall()->qufuhao()->getValue();
-
+		
 		$csrf_token = $this->getPost('csrf_token', false);
-
+		
 		if($email AND $password AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				$email = strtolower($email);
 				if(isEmail($email)){
-					if(isset($this->config['yzmswitch']) AND $this->config['yzmswitch']>0){
-						$vercode = $this->getPost('vercode');
-						if($vercode){
-							if(strtolower($this->getSession('loginCaptcha')) == strtolower($vercode)){
-								$this->unsetSession('loginCaptcha');
-							}else{
-								$data=array('code'=>1004,'msg'=>'图形验证码错误');
-								Helper::response($data);
-							}
-						}else{
-							$data = array('code' => 1000, 'msg' => '丢失参数');
-							Helper::response($data);
-						}
-					}
-
+					// 验证码已移除
 					$checkUser = $this->m_user->checkLogin($email,$password);
 					if($checkUser){
-						//写入登录日志
+						//写入登录日志 
 						$m=array('userid'=>$checkUser['id'],'ip'=>getClientIP(),'addtime'=>time());
 						$this->m_user_login_logs->Insert($m);
 						$data = array('code' => 1, 'msg' =>'success');
@@ -88,5 +74,5 @@ class LoginController extends MemberBasicController
 		}
 		Helper::response($data);
 	}
-
+	
 }

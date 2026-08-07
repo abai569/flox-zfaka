@@ -46,7 +46,7 @@ if ($response->statusCode == 201)
     foreach($response->result->purchase_units as $purchase_unit)
     {
         foreach($purchase_unit->payments->captures as $capture)
-        {
+        {    
             $captureId = $capture->id;
         }
     }

@@ -14,7 +14,7 @@ layui.define(['layer', 'form'], function(exports){
             timeout: 10000, //ajax请求超时时间10s
             data: {"csrf_token": TOKEN,'method':"download"}, //post数据
 			beforeSend: function(XMLHttpRequest){
-
+				
 			},
             success: function (res, textStatus) {
 				if (res.code == '1') {
@@ -24,10 +24,10 @@ layui.define(['layer', 'form'], function(exports){
 				}
             },
 			complete: function(XMLHttpRequest, textStatus){
-
+				
 			},
 			error: function(){
-
+				
 			}
         });
     }

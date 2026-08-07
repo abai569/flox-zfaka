@@ -9,7 +9,7 @@
 class ProfilesController extends MemberBasicController
 {
     private $m_user;
-
+	
 	public function init()
     {
         parent::init();
@@ -39,20 +39,20 @@ class ProfilesController extends MemberBasicController
 		$qq = $this->getPost('qq',false);
 		$tag = $this->getPost('tag',false);
 		$csrf_token = $this->getPost('csrf_token', false);
-
+		
 		$data = array();
-
+		
 		if($nickname AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				$nickname_string = new \Safe\MyString($nickname);
 				$nickname = $nickname_string->trimall()->qufuhao()->getValue();
-
+				
 				$qq_string = new \Safe\MyString($qq);
 				$qq = $qq_string->trimall()->qufuhao()->getValue();
 
 				$tag_string = new \Safe\MyString($tag);
 				$tag = $tag_string->trimall()->qufuhao()->getValue();
-
+				
 				$this->m_user->UpdateByID(array('nickname'=>$nickname,'qq'=>$qq,'tag'=>$tag),$this->userid);
 				$data = array('code' => 1, 'msg' => '更新成功');
 			} else {
@@ -63,9 +63,9 @@ class ProfilesController extends MemberBasicController
 		}
 		Helper::response($data);
 	}
-
-
-
+	
+	
+	
 	public function passwordAction()
 	{
         if ($this->login==FALSE AND !$this->userid) {
@@ -76,7 +76,7 @@ class ProfilesController extends MemberBasicController
 		$data['title'] = "密码";
         $this->getView()->assign($data);
 	}
-
+	
 	public function passwordajaxAction()
 	{
         if ($this->login==FALSE AND !$this->userid) {
@@ -87,7 +87,7 @@ class ProfilesController extends MemberBasicController
 		$oldpassword = $this->getPost('oldpassword',false);
 		$csrf_token = $this->getPost('csrf_token', false);
 		$data = array();
-
+		
 		if($password AND $oldpassword AND $csrf_token){
 			if ($this->VerifyCsrfToken($csrf_token)) {
 				if ($oldpassword !== $password) {

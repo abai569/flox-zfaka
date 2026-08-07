@@ -28,7 +28,7 @@ abstract class Helper {
 			self::raiseError($traceInfo, $error);
 		}
 	}
-
+	
 	/**
 	 * Load model
 	 * <br />After loading a model, the new instance will be added into $obj immediately,
@@ -45,7 +45,7 @@ abstract class Helper {
 			list($category, $model) = explode('/', $model);
 			$path = '/'. $category;
 		}
-
+		
 		$hash = md5($path . $model);
 
 		if(isset(self::$obj[$hash])) {
@@ -54,7 +54,7 @@ abstract class Helper {
 
 		$default = FALSE;
 		$file = MODEL_PATH .$path .'/M_'.ucfirst($model).'.php';
-
+		
 		if(!file_exists($file)) {
 			// 加载默认模型, 减少没啥通用方法的模型
 			$default = TRUE;
@@ -74,9 +74,9 @@ abstract class Helper {
 				self::$obj[$hash] = new $model($table);
 			}else{
 				$model = 'M_'.$model;
-				self::$obj[$hash] = new $model;
+				self::$obj[$hash] = new $model;	
 			}
-
+			
 			unset($model, $default, $table, $file, $path, $category);
 			return self::$obj[$hash];
 		}catch(Exception $error) {
@@ -102,13 +102,13 @@ abstract class Helper {
         $signPars .= 'key='.API_KEY;
         return strtolower(md5($signPars));
     }
-
-
+	
+	
 	/**
 	 * Response
-	 *
+	 * 
 	 * @param string $format : json, xml, jsonp, string
-	 * @param array $data:
+	 * @param array $data: 
 	 * @param boolean $die: die if set to true, default is true
 	 */
 	public static function response($data, $format = 'json', $die = TRUE) {
@@ -117,7 +117,7 @@ abstract class Helper {
 			case 'json':
 				$file = FUNC_PATH.'/F_String.php';
 				Yaf\Loader::import($file);
-				if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){
+				if(isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"])=="xmlhttprequest"){ 
 					//$data = JSON($data);
 					$data = json_encode($data, JSON_UNESCAPED_UNICODE);
 				}else if(isset($_REQUEST['ajax'])){
@@ -128,18 +128,18 @@ abstract class Helper {
 					echo json_encode($data, JSON_UNESCAPED_UNICODE); die;
 				}
 			break;
-
+			
 			case 'jsonp':
-
+				
 				$data = htmlspecialchars($_GET['jsoncallback'],ENT_QUOTES) .'('. json_encode($data) .')';
 			break;
-
+			
 			case 'string':
 			break;
 		}
 
 		echo $data;
-
+		
 		if($die){
             die;
 		}

@@ -127,7 +127,7 @@ class Captcha
     public function __construct($phrase = null)
     {
         if ($phrase === null) {
-		   $phrase=$this->buildPhrase();
+		   $phrase=$this->buildPhrase();    
         }
 
         $this->phrase = $phrase;
@@ -682,7 +682,7 @@ class Captcha
 
         // check image type
 		return $imageType='image/png';
-
+		
         $finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
         $imageType = finfo_file($finfo, $backgroundImage);
         finfo_close($finfo);

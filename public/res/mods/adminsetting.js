@@ -4,10 +4,13 @@ layui.define(['layer', 'table','form'], function(exports){
 	var table = layui.table;
 	var form = layui.form;
 
-	table.render({
+	var savedPage = sessionStorage.getItem('setting_page');
+	var currentPage = savedPage ? parseInt(savedPage) : 1;
+
+	var tableIns = table.render({
 		elem: '#setting',
 		url: '/'+ADMIN_DIR+'/setting/ajax',
-		page: true,
+		page: {curr: currentPage},
 		cellMinWidth:60,
 		cols: [[
 			{field: 'id', title: 'ID', width:80},
@@ -15,7 +18,19 @@ layui.define(['layer', 'table','form'], function(exports){
 			{field: 'tag', title: '说明'},
 			{field: 'updatetime', title: '更新时间', width:200, templet: '#updatetime',align:'center'},
 			{field: 'opt', title: '操作', width:200, templet: '#opt',align:'center'}
-		]]
+		]],
+		done: function(res, currPage, count){
+			if(currPage) sessionStorage.setItem('setting_page', currPage);
+			//监听分页变化
+			var laypage = document.querySelector('.layui-laypage-curr');
+			if(laypage && !laypage._observed){
+				laypage._observed = true;
+				new MutationObserver(function(){
+					var em = laypage.querySelector('em');
+					if(em && em.textContent) sessionStorage.setItem('setting_page', em.textContent);
+				}).observe(laypage, {childList:true, subtree:true});
+			}
+		}
 	});
 
 	//修改
@@ -36,10 +51,10 @@ layui.define(['layer', 'table','form'], function(exports){
 					content: '修改成功',
 					btn: ['确定'],
 					yes: function(index, layero){
-					    location.reload();
+					    window.location.href = '/'+ADMIN_DIR+'/setting';
 					},
-					cancel: function(){
-					    location.reload();
+					cancel: function(){ 
+					    window.location.href = '/'+ADMIN_DIR+'/setting';
 					}
 				});
 			} else {
@@ -55,7 +70,7 @@ layui.define(['layer', 'table','form'], function(exports){
 
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
     form.on('submit(repair)', function(data){
 		data.field.csrf_token = TOKEN;
 		data.field.method = 'repair';
@@ -80,9 +95,9 @@ layui.define(['layer', 'table','form'], function(exports){
 						,yes: function(){
 							location.reload();
 						}
-						,cancel: function(){
+						,cancel: function(){ 
 							location.reload();
-						}
+						} 
 					});
 				} else {
 					layer.msg(res.msg,{icon:2,time:5000});

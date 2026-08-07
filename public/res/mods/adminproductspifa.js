@@ -4,7 +4,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 	var table = layui.table;
 	var form = layui.form;
 	var pid = $('#pid').val();
-
+		
 	table.render({
 		elem: '#table',
 		url: '/'+ADMIN_DIR+'/productspifa/ajax',
@@ -18,7 +18,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 			{field: 'opt', title: '操作', width:120, templet: '#opt',align:'center'},
 		]]
 	});
-
+	
 	//修改
 	form.on('submit(edit)', function(data){
 		data.field.csrf_token = TOKEN;
@@ -38,7 +38,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});

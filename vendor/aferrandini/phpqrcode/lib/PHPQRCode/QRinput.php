@@ -482,3 +482,5 @@ class QRinput {
         return $bstream->toByte();
     }
 }
+
+

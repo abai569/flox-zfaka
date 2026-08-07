@@ -3,7 +3,7 @@
  * PHP QR Code encoder
  *
  * Reed-Solomon error correction support
- *
+ * 
  * Copyright (C) 2002, 2003, 2004, 2006 Phil Karn, KA9Q
  * (libfec is released under the GNU Lesser General Public License.)
  *

@@ -36,7 +36,7 @@ class SendemailController extends BasicController
 				//对smtp进行特别配置
 				if($emainConfig['smtp_crypto']>1){
 					$config['smtp_crypto'] = 'tls';
-				}elseif($emainConfig['smtp_crypto']>0){
+				}elseif($emainConfig['smtp_crypto']>0){	
 					$config['smtp_crypto'] = 'ssl';
 				}else{
 					$config['smtp_crypto'] = '';
@@ -46,7 +46,7 @@ class SendemailController extends BasicController
 				$config['smtp_pass'] = $emainConfig['mailpassword'];
 				$config['smtp_port'] = $emainConfig['port'];
 			}
-
+			
 			$config['sendmail'] = $emainConfig['sendmail'];
 			$config['sendname'] = $emainConfig['sendname'];
 			foreach($queue AS $q){
@@ -62,8 +62,8 @@ class SendemailController extends BasicController
         file_put_contents(CRONTAB_FILE, CUR_DATETIME . '-' . 'end' . PHP_EOL, FILE_APPEND);
         exit();
     }
-
-
+	
+	
 	private function _send($config,$params)
 	{
 		//发送邮件

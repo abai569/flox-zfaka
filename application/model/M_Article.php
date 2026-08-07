@@ -21,7 +21,7 @@ class M_Article extends Model
     {
         $where = array('status' => 1);
         $order = array('sort' => 'DESC', 'id' => 'DESC');
-
+        
         if ($limit) {
             return $this->Where($where)->Order($order)->Limit($limit)->Select();
         } else {

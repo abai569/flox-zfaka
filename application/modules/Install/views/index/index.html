@@ -32,29 +32,20 @@
 
     </div>
 <div class="layui-container fly-marginTop fly-user-main">
-	<div class="zf-install-wrap">
-		<div class="zf-install-steps">
-			<div class="zf-install-step zf-step-active"><span class="zf-install-step-num">1</span><span>服务条款</span></div>
-			<div class="zf-install-step-connector"></div>
-			<div class="zf-install-step"><span class="zf-install-step-num">2</span><span>环境检测</span></div>
-			<div class="zf-install-step-connector"></div>
-			<div class="zf-install-step"><span class="zf-install-step-num">3</span><span>安装设置</span></div>
-			<div class="zf-install-step-connector"></div>
-			<div class="zf-install-step"><span class="zf-install-step-num">4</span><span>安装完成</span></div>
-		</div>
-		<div class="layui-card">
-			<div class="layui-card-header">1.服务条款</div>
-			<div class="layui-card-body">
-				<div class="layui-form-item zf-install-terms">
+    <div class="layui-row layui-col-space15">
+			<div class="layui-card">
+			  <div class="layui-card-header">1.服务条款</div>
+			  <div class="layui-card-body">
+				<div class="layui-form-item">
 					<textarea placeholder="" class="layui-textarea">首先感谢您选择使用本系统,本系统不会收集任何信息,不预留漏洞后门;但请自行做好安全措施并进行数据备份.</textarea>
 				</div>
-				<div class="zf-install-actions">
+				<div class="layui-form-item" style="text-align: center;">
 					<a class="layui-btn" lay-submit="" lay-filter="agree" href="/install/setpone">同意</a>
 					<button class="layui-btn layui-btn-danger" lay-submit="" lay-filter="demo2" onClick="custom_close()">拒绝</button>
 				</div>
+			  </div>
 			</div>
-		</div>
-	</div>
+    </div>
 </div>
 <!--引入公共底文件-->
 	<div class="fly-footer">

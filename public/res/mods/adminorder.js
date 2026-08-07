@@ -13,9 +13,15 @@ layui.define(['layer', 'table', 'form'], function(exports){
 		cols: [[
 			{type: 'checkbox', fixed: 'left'},
 			{field: 'id', title: 'ID', width:80},
-			{field: 'orderid', title: '订单号', minWidth:100},
-			{field: 'email', title: '邮箱', minWidth:120},
-			{field: 'productname', title: '商品', minWidth:100},
+			{field: 'orderid', title: '订单号', minWidth:100, templet: function(d){
+				return '<span class="tokyo-copy-cell" title="' + d.orderid + '" data-copy="' + d.orderid + '">' + d.orderid + '</span>';
+			}},
+			{field: 'email', title: '邮箱', minWidth:120, templet: function(d){
+				return '<span class="tokyo-copy-cell" title="' + d.email + '" data-copy="' + d.email + '">' + d.email + '</span>';
+			}},
+			{field: 'productname', title: '商品', minWidth:100, templet: function(d){
+				return '<span class="tokyo-copy-cell" title="' + d.productname + '" data-copy="' + d.productname + '">' + d.productname + '</span>';
+			}},
 			{field: 'addtime', title: '时间', templet: '#addtime',minWidth:120},
 			{field: 'status', title: '状态', width:80, templet: '#status',align:'center'},
 			{field: 'paymoney', title: '支付金额',width:80},
@@ -70,7 +76,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.href = '/'+ADMIN_DIR+'/order/view/?id='+data.field.id;
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -87,7 +93,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
 	form.on('submit(order-send-button)', function(data){
 		data.field.csrf_token = TOKEN;
 		var i = layer.load(2,{shade: [0.5,'#fff']});
@@ -106,7 +112,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.href = '/'+ADMIN_DIR+'/order/view/?id='+data.field.id;
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -123,7 +129,7 @@ layui.define(['layer', 'table', 'form'], function(exports){
 
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
     form.on('submit(search)', function(data){
         table.reload('table', {
             url: '/'+ADMIN_DIR+'/order/ajax',
@@ -132,6 +138,16 @@ layui.define(['layer', 'table', 'form'], function(exports){
         return false;
     });
 
+	// 点击复制订单号/邮箱/商品
+	$(document).on('click', '.tokyo-copy-cell', function(e) {
+		e.stopPropagation();
+		var text = $(this).attr('data-copy') || $(this).text().trim();
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(text).then(function() {
+				layer.msg('已复制：' + text, {icon: 1, time: 1200});
+			});
+		}
+	});
 
 	exports('adminorder',null)
 });

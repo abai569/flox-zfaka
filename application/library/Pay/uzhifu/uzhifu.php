@@ -2,7 +2,7 @@
 /**
  * File: uzhifu.php
  * Functionality: USDT pay -USDT支付
- * Author:
+ * Author: 
  * Date: 2025-08-13
  */
 namespace Pay\uzhifu;
@@ -11,7 +11,7 @@ use \Pay\notify;
 class uzhifu
 {
 	private $paymethod ="uzhifu";
-
+	
 	//处理请求
 	public function pay($payconfig,$params)
 	{
@@ -131,19 +131,19 @@ class uzhifu
             } else {
                 return array('code'=>1001,'msg'=>"支付接口请求失败",'data'=>'');
             }
-		}
-		catch (\Exception $e)
+		} 
+		catch (\Exception $e) 
 		{
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
 	}
-
-
+	
+	
 	//处理返回
     public function notify($payconfig)
     {
         file_put_contents(YEWU_FILE, CUR_DATETIME . '-USDT-NOTIFY-' . json_encode($_POST) . PHP_EOL, FILE_APPEND);
-
+        
         // Only accept POST requests
         if(!$_POST) {
             $data = array('code' => 1000, 'msg' => 'Invalid request method');
@@ -180,5 +180,5 @@ class uzhifu
             return 'error|Notify: invalid';
         }
     }
-
-}
+	
+} 

@@ -23,7 +23,7 @@ layui.define(['layer', 'form'], function(exports){
 			}
 		}
 	});
-
+	
 	//修改邮箱账户
 	form.on('submit(email)', function(data){
 		data.field.csrf_token = TOKEN;
@@ -43,7 +43,7 @@ layui.define(['layer', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});
@@ -60,7 +60,7 @@ layui.define(['layer', 'form'], function(exports){
 
 		return false; //阻止表单跳转。
 	});
-
+	
 	//修改密码
 	form.on('submit(pass)', function(data){
 
@@ -81,7 +81,7 @@ layui.define(['layer', 'form'], function(exports){
 					yes: function(index, layero){
 					    location.reload();
 					},
-					cancel: function(){
+					cancel: function(){ 
 					    location.reload();
 					}
 				});

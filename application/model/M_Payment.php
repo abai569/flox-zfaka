@@ -34,11 +34,11 @@ class M_Payment extends Model
 		}
 
 		if (empty($config) OR $new){
-		$data['config'] = $config = $this->_getData();
-		$data['expire_time'] = time() + 600;
+    		$data['config'] = $config = $this->_getData();
+    		$data['expire_time'] = time() + 600;
 			file_put_contents($file_path,json_encode($data));
-	}
-
+    	}
+		
 
 		return $config;
 	}
@@ -52,5 +52,5 @@ class M_Payment extends Model
 			$_config[$k]=$i;
 		}
 		return $_config;
-	}
+	}    
 }

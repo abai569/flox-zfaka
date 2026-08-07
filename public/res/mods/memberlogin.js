@@ -3,14 +3,7 @@ layui.define(['layer', 'form'], function(exports){
 	var layer = layui.layer;
 	var form = layui.form;
 
-	$('.loadcode').on('click', function(event) {
-		event.preventDefault();
-		$(this).attr('src','/Captcha?t=login&n=' + Math.random())
-	});
-
-	form.verify({
-		vercode: [/^[0-9a-zA-Z]{4}$/,'图形验证码错误']
-	});
+	// 验证码已移除
 
 	form.on('submit(login)', function(data){
 
@@ -26,7 +19,6 @@ layui.define(['layer', 'form'], function(exports){
 			if (res.code == '1') {
 				location.pathname = '/member'
 			} else {
-				$('.loadcode').attr('src','/Captcha?t=login&n=' + Math.random());
 				layer.msg(res.msg,{icon:2,time:5000});
 			}
 		})

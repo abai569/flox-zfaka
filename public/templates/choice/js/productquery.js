@@ -6,7 +6,7 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
 	var laytpl = layui.laytpl;
 	var element = layui.element;
 	var lodding;
-
+	
 	function createTime(v){
 		var date = new Date();
 		date.setTime(parseInt(v)*1000);
@@ -24,7 +24,7 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
 		var str = y+"-"+m+"-"+d+" "+h+":"+M+":"+s;
 		return str;
 	}
-
+	
 	function converStatus(data){
 		var str = "";
 		var s = data.status;
@@ -47,7 +47,7 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
 		}
 		return str;
 	}
-
+	
 	$("#query-pane").on("click",".view_kami",function(event){
 		event.preventDefault();
 		var orderid = $(this).attr("data-orderid");
@@ -95,7 +95,7 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
 							clipboard.on('error', function(e) {
 								//console.log(e);
 								layer.msg("复制失败");
-							});
+							});	
 						 }
 						 ,no: function(){
 							 layer.closeAll();
@@ -108,12 +108,12 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
             }
         });
 	});
-
+	
 	$('.loadcode').on('click', function(event) {
 		event.preventDefault();
 		$(this).attr('src','/Captcha?t=productquery&n=' + Math.random())
 	});
-
+	
 	form.on('submit(query)', function(data){
 		data.field.csrf_token = TOKEN;
 		var i = layer.load(2,{shade: [0.5,'#fff']});
@@ -159,6 +159,6 @@ layui.define(['layer', 'form','jquery','base64','laytpl','element'], function(ex
 		});
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
 	exports('productquery',null)
 });

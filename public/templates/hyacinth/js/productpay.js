@@ -8,15 +8,16 @@
 	var queryRadio = 1;
 	var lodding;
 	console.log("注意：本页js用的比较多，请小心谨慎!");
-
+	
 	$('.orderpaymethod').on('click', function(event) {
 		event.preventDefault();
 		var paymethod = $(this).attr("data-type");
+		var paytype = $(this).data('paytype') || '';
         $.ajax({
             type: "POST",
             dataType: "json",
             url: "/product/order/payajax",
-            data: { "csrf_token": TOKEN,'paymethod':paymethod,'oid':oid },
+            data: { "csrf_token": TOKEN,'paymethod':paymethod,'paytype':paytype,'oid':oid },
 			beforeSend: function () {
 				lodding = layer.load();
 			},
@@ -62,16 +63,16 @@
 								,yes: function(){
 									clearInterval(myTimer);
 								}
-								,cancel: function(){
+								,cancel: function(){ 
 								   queryRadio = 0;
 								   clearInterval(myTimer);
-								}
+								} 
 							  });
 							  //3秒后自动跳转
 								setTimeout(function(){
 									location.href = res.data.url;
 								},3000);
-
+							  
 						}else{
 							if(res.data.overtime>0){
 								timer(res.data.overtime,paymethod);
@@ -85,7 +86,7 @@
 								if(paymethod === "uzhifu"){
 									html += '<li>使用支持TRC20网络的USDT钱包转账(如币安, Safepal等)</li>';
 									html += '<li style="color: red;">转账金额必须为 <strong>' + res.data.money + ' USDT</strong>（请勿多转或少转）</li>';
-				html += '<li>到账时间取决于区块链网络拥堵程度, 通常在半分钟内</li>';
+                      				html += '<li>到账时间取决于区块链网络拥堵程度, 通常在半分钟内</li>';
 									html += '<div style="font-weight: bold; margin-bottom: 8px; color: #333;">收款地址:</div>'
 									html += '<div style="font-weight: bold; margin-bottom: 8px; color: red;">' + res.data.wallet_address +'</div>'
 								}
@@ -101,7 +102,7 @@
 								html += '<div class="money-item">订单金额：<strong>'+res.data.money+'</strong></div>';
 								html +='<div id="time-item" class="time-item"><hr><p>请使用手机'+res.data.payname+'扫一扫</p><p>扫描二维码完成支付</p></div></div>';
 							}
-
+							
 							if(res.data.subjump>0 && (device.android || device.ios)){
 								if(!device.weixin){
 									setTimeout(function(){
@@ -109,7 +110,7 @@
 									},2000);
 								}
 							}
-
+							
 							layer.open({
 								type: 1
 								,title: false
@@ -124,10 +125,10 @@
 									queryRadio = 0;
 									clearInterval(myTimer);
 								}
-								,cancel: function(){
+								,cancel: function(){ 
 								   queryRadio = 0;
 								   clearInterval(myTimer);
-								}
+								} 
 							});
 						}
 						queryPay();
@@ -170,7 +171,7 @@
         });
 		//return true;
     }
-
+	
 	function timer(intDiff,paymethod) {
 		var i = 0;
 		myTimer = window.setInterval(function () {
@@ -200,7 +201,7 @@
 			intDiff--;
 		}, 1000);
 	}
-
+	
 	$("#query-pane").on("click",".view_kami",function(event){
 		event.preventDefault();
 		var orderid = $(this).attr("data-orderid");

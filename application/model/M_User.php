@@ -45,7 +45,7 @@ class M_User extends Model
 		$m=array();
 		$m['email'] = $params['email'];
 		$m['nickname'] = $params['nickname'];
-		$m['createtime']= time();
+		$m['createtime']= time(); 
 		$m['password'] = md5($params['password']);
 
 		if(isset($params['qq'])){
@@ -81,7 +81,7 @@ class M_User extends Model
 		}
 		return array();
 	}
-
+	
     /*
      * 修改密码
      */
@@ -94,7 +94,7 @@ class M_User extends Model
 			return FALSE;
 		}
     }
-
+	
 	/**
 	* 登录session处理
 	* @param $params

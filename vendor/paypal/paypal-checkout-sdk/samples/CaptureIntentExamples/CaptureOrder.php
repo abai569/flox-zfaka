@@ -13,7 +13,7 @@ class CaptureOrder
     /**
      * This function can be used to capture an order payment by passing the approved
      * order id as argument.
-     *
+     * 
      * @param orderId
      * @param debug
      * @returns
@@ -38,7 +38,7 @@ class CaptureOrder
             foreach($response->result->purchase_units as $purchase_unit)
             {
                 foreach($purchase_unit->payments->captures as $capture)
-                {
+                {    
                     print "\t{$capture->id}";
                 }
             }

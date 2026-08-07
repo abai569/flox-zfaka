@@ -12,7 +12,7 @@ class UpgradeController extends AdminBasicController
 	public function init()
     {
         parent::init();
-		$this->all_version = ['1.0.0','1.0.2','1.0.3','1.0.4','1.0.5','1.0.6','1.0.7','1.0.8','1.0.9','1.1.0','1.1.1','1.1.2','1.1.3','1.1.4','1.1.5','1.1.6','1.1.7','1.1.8','1.1.9','1.2.0','1.2.1','1.2.2','1.2.3','1.2.4','1.2.5','1.2.6','1.2.7','1.2.8','1.2.9','1.3.0','1.3.1','1.3.3','1.3.4','1.3.5','1.3.6','1.3.7','1.3.8','1.3.9','1.4.0','1.4.1','1.4.2','1.4.3','1.4.4','1.4.5','1.4.6','1.4.7'];
+		$this->all_version = ['1.0.0','1.0.2','1.0.3','1.0.4','1.0.5','1.0.6','1.0.7','1.0.8','1.0.9','1.1.0','1.1.1','1.1.2','1.1.3','1.1.4','1.1.5','1.1.6','1.1.7','1.1.8','1.1.9','1.2.0','1.2.1','1.2.2','1.2.3','1.2.4','1.2.5','1.2.6','1.2.7','1.2.8','1.2.9','1.3.0','1.3.1','1.3.3','1.3.4','1.3.5','1.3.6','1.3.7','1.3.8','1.3.9','1.4.0','1.4.1','1.4.2','1.4.3','1.4.4','1.4.5','1.4.6'];
     }
 
     public function indexAction()
@@ -65,7 +65,7 @@ class UpgradeController extends AdminBasicController
 			return FALSE;
 		}
     }
-
+	
 	public function ajaxAction()
 	{
         if ($this->AdminUser==FALSE AND empty($this->AdminUser)) {
@@ -74,7 +74,7 @@ class UpgradeController extends AdminBasicController
         }
 		$method = $this->getPost('method',false);
 		$data = array();
-
+		
 		if($method AND $method=='upgrade'){
             try {
 				$version = @file_get_contents(INSTALL_LOCK);
@@ -90,9 +90,9 @@ class UpgradeController extends AdminBasicController
 					$data = array('code' => 1, 'msg' =>"请勿重复升级");
 					Helper::response($data);
 				}
-
+				
 				$upgrade_sql = INSTALL_PATH.'/'.$update_version.'/upgrade.sql';
-
+				
 				if(file_exists($upgrade_sql) AND is_readable($upgrade_sql)){
 					$sql = @file_get_contents($upgrade_sql);
 					if(!$sql){
@@ -103,22 +103,22 @@ class UpgradeController extends AdminBasicController
 					$data = array('code' => 1004, 'msg' =>"无法读取".$upgrade_sql."文件,请检查文件是否存在且有读权限");
 					Helper::response($data);
 				}
-
+				
 				if (!is_writable(INSTALL_LOCK)){
 					$data = array('code' => 1006, 'msg' =>"无法写入文件".INSTALL_LOCK.",请检查是否有写权限");
 					Helper::response($data);
 				}
-
+				
 				$m_config = $this->load('config');
                 $m_config->Query($sql);
-
+				
 				$result = @file_put_contents(INSTALL_LOCK,$update_version,LOCK_EX);
 				if (!$result){
 					$data = array('code' => 1004, 'msg' =>"无法写入安装锁定到".INSTALL_LOCK."文件，请检查是否有写权限");
 				}
 				//20190319，这里添加一个延时，避免sql操作时间过长导致异常
 				sleep(10);
-				//更新配置缓存
+				//更新配置缓存 
 				$m_config->getConfig(1);
 				$data = array('code' => 1, 'msg' =>"SUCCESS");
             } catch (\Exception $e) {
@@ -129,7 +129,7 @@ class UpgradeController extends AdminBasicController
 		}
 		Helper::response($data);
 	}
-
+	
 	//获取下一版本号
 	private function _getUpdateVersion($version)
 	{

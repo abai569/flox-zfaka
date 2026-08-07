@@ -13,5 +13,5 @@ class M_Config_cat extends Model
 	{
 		$this->table = TB_PREFIX.'config_cat';
 		parent::__construct();
-	}
+	}       
 }

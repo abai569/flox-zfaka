@@ -16,11 +16,11 @@ class MemberBasicController extends BasicController
 	protected $login = FALSE;
 	//模版基础路径
 	protected $tplBase = "";
-
+	
     public $serverPrivateKey = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAPiKwTi/M+PNwqvKI37LyTDWF3sRDHuOariVfBpIEv3976jViWDsTHNL5oxd+D2mRqdty3KM3SySItPE2DCQj/j7FoDn7Gz+F34GiqOmGKoRIBZy4N6C2P4d7G2x2DtMk2dMwg6/ZMzXumuyeziEXUMnPlpIomroaTCGWPr2/tmxAgMBAAECgYEAjK3FNoCLN2sUwDX3J2Ljqx/TRJZe0WTIJVh/WUTocxmT2KWdT94QW8ZfZZ4ez45ZOZWc7WasHflNez5U/BAnXLH89XmCuAWdCUqbkDm7fD76qa0gO0ScQrZQ34fTkBYaW2EAM40Mqd8rCAEuCBu6JVkP7wnaAU1MeQEvmVtv0H0CQQD848oh3WYoWZacUmq84udlnbycRAySka/J8/VImYVmQ2O/i4Y/GAZOeHtjrtfNZAtOxCbAkpnpmZfdgoIx3bd3AkEA+5lGwc5krprOHFVsJLiWLLpV+aFBPD5IrATaJ6X+l6EAxl1gUhaGlz85r9Jy6HCGi6Mv07gmPmgzUVjb+XsSFwJAKtzhEcRY4FXu9Sfy93juB4coxMOz7dPLm8tBs8Bxn9ekPH8FjgQgbYR2RXsJEML4N61/c/xlIfbqipzoPFN8GQJBAMnp+ZoBvFVQEUc12sMhjAu7QtJCcmsZhRLgFf+pvMcNQ+Tt/SYDw+HPsMkEuIkH/UJFJVXhPHfrAfwvtuHhveMCQQCMXoBkqc8GhjaXPvW0ZJ2IVu+5lo/YhCG4GY2YsLPysA7XMJMwojuETHwcuqMJ2fXvIxrlGTLjGJmV9Bi7nebO";
     public $serverPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQD4isE4vzPjzcKryiN+y8kw1hd7EQx7jmq4lXwaSBL9/e+o1Ylg7ExzS+aMXfg9pkanbctyjN0skiLTxNgwkI/4+xaA5+xs/hd+BoqjphiqESAWcuDegtj+Hextsdg7TJNnTMIOv2TM17prsns4hF1DJz5aSKJq6Gkwhlj69v7ZsQIDAQAB";
-
-	public function init(){
+  	
+	public function init(){	
 		parent::init();
 		$sysvars = $data = array();
 		$this->config=$this->load('config')->getConfig();
@@ -34,7 +34,7 @@ class MemberBasicController extends BasicController
 		$sysvars['isPost']=$this->isPost=isPost();
 		$sysvars['currentUrl']=stripHTML(str_replace('//', '/',$_SERVER['REQUEST_URI']));
 		$sysvars['currentUrlSign']=md5(URL_KEY.$sysvars['currentUrl']);
-		$data['sysvars']=$sysvars;
+		$data['sysvars']=$sysvars; 
         $uinfo = $this->getSession('uinfo');
 		if(is_array($uinfo) AND !empty($uinfo) AND $uinfo['expiretime']>time()){
 			$groupName=$this->load('user_group')->getConfig();
@@ -76,15 +76,15 @@ class MemberBasicController extends BasicController
             $lastKey = "-----BEGIN PUBLIC KEY-----\n" . $lastKey . "-----END PUBLIC KEY-----\n";
             return $lastKey;
         }
-    }
+    }	
 	public function show_message($code='',$msg='',$url='/'){
 		$this->forward("Index",'Showmsg','index',array('code'=>$code,'msg'=>$msg,'url'=>$url));
-		return FALSE;
+		return FALSE; 
 	}
-
+	
 	//生成csrftoken　防csrf攻击
     private function createCsrfToken(){
-	$csrf_token = $this->getSession('csrf_token');
+    	$csrf_token = $this->getSession('csrf_token');
 		$isCreate = false;
 		if($csrf_token){
 			try {
@@ -92,8 +92,8 @@ class MemberBasicController extends BasicController
 					$decoded = JWT::decode($csrf_token, self::readRSAKey($this->serverPublicKey), array('RS256'));
 					$tokenKey = (array)$decoded;
 					if (is_array($tokenKey) AND !empty($tokenKey)) {
-
-
+						
+		
 					} else {
 						$isCreate = true;
 					}
@@ -104,17 +104,17 @@ class MemberBasicController extends BasicController
 		}else{
 			$isCreate = true;
 		}
-
-	if($isCreate == true){
-		$csrf_token=$this->createToken();
+		
+    	if($isCreate == true){
+    		$csrf_token=$this->createToken(); 
 			$this->setSession('csrf_token',$csrf_token);
-	}
+    	}
 		return $csrf_token;
 	}
 	//验证csrftoken 防csrf攻击
 	public function VerifyCsrfToken($csrf_token=''){
 		$csrf_token = $csrf_token?$csrf_token:$this->getPost('csrf_token',false);
-		$session_csrf_token = $this->getSession('csrf_token',false);
+		$session_csrf_token = $this->getSession('csrf_token',false); 
 		if($session_csrf_token && $session_csrf_token==$csrf_token){
 			try {
 				$decoded = JWT::decode($csrf_token, self::readRSAKey($this->serverPublicKey), array('RS256'));

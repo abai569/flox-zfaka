@@ -36,7 +36,7 @@ class wxh5
 		];
 
 		$data = [
-			'body'    => $this->paymethod,
+			'body'    => $this->paymethod, 
 			'subject'    => $params['productname'],
 			'order_no'    => $params['orderid'],
 			'timeout_express' => time() + 600,// 表示必须 600s 内付款
@@ -71,7 +71,7 @@ class wxh5
 			return array('code'=>1000,'msg'=>$e->getMessage(),'data'=>'');
 		}
 	}
-
+	
 	public function notify(array $payconfig)
 	{
 		try {
@@ -90,10 +90,10 @@ class wxh5
 				'return_raw' => true
 			];
 			$callback = new \Pay\wxh5\callback();
-			return $ret = Notify::run("wx_charge", $config,$callback);// 处理回调，内部进行了签名检查
+			return $ret = Notify::run("wx_charge", $config,$callback);// 处理回调，内部进行了签名检查	
 		} catch (\Exception $e) {
 			return 'error|Exception:'.$e->getMessage();
 		}
 	}
-
+	
 }

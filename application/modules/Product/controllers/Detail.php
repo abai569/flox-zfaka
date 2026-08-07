@@ -39,12 +39,12 @@ class DetailController extends ProductBasicController
 				}else{
 					$data['addons'] = array();
 				}
-
+				
 				//库存字段－处理虚拟库存与真实库存
 				if($product['qty_switch']>0){
 					$product['qty'] = $product['qty_virtual'];
 				}
-
+				
 				//如果是密码商品
 				if(strlen($product['password'])>0){
 					$tpl = "password";
@@ -65,7 +65,7 @@ class DetailController extends ProductBasicController
 				}
 			}else{
 				$this->redirect("/product/");
-				return FALSE;
+				return FALSE;	
 			}
 		}else{
 			$this->redirect("/product/");

@@ -7,11 +7,11 @@
 class ShowmsgController extends BasicController
 {
 
-	public function init()
+ 	public function init()
 	{
         parent::init();
 	}
-
+	
 	public function indexAction()
 	{
 		$data = array();

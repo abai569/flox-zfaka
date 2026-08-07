@@ -17,7 +17,7 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 			//console.log(res)
 		}
 	});
-
+	
 	form.on('select(typeid)', function(data){
 		if (data.value == 0) return;
 		$.ajax({
@@ -44,7 +44,7 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 
 		});
 	});
-
+	
 	//导入
 	form.on('submit(import)', function(data){
 		data.field.csrf_token = TOKEN;
@@ -83,7 +83,7 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 		});
 		return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
 	});
-
+	
 	//导出
 	form.on('submit(download)', function(data){
 		data.field.csrf_token = TOKEN;
@@ -154,8 +154,8 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 				}
 			})
 		})
-	});
-
+	}); 
+	
     form.on('submit(repair)', function(data){
 		data.field.csrf_token = TOKEN;
 		data.field.method = 'repair';
@@ -180,9 +180,9 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 						,yes: function(){
 							location.reload();
 						}
-						,cancel: function(){
+						,cancel: function(){ 
 							location.reload();
-						}
+						} 
 					});
 				} else {
 					layer.msg(res.msg,{icon:2,time:5000});
@@ -196,7 +196,7 @@ layui.define(['layer', 'table', 'form','upload'], function(exports){
 			});
 
 			return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
-    });
+    });	
 	//添加
 	form.on('submit(add)', function(data){
 		data.field.csrf_token = TOKEN;

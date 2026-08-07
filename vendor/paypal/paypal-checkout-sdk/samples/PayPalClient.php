@@ -20,7 +20,7 @@ class PayPalClient
     {
         return new PayPalHttpClient(self::environment());
     }
-
+    
     /**
      * Setting up and Returns PayPal SDK environment with PayPal Access credentials.
      * For demo purpose, we are using SandboxEnvironment. In production this will be

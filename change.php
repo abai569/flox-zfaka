@@ -26,7 +26,7 @@ if($flag = 1){
         echo "[-]Your dir format is wrong. Please use [A-Z][a-z]{3,10}".PHP_EOL;
         exit();
     }
-
+    
     echo "[+]We will change [$path] to [$todir]".PHP_EOL;
     if(rename('./application/modules/'.$path,'./application/modules/'.$todir)){
         file_put_contents('./conf/application.ini',preg_replace('/application.modules.*/i', 'application.modules = "Index,Member,Product,'.$todir.',Crontab,Install"', $applicationini));

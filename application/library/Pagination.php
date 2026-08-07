@@ -108,7 +108,7 @@ class Pagination {
 			}
 			//$this->Get_Post_Strs=trim($this->Get_Post_Strs,'&');
 		}
-
+		
 		// If our item count or per-page total is zero there is no need to continue.
 		if ($this->total_rows == 0 OR $this->per_page == 0)
 		{
@@ -133,7 +133,7 @@ class Pagination {
 		{
 			$base_page = 0;
 		}
-
+		
 		// Set current page to 1 if using page numbers instead of offset
 		if ($this->use_page_numbers AND $this->cur_page == 0)
 		{
@@ -170,7 +170,7 @@ class Pagination {
 		}
 
 		$uri_page_number = $this->cur_page;
-
+		
 		if ( ! $this->use_page_numbers)
 		{
 			$this->cur_page = floor(($this->cur_page/$this->per_page) + 1);
@@ -183,9 +183,9 @@ class Pagination {
 
 		// Is pagination being used over GET or POST?  If get, add a per_page query
 		// string. If post, add a trailing slash to the base URL if needed
-
+		
 			$this->base_url = rtrim($this->base_url).'?'.$this->query_string_segment.'=';
-
+		
 
 		// And here we go...
 		$output = '';

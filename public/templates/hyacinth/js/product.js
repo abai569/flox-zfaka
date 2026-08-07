@@ -5,13 +5,13 @@
 	var element = layui.element;
 	var form = layui.form;
 	var device = layui.device();
-
+	
 	//手机适配调整
 	if(device.weixin || device.android || device.ios){
 		$(".productname").addClass("layui-form-text");
 		$(".layui-input-inline").attr("class", "layui-input-block");
 	}
-
+	
 	//判断是否为数字
 	function isNotANumber(inputData) {
 	　　if (parseFloat(inputData).toString() == "NaN") {
@@ -20,21 +20,21 @@
 	　　　　return true;
 	　　}
 	}
-
+	
 	//订单金额
     $("#number").on('input',function(e){
 		var stockcontrol = Number($('#stockcontrol').val());
 		var qty = Number($('#qty').val());
 		var number_value = $('#number').val();
 		var number = Number(number_value);
-
+		
 		if(isNotANumber(number_value)){
 			if(number<1){
 				number =1;
 				$('#number').val(1);
 			}
 		}
-
+		
 		if(stockcontrol>0){
 			if(number>qty){
 				$('#number').val(qty);
@@ -57,7 +57,7 @@
 		$('#money').val(money);
 		form.render('select');
     });
-
+	
 	form.verify({
 		numberCheck: function(value, item){ //value：表单的值、item：表单的DOM对象
 			var qty = $('#qty').val();
@@ -75,11 +75,11 @@
 		}
 		,chapwd: function(value, item){ //value：表单的值、item：表单的DOM对象
 			if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
-				return '查询密码不能有特殊字符';
+				return '安全密码不能有特殊字符';
 			}
 		}
 	});
-
+	
 	function changeTwoDecimal_f(x) {
 		var f_x = parseFloat(x);
 		if (isNaN(f_x)) {
@@ -97,7 +97,7 @@
 			s_x += '0';
 		}
 		return s_x;
-	}
+	}	
     function htmlspecialchars_decode(str){
 		if(str.length>0){
 			str = str.replace(/&amp;/g, '&');
@@ -106,9 +106,9 @@
 			str = str.replace(/&quot;/g, '"');
 			str = str.replace(/&#039;/g, "'");
 		}
-        return str;
+        return str;  
     }
-
+	
 	function buyNumCheck(){
 		var qty = $('#qty').val();
 		var number = $('#number').val();
@@ -120,7 +120,7 @@
 		}
 		return true;
 	}
-
+	
 	form.on('select(typeid)', function(data){
 		if (data.value == 0) return;
 		var ispassword = $(data.elem).find('option:selected').data('type');
@@ -138,7 +138,7 @@
 				,moveType: 1 //拖拽模式，0或者1
 				,content: html
 				,yes: function(layero){
-					var grouppassword = $("#grouppassword").val();
+					var grouppassword = $("#grouppassword").val(); 
 					if(grouppassword.length>0){
 						//远程请求验证
 						$.ajax({
@@ -178,7 +178,7 @@
 					}else{
 						layer.msg("请输入密码",{icon:2,time:5000});
 					}
-				}
+				}	
 				,btn2: function(index, layero){
 					$(data.elem).find("option").eq(0).val("0");
 					$(data.elem).find("option").eq(0).attr("selected",true);
@@ -192,7 +192,7 @@
 					form.render('select');
 					$(data.elem).find("option").eq(0).attr("selected",false);
 				}
-				,cancel: function(){
+				,cancel: function(){ 
 					$(data.elem).find("option").eq(0).val("0");
 					$(data.elem).find("option").eq(0).attr("selected",true);
 					$('#productlist').html("");
@@ -273,7 +273,7 @@
 				,moveType: 1 //拖拽模式，0或者1
 				,content: html
 				,yes: function(layero){
-					var productpassword = $("#productpassword").val();
+					var productpassword = $("#productpassword").val(); 
 					if(productpassword.length>0){
 						//远程请求验证
 						$.ajax({
@@ -307,12 +307,12 @@
 									}else{
 										var str = '<p><span class="layui-badge layui-bg-black">手工发货</span></p>';
 									}
-
+									
 									html = str + htmlspecialchars_decode(product.description);
 									$('#prodcut_description').html(html);
-
+									
 									PIFA = res.data.pifa;
-
+									
 									$("#addons").remove();
 									var list = res.data.addons;
 									if(list.length>0){
@@ -333,11 +333,11 @@
 								}
 							}
 						});
-
+						
 					}else{
 						layer.msg("请输入密码",{icon:2,time:5000});
 					}
-				}
+				}	
 				,btn2: function(index, layero){
 					$(data.elem).find("option").eq(0).val("0");
 					$(data.elem).find("option").eq(0).attr("selected",true);
@@ -350,7 +350,7 @@
 					form.render('select');
 					$(data.elem).find("option").eq(0).attr("selected",false);
 				}
-				,cancel: function(){
+				,cancel: function(){ 
 					$(data.elem).find("option").eq(0).val("0");
 					$(data.elem).find("option").eq(0).attr("selected",true);
 					$('#price').val('');
@@ -395,7 +395,7 @@
 						}else{
 							var str = '<p><span class="layui-badge layui-bg-black">手工发货</span></p>';
 						}
-
+						
 						html = str + htmlspecialchars_decode(product.description);
 						$('#prodcut_description').html(html);
 						PIFA = res.data.pifa;
@@ -434,7 +434,7 @@
 	form.on('submit(buy)', function(data){
 		data.field.csrf_token = TOKEN;
 		var i = layer.load(2,{shade: [0.5,'#fff']});
-
+		
 		if(buyNumCheck()){
 			$.ajax({
 				url: '/product/order/buy/',
@@ -466,7 +466,7 @@
 			layer.msg("下单数量超限",{icon:2,time:5000});
 			layer.close(i);
 		}
-		return false;
+		return false; 
 	});
 
 	//左右框高度
@@ -487,9 +487,9 @@
 		$('#prodcut_description').html(html);
 	}*/
 	autoHeight();
-
+	
 	//首页广告弹窗
-	var layerad = $("#layerad").html();
+	var layerad = $("#layerad").html(); 
 	if(typeof(layerad)!="undefined"){
 		if(layerad.length>0){
 			layer.open({
@@ -506,7 +506,7 @@
 			});
 		}
 	}
-
+	
 	//密码商品
 	if(typeof(PASSWORD_PRODUCT)!="undefined"){
 		if(PASSWORD_PRODUCT >0){
@@ -523,8 +523,8 @@
 				,moveType: 1 //拖拽模式，0或者1
 				,content: html
 				,yes: function(layero){
-					var pid = $("#pid").val();
-					var productpassword = $("#productpassword").val();
+					var pid = $("#pid").val(); 
+					var productpassword = $("#productpassword").val(); 
 					if(productpassword.length>0){
 						//远程请求验证
 						$.ajax({
@@ -558,10 +558,10 @@
 									}else{
 										var str = '<p><span class="layui-badge layui-bg-black">手工发货</span></p>';
 									}
-
+									
 									html = str + htmlspecialchars_decode(product.description);
 									$('#prodcut_description').html(html);
-
+									
 									$("#addons").remove();
 									var list = res.data.addons;
 									if(list.length>0){
@@ -581,21 +581,21 @@
 								}
 							}
 						});
-
+						
 					}else{
 						layer.msg("请输入密码",{icon:2,time:5000});
 					}
-				}
+				}	
 				,btn2: function(index, layero){
 					location.href = '/product/';
 				}
-				,cancel: function(){
+				,cancel: function(){ 
 					location.href = '/product/';
 				}
 			});
 		}
-	}
-
+	}	
+	
 	//查询批发优惠
 	$('#view-youhui').on('click', function(event) {
 		var getTpl = youhui_tpl.innerHTML;
@@ -604,7 +604,7 @@
 			 youhui_html = html;
 		});
 		element.render('query-m-result');
-
+		
 		layer.open({
 			type: 1
 			,title: false

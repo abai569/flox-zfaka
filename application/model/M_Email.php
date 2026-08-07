@@ -23,7 +23,7 @@ class M_Email extends Model
 			if(file_exists($file_path) AND !$new){
 			$data = json_decode(file_get_contents($file_path),true);
 		}
-
+		
 		//取旧值
 		if(!empty($data) AND isset($data['email']) AND (isset($data['expire_time']) AND $data['expire_time'] > time())){
 			//做了随机发送的处理，随机选择账号发送
@@ -31,18 +31,18 @@ class M_Email extends Model
 			$emailConfig = $data['email'][$key];
 		}
 		if (empty($emailConfig) OR $new){
-		$email = $this->_getData();
-		$data['email'] = $email;
-		$data['expire_time'] = time() + 600;
+    		$email = $this->_getData();
+    		$data['email'] = $email;
+    		$data['expire_time'] = time() + 600;
 
 			file_put_contents($file_path,json_encode($data));
-
+			
 			$key = array_rand($data['email']);
 			$emailConfig = $data['email'][$key];
-	}
-
+    	}
+		
 		return $emailConfig;
-	}
+	} 
 
 	private function _getData()
 	{

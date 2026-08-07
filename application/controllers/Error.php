@@ -13,7 +13,7 @@ class ErrorController extends BasicController
 		$ip = getClientIP();
 		$time = date('Y-m-d H:i:s');
 		if($ip){
-			file_put_contents(REQUEST_FILE, $time.'-'.$ip.'-'.$msg.PHP_EOL, FILE_APPEND);
+			file_put_contents(REQUEST_FILE, $time.'-'.$ip.'-'.$msg.PHP_EOL, FILE_APPEND);	
 			$data['title'] = '系统异常';
 			$this->getView()->assign($data);
 		}else{

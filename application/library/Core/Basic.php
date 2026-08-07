@@ -13,9 +13,9 @@ class BasicController extends Yaf\Controller_Abstract
 	protected $isAjax=FALSE;
 	protected $isGet=FALSE;
 	protected $isPost=FALSE;
-
+	
 	public function init(){}
-
+	
 	public function get($key, $filter = TRUE){
 		if($filter){
 			return filterStr($this->getRequest()->get($key));
@@ -39,7 +39,7 @@ class BasicController extends Yaf\Controller_Abstract
 			return $this->getRequest()->getParam($key);
 		}
 	}
-
+	
 	public function getQuery($key, $filter = TRUE){
 		if($filter){
 			return filterStr($this->getRequest()->getQuery($key));
@@ -80,9 +80,9 @@ class BasicController extends Yaf\Controller_Abstract
 	public function load($model){
 		return Helper::load($model);
 	}
-
+	
 	public function show_message($code='',$msg='',$url='/'){
-		return FALSE;
+		return FALSE; 
 	}
 
 }

@@ -9,12 +9,12 @@ if(defined('APP_PATH')) {
 	//2.判断是否安装yaf扩展
 	if (!extension_loaded('yaf')){
 		echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>警告：</strong><br>请按照安装要求安装YAF扩展</div>";
-		exit();
+		exit();	
 	}
 	//3.获取yaf扩展设置
 	if(ini_get('yaf.use_namespace')!="1"){
 		echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>警告：</strong><br>请按照安装要求配置yaf.use_namespace=1</div>";
-		exit();
+		exit();	
 	}
 	// //4.必须修改后台地址
 	// if(file_exists(APP_PATH.'/application/modules/Admin')){

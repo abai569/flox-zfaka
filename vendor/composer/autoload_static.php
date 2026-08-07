@@ -14,75 +14,75 @@ class ComposerStaticInit726a210eedb371e5cd2e9c37fab07589
     );
 
     public static $prefixLengthsPsr4 = array (
-        'W' =>
+        'W' => 
         array (
             'WriteiniFile\\' => 13,
         ),
-        'S' =>
+        'S' => 
         array (
             'Sample\\' => 7,
         ),
-        'P' =>
+        'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
             'Payment\\' => 8,
             'PayPalCheckoutSdk\\' => 18,
         ),
-        'G' =>
+        'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
         ),
-        'B' =>
+        'B' => 
         array (
             'BraintreeHttp\\' => 14,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WriteiniFile\\' =>
+        'WriteiniFile\\' => 
         array (
             0 => __DIR__ . '/..' . '/magicalex/write-ini-file/src',
         ),
-        'Sample\\' =>
+        'Sample\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/samples',
         ),
-        'Psr\\Http\\Message\\' =>
+        'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Payment\\' =>
+        'Payment\\' => 
         array (
             0 => __DIR__ . '/..' . '/riverslei/payment/src',
         ),
-        'PayPalCheckoutSdk\\' =>
+        'PayPalCheckoutSdk\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk',
         ),
-        'GuzzleHttp\\Psr7\\' =>
+        'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' =>
+        'GuzzleHttp\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' =>
+        'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'BraintreeHttp\\' =>
+        'BraintreeHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/braintree/braintreehttp/lib/BraintreeHttp',
         ),
     );
 
     public static $prefixesPsr0 = array (
-        'P' =>
+        'P' => 
         array (
-            'PHPQRCode' =>
+            'PHPQRCode' => 
             array (
                 0 => __DIR__ . '/..' . '/aferrandini/phpqrcode/lib',
             ),
