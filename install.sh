@@ -146,7 +146,9 @@ uninstall_zfaka() {
   cd "$INSTALL_DIR"
   if [ "$option" = "--volumes" ]; then
     compose down --volumes
-    echo "[OK] ZFAKA containers and data volumes removed"
+    cd /
+    rm -rf "$INSTALL_DIR"
+    echo "[OK] ZFAKA containers, data volumes, and installation files removed"
   else
     compose down
     echo "[OK] ZFAKA containers removed; data volumes retained"
