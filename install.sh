@@ -131,12 +131,35 @@ restore_zfaka() {
   echo "[OK] Database restored from $file"
 }
 
+uninstall_zfaka() {
+  require_root
+  option="${2:-}"
+  if [ "$option" != "" ] && [ "$option" != "--volumes" ]; then
+    echo "Usage: $0 uninstall [--volumes]"
+    exit 1
+  fi
+  if [ "${3:-}" != "" ]; then
+    echo "Usage: $0 uninstall [--volumes]"
+    exit 1
+  fi
+
+  cd "$INSTALL_DIR"
+  if [ "$option" = "--volumes" ]; then
+    compose down --volumes
+    echo "[OK] ZFAKA containers and data volumes removed"
+  else
+    compose down
+    echo "[OK] ZFAKA containers removed; data volumes retained"
+  fi
+}
+
 case "$ACTION" in
   install) install_zfaka ;;
   update) update_zfaka ;;
   backup) backup_zfaka ;;
   restore) restore_zfaka "$@" ;;
+  uninstall) uninstall_zfaka "$@" ;;
   status) cd "$INSTALL_DIR" && compose ps ;;
   logs) cd "$INSTALL_DIR" && compose logs -f --tail=200 ;;
-  *) echo "Usage: $0 {install|update|backup|restore|status|logs}"; exit 1 ;;
+  *) echo "Usage: $0 {install|update|backup|restore|uninstall|status|logs}"; exit 1 ;;
 esac
