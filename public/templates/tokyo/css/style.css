@@ -938,6 +938,7 @@ img {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    justify-content: center;
     background: var(--tokyo-card);
 }
 
