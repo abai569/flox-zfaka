@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.5.5-blue" alt="version 1.5.5">
+  <img src="https://img.shields.io/badge/version-1.5.6-blue" alt="version 1.5.6">
   <img src="https://img.shields.io/badge/deploy-Docker-2496ED?logo=docker" alt="Docker">
   <img src="https://img.shields.io/badge/platform-linux--amd64%20%7C%20linux--arm64-lightgrey" alt="platforms">
 </p>
@@ -27,6 +27,8 @@
 - 30 项系统配置
 - 10 个内置支付渠道
 - 后台数据库导入与导出
+- 商品多图上传、主图设置、排序和删除
+- 后台与会员登录采用 8 小时滑动有效期，关闭浏览器后失效
 - 镜像升级时自动修复基础数据，不覆盖已有支付密钥和配置值
 
 ## 环境要求
@@ -102,6 +104,8 @@ bash install.sh update
 - 清理配置和支付缓存
 
 迁移成功后会写入持久化标记，不会在以后每次启动时重复执行。
+
+升级到 `v1.5.6` 后，容器会自动创建商品图片表并迁移现有商品主图。每个商品最多可管理 10 张图片，单张图片最大 `5 MB`。
 
 ## 查看状态和日志
 
