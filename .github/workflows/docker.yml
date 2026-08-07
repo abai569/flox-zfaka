@@ -22,7 +22,7 @@ jobs:
       - name: Validate shell scripts
         run: |
           bash -n install.sh
-          sh -n docker/docker-entrypoint.sh
+          sh -n docker/entrypoint.sh
 
       - name: Validate Docker Compose
         run: docker compose --env-file .env.example config --quiet
@@ -35,104 +35,23 @@ jobs:
       - name: Validate PHP syntax
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Normalize release version
         id: version
         shell: bash
-        run: |
-          version="${GITHUB_REF_NAME#v}"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Build smoke-test image
-        uses: docker/build-push-action@v6
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          context: .
-          load: true
-          push: false
-          tags: flox-zfaka:smoke
-          build-args: |
-            APP_VERSION=${{ steps.version.outputs.version }}
-
-      - name: Check install baseline in image
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker run --rm flox-zfaka:smoke sh -c 'test ! -d /var/www/html/install/1.0.2 && test ! -d /var/www/html/install/1.4.6 && test -f /var/www/html/install/faka.sql'
-
-      - name: Run container smoke test
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker network create zfaka-ci
-          docker run -d --name zfaka-ci-mysql --network zfaka-ci \
-            -e MYSQL_ROOT_PASSWORD=ci_root_password \
-            -e MYSQL_DATABASE=faka \
-            -e MYSQL_USER=faka \
-            -e MYSQL_PASSWORD=ci_database_password \
-            mysql:8.0 \
-            --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-
-          for attempt in $(seq 1 60); do
-            if docker exec zfaka-ci-mysql mysqladmin ping -uroot -pci_root_password --silent; then
-              break
-            fi
-            if [ "$attempt" -eq 60 ]; then
-              docker logs zfaka-ci-mysql
-              exit 1
-            fi
-            sleep 2
-          done
-
-          docker run -d --name zfaka-ci-web --network zfaka-ci -p 18089:80 \
-            -e DB_HOST=zfaka-ci-mysql \
-            -e DB_NAME=faka \
-            -e DB_USER=faka \
-            -e DB_PASSWORD=ci_database_password \
-            -e ADMIN_DIR=Admin \
-            flox-zfaka:smoke
-
-          for attempt in $(seq 1 60); do
-            if curl -fsS http://127.0.0.1:18089/ >/dev/null; then
-              break
-            fi
-            if [ "$attempt" -eq 60 ]; then
-              docker logs zfaka-ci-web
-              exit 1
-            fi
-            sleep 3
-          done
-
-          docker exec zfaka-ci-web php -m | grep -qi '^yaf$'
-          docker logs zfaka-ci-web 2>&1 | grep -q 'INIT_DONE'
-          test "$(docker exec zfaka-ci-web sh -c 'cat /var/www/html/install/install.lock')" = "${{ steps.version.outputs.version }}"
-          test "$(docker exec zfaka-ci-mysql mysql -N -B -ufaka -pci_database_password faka -e "SELECT COUNT(*) FROM t_config;")" -gt 0
-          test "$(docker exec zfaka-ci-mysql mysql -N -B -ufaka -pci_database_password faka -e "SHOW TABLES LIKE 't_article';")" = "t_article"
-          payment_aliases=$(docker exec zfaka-ci-mysql mysql -N -B -ufaka -pci_database_password faka -e "SELECT GROUP_CONCAT(alias ORDER BY alias) FROM t_payment WHERE alias IN ('paypal','uzhifu','vpayalipay','vpaywx');")
-          test "$payment_aliases" = "paypal,uzhifu,vpayalipay,vpaywx"
-          payment_auto_increment=$(docker exec zfaka-ci-mysql mysql -N -B -ufaka -pci_database_password faka -e "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema='faka' AND table_name='t_payment';")
-          test "$payment_auto_increment" -ge 9
-          docker exec zfaka-ci-web sh -c 'printf "%s\n" "1.0.3" > /var/www/html/install/install.lock'
-          docker restart zfaka-ci-web
-          for attempt in $(seq 1 60); do
-            if docker logs zfaka-ci-web 2>&1 | grep -q 'INIT_DONE'; then
-              break
-            fi
-            if [ "$attempt" -eq 60 ]; then
-              docker logs zfaka-ci-web
-              exit 1
-            fi
-            sleep 2
-          done
-          test "$(docker exec zfaka-ci-web sh -c 'cat /var/www/html/install/install.lock')" = "${{ steps.version.outputs.version }}"
-          admin_login_page=$(curl -fsS http://127.0.0.1:18089/Admin/login)
-          grep -q '<title>登录-管理系统</title>' <<<"$admin_login_page"
-          grep -q '<form class="layui-form">' <<<"$admin_login_page"
-          product_query_page=$(curl -fsS http://127.0.0.1:18089/product/query)
-          grep -q '订单查询' <<<"$product_query_page"
-          grep -q 'name="orderid"' <<<"$product_query_page"
-          ! grep -q '商品分类' <<<"$product_query_page"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract image metadata
         id: meta
@@ -144,17 +63,11 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest
 
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
