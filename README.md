@@ -1,135 +1,290 @@
 <p align="center">
-  <img width="455" height="116" alt="new_logo" src="https://github.com/user-attachments/assets/56c6e3ff-2e89-4996-b9f7-55fb0aef9ed9" />
+  <img width="455" height="116" alt="ZFAKA" src="https://github.com/user-attachments/assets/56c6e3ff-2e89-4996-b9f7-55fb0aef9ed9" />
 </p>
+
 <p align="center">
-  <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.5.4-blue">
-  <img src="https://img.shields.io/badge/PHP-7.x-blue">
-  <a href="https://t.me/ZFAKA_dev">
-    <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
-  </a>
+  <img src="https://img.shields.io/badge/version-1.5.5-blue" alt="version 1.5.5">
+  <img src="https://img.shields.io/badge/deploy-Docker-2496ED?logo=docker" alt="Docker">
+  <img src="https://img.shields.io/badge/platform-linux--amd64%20%7C%20linux--arm64-lightgrey" alt="platforms">
 </p>
 
-# ZFAKA自动售货系统
+# Flox ZFAKA
 
->**郑重申明：本项目为开源程序，仅做技术交流使用**
+基于 Docker 的 ZFAKA 自动售货系统，支持自动发卡、手工发卡、会员、订单、文章、邮件及多种支付渠道。
 
-演示地址：https://zk-cash.com/  
-永久免费、完全开源，欢迎提供各种需求和意见与建议。  
-[加入群组](https://t.me/ZFAKA_group)  
-历史漏洞已修复，可放心使用  
+本仓库只维护 Docker 部署方式。无需手动安装 Nginx、PHP、Yaf 或 MySQL，也不需要宝塔面板。
 
-[![Telegram](https://img.shields.io/badge/Telegram-联系作者-blue?logo=telegram&style=for-the-badge)](https://t.me/ZFAKA_dev)  
-# 模板展示
+- 项目群组：[https://t.me/floxpanel](https://t.me/floxpanel)
+- 作者联系：[https://t.me/abai569](https://t.me/abai569)
 
-模板1
+## 功能
 
-<img width="800" alt="template1" src="https://github.com/user-attachments/assets/58fe1d1a-8bb0-4b80-8c4d-e9078d6cd1ca" />
+- Docker 一键安装、更新、备份、恢复和卸载
+- 支持 `linux/amd64` 与 `linux/arm64`
+- MySQL 数据持久化
+- 配置、日志、缓存和上传文件持久化
+- Tokyo 前台与后台界面
+- 30 项系统配置
+- 10 个内置支付渠道
+- 后台数据库导入与导出
+- 镜像升级时自动修复基础数据，不覆盖已有支付密钥和配置值
 
-模板2
+## 环境要求
 
-<img width="800" alt="template2" src="https://github.com/user-attachments/assets/267e960a-2ea7-4114-a402-756965262a15" />
+- Linux 服务器
+- 使用 `root` 账号登录
+- 能够访问 GitHub、GHCR 和 Docker Hub
+- 默认开放端口 `8089`，安装时可以修改
 
-模板3
+安装脚本会在服务器未安装 Docker 时自动安装 Docker Engine，并自动使用 `docker compose` 或 `docker-compose`。
 
-<img width="800" alt="template3" src="https://github.com/user-attachments/assets/a58a11cc-b96d-4164-8bf0-222177c33b84" />
+## 一键安装
 
-# 文章页面
+在服务器执行：
 
-<img width="800" alt="article1" src="https://github.com/user-attachments/assets/109985da-554a-4c8b-9bc4-ed80960e4b29" />
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/install.sh)"
+```
 
-# 系统优势  
-* 支持USDT收款
-* 支持windows和linux  
-* SEO优化：新增文章模块  
-* 安全：旧版漏洞已修复  
-* 全部开源，永久免费，长期技术更新支持  
-* 丰富的前端模板  
-* 易于扩展，可自行添加支付方式和前端模板  
+脚本会询问访问端口，直接按回车使用默认端口 `8089`。
 
-# 一、系统介绍
->包含自动/手工发卡功能，有会员中心和后台中心。
+安装目录：
 
-1.1 会员模块
-* 默认情况下，不支持注册，当然后台可以开放注册；
+```text
+/opt/flox-zfaka
+```
 
-* 注册成会员可查看历史购买记录。
-	
-1.2 购买模块
-* 支持自动发卡和手工发卡模式；
+安装完成后访问：
 
-1.3 后台模块
-* 包含设置模块、订单模块、商品模块、配置模块、卡密导入导出等；后台可对首页模版进行切换，验证码、注册、登录、找回密码进行后台开关控制；
+```text
+前台：http://服务器IP:8089/
+后台：http://服务器IP:8089/Goadmin/login
+```
 
-1.4 文章模块
-* 支持在后台编辑并发布文章；
-	
-1.5 支付渠道
-* 官方接口－U支付 （USDT TRC20） （教程：[配置支付方式‐U支付（USDT TRC20）](https://github.com/ZFAKA/ZFAKA/wiki/%E9%85%8D%E7%BD%AE%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E2%80%90U%E6%94%AF%E4%BB%98%EF%BC%88USDT-TRC20%EF%BC%89)）
+默认管理员：
 
-* 官方接口－V免签 （教程：[配置支付方式‐V免签（微信 支付宝）](https://github.com/ZFAKA/ZFAKA/wiki/%E9%85%8D%E7%BD%AE%E6%94%AF%E4%BB%98%E6%96%B9%E5%BC%8F%E2%80%90V%E5%85%8D%E7%AD%BE%EF%BC%88%E5%BE%AE%E4%BF%A1-%E6%94%AF%E4%BB%98%E5%AE%9D%EF%BC%89)）
+```text
+账号：demo@demo.com
+密码：admin123
+```
 
-* 官方接口－支付宝当面付
+登录后请立即在后台修改管理员账号和密码。安装生成的数据库密码保存在：
 
-* 官方接口－支付宝电脑网站支付
+```text
+/opt/flox-zfaka/.env
+```
 
-* 官方接口－微信扫码支付
+## 更新
 
-* 官方接口－微信H5支付
+建议更新前先备份：
 
-* 官方接口－PayPal支付
+```bash
+cd /opt/flox-zfaka
+bash install.sh backup
+bash install.sh update
+```
 
-# 二、系统部署
->**友情提示：很多人安装失败都是因为没有仔细看所有的wiki，所以请仔细看完所有的wiki再操作**
+更新流程会：
 
-## 2.1 安装zfaka
+1. 下载最新的 `docker-compose.yml`
+2. 拉取最新镜像
+3. 重建 Web 容器
+4. 保留 MySQL、配置、日志、缓存和上传数据卷
+5. 清理不再使用的旧镜像
 
->ZFAKA并不是非得在宝塔环境下才能安装，只是这种安装方式是最快也是最稳定的，熟悉之后三分钟就能搭好，完全避免浪费时间在环境配置上。如果你自己在非宝塔环境下安装遇到问题，请自行寻找解决方法。
+从旧版本升级到 `v1.5.4` 时，容器会自动执行一次基础数据修复：
 
-### 2.1.1 宝塔环境安装zfaka
->参考：[宝塔环境安装zfaka](https://github.com/ZFAKA/ZFAKA/wiki/%E5%AE%9D%E5%A1%94%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85zfaka).
+- 配置中心补齐并排列为标准 ID `1-30`
+- 支付设置补齐并排列为标准 ID `1-10`
+- 按配置名称保留已有配置值
+- 按支付别名保留已有密钥、网关和激活状态
+- 保留自定义配置和自定义支付渠道
+- 清理配置和支付缓存
 
-### 2.1.2 lnmp环境 (宝塔安装不需要看)
->参考：[lnmp环境中如何进行配置](https://github.com/ZFAKA/ZFAKA/wiki/lnmp%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE).
+迁移成功后会写入持久化标记，不会在以后每次启动时重复执行。
 
-### 2.1.2.1 lnmp环境安装YAF (宝塔安装不需要看)
->参考：[lnmp环境中如何安装yaf](https://github.com/ZFAKA/ZFAKA/wiki/lnmp%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85yaf).
+## 查看状态和日志
 
-### 2.1.3 rewrite配置 (宝塔安装不需要看)
->参考：[rewrite配置](https://github.com/ZFAKA/ZFAKA/wiki/rewrite%E9%85%8D%E7%BD%AE).
+查看容器状态：
 
-### 2.1.4 lamp环境（apache）安装ZFAKA (宝塔安装不需要看)
->参考：[lamp环境(apache)中如何安装ZFAKA](https://github.com/ZFAKA/ZFAKA/wiki/lamp%E7%8E%AF%E5%A2%83(apache)%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85ZFAKA).
+```bash
+cd /opt/flox-zfaka
+bash install.sh status
+```
 
-## 非宝塔安装出现问题请检查：
+实时查看日志：
 
-* 务必：配置nginx vhost中root路径一定要加上public目录，例如:  /alidata/wwwroot/faka.zlkb.net/public;
+```bash
+cd /opt/flox-zfaka
+bash install.sh logs
+```
 
-* 务必：配置nginx vhost中一定要添加rewrite规则
+查看最近的 Web 容器日志：
 
-* 务必：取消防跨站攻击(open_basedir)
+```bash
+cd /opt/flox-zfaka
+docker compose logs --tail=200 zfaka-web
+```
 
-* 务必：注意nginx环境下path_info的配置(记的要取消)
+## 数据备份
 
-* 务必：YAF配置开启命名空间 yaf.use_namespace=1
+### 命令行备份
 
-* 务必：项目运行给站点用户权限
+```bash
+cd /opt/flox-zfaka
+bash install.sh backup
+```
 
-## 2.2 修改默认管理员账号和密码
+备份文件保存在：
 
-安装完成后请访问后台（默认路径为Goadmin，实际取决于你安装过程中的配置）修改管理员账号和密码  
-Docker 安装默认管理员账号为 `demo@demo.com`，默认密码为 `admin123`。凭据同时保存在 `/opt/flox-zfaka/.env`。  
+```text
+/opt/flox-zfaka/backups/
+```
 
-## 2.3 定时任务（可选）
+每次备份会生成：
 
-> 发送邮件方式如果选择系统自动，则不需要配置定时任务
+- `zfaka-日期-时间.sql.gz`：MySQL 数据库备份
+- `zfaka-日期-时间.env`：当前部署配置副本
 
-### 2.3.1 安装计划任务crontab模块,配置定时计划,用于定时发送邮件
-* lnmp环境计划任务crontab的部署
->参考：[lnmp环境中如何部署计划任务](https://github.com/ZFAKA/ZFAKA/wiki/lnmp%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1)
+数据库备份不包含 Docker 数据卷本身。迁移服务器时还应备份上传文件卷或宿主机存储。
 
-* 宝塔环境计划任务crontab的部署
->参考：[宝塔环境中如何部署计划任务](https://github.com/ZFAKA/ZFAKA/wiki/%E5%AE%9D%E5%A1%94%E7%8E%AF%E5%A2%83%E4%B8%AD%E5%A6%82%E4%BD%95%E9%83%A8%E7%BD%B2%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1).
+### 后台备份
 
-# 三、免责声明
-请查看 [/disclaimer.md](/disclaimer.md)
+登录后台后进入：
+
+```text
+设置中心 → 数据备份
+```
+
+支持：
+
+- 导出完整 SQL
+- 上传 SQL 备份并导入
+- 导入前自动生成备份
+- 导入失败时自动恢复
+- 下载导入前自动备份
+
+上传文件必须是 ZFAKA SQL 备份，最大 `64 MB`。导入会覆盖当前数据库，请先确认备份可用。
+
+## 恢复数据库
+
+使用命令行生成的 `.sql.gz` 文件恢复：
+
+```bash
+cd /opt/flox-zfaka
+bash install.sh restore /完整路径/zfaka-日期-时间.sql.gz
+```
+
+例如：
+
+```bash
+cd /opt/flox-zfaka
+bash install.sh restore /opt/flox-zfaka/backups/zfaka-20260807-120000.sql.gz
+```
+
+恢复会覆盖当前数据库。操作前建议再创建一次备份。
+
+## 修改端口
+
+编辑部署配置：
+
+```bash
+cd /opt/flox-zfaka
+nano .env
+```
+
+修改：
+
+```text
+ZFAKA_PORT=8089
+```
+
+然后重建容器：
+
+```bash
+docker compose up -d
+```
+
+## 反向代理
+
+容器默认监听服务器的 `ZFAKA_PORT`。使用域名时，可在宿主机的 Nginx、Caddy 或其他反向代理中将请求转发到：
+
+```text
+http://127.0.0.1:8089
+```
+
+HTTPS 证书应由宿主机反向代理或外部网关管理，容器内部不负责签发证书。
+
+## 卸载
+
+只删除容器，保留数据库和其他数据卷：
+
+```bash
+cd /opt/flox-zfaka
+bash install.sh uninstall
+```
+
+彻底删除容器、数据卷和安装目录：
+
+```bash
+cd /opt/flox-zfaka
+bash install.sh uninstall --volumes
+```
+
+`--volumes` 会永久删除数据库、配置、日志、缓存和上传文件，执行前务必备份。
+
+## 常用文件
+
+```text
+/opt/flox-zfaka/.env                 部署配置和密码
+/opt/flox-zfaka/docker-compose.yml   Docker Compose 配置
+/opt/flox-zfaka/install.sh           管理脚本
+/opt/flox-zfaka/backups/             命令行数据库备份
+```
+
+## Docker 数据卷
+
+```text
+zfaka_mysql      MySQL 数据
+zfaka_conf       应用数据库连接配置
+zfaka_install    安装与迁移状态
+zfaka_logs       应用日志
+zfaka_temp       缓存和后台自动备份
+zfaka_uploads    用户上传文件
+```
+
+实际卷名可能带有 Docker Compose 项目前缀，可通过下面的命令查看：
+
+```bash
+docker volume ls | grep zfaka
+```
+
+## 支付渠道
+
+全新安装会创建 10 个未激活的支付渠道：
+
+1. 支付宝当面付
+2. 支付宝电脑网站支付
+3. 微信扫码支付
+4. 微信 H5 支付
+5. PayPal
+6. V 免签微信
+7. V 免签支付宝
+8. U 支付
+9. 易支付
+10. GMPay USDT
+
+请在后台的“设置中心 → 支付设置”中填写对应渠道参数并手动激活。仓库和镜像不包含生产支付密钥。
+
+## 安全建议
+
+- 首次登录后立即修改默认管理员账号和密码
+- 不要公开 `/opt/flox-zfaka/.env`
+- 不要将数据库端口暴露到公网
+- 定期执行数据库备份并下载到其他存储位置
+- 使用域名时启用 HTTPS
+- 更新前先备份数据库
+
+## 免责声明
+
+本项目仅用于技术交流。使用者应自行确保部署和业务符合当地法律法规，并自行承担使用、配置、支付渠道及数据安全相关责任。
