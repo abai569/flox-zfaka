@@ -113,6 +113,13 @@ jobs:
             sleep 3
           done
 
+          config_state=$(docker exec zfaka-ci-mysql mysql -N -B -uzfaka -pci_database_password zfaka -e 'SELECT CONCAT(COUNT(*), ":", MIN(id), ":", MAX(id)) FROM t_config')
+          payment_state=$(docker exec zfaka-ci-mysql mysql -N -B -uzfaka -pci_database_password zfaka -e 'SELECT CONCAT(COUNT(*), ":", MIN(id), ":", MAX(id)) FROM t_payment')
+          if [ "$config_state" != "30:1:30" ] || [ "$payment_state" != "10:1:10" ]; then
+            printf 'Unexpected seed state: config=%s payment=%s\n' "$config_state" "$payment_state"
+            exit 1
+          fi
+
           docker exec zfaka-ci-web sh -c "printf '1.5.1' > /var/www/html/install/install.lock"
           docker restart zfaka-ci-web >/dev/null
           for attempt in $(seq 1 30); do
