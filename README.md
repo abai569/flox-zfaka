@@ -3,7 +3,7 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/OS-Windows | Linux-blue">
-  <img src="https://img.shields.io/badge/version-1.5.0-blue">
+  <img src="https://img.shields.io/badge/version-1.5.1-blue">
   <img src="https://img.shields.io/badge/PHP-7.x-blue">
   <a href="https://t.me/ZFAKA_dev">
     <img src="https://img.shields.io/badge/Telegram-纸飞机-blue?logo=telegram" />
@@ -24,7 +24,7 @@ Docker 版本包含 PHP 7.4、Yaf、Nginx、Supervisor 和 MySQL 8.0。首次启
 bash <(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/install.sh)
 ```
 
-安装脚本默认将文件保存到 `/opt/flox-zfaka`，自动生成数据库密码，并提示访问地址。默认端口为 `8089`，默认后台路径为 `/Admin/login`。
+安装脚本默认将文件保存到 `/opt/flox-zfaka`，自动生成数据库密码，并提示访问地址。默认端口为 `8089`，默认后台路径为 `/Goadmin/login`。
 
 首次登录账号为 `demo@demo.com`，密码为 `123456`。登录后必须立即修改账号和密码。
 
