@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `t_admin_user` (
 --
 
 INSERT INTO `t_admin_user` (`id`, `email`, `password`, `secret`, `updatetime`) VALUES
-(1, 'demo@demo.com', '76b1807fc1c914f15588520b0833fbc3', '78e055', 0);
+(1, 'demo@demo.com', '6294b59b2003c862fafc34c4eb8fe002', '78e055', 0);
 
 -- --------------------------------------------------------
 
@@ -78,33 +78,33 @@ INSERT INTO `t_config` (`id`, `catid`, `name`, `value`, `tag`, `lock`, `updateti
 (1, 1, 'registerswitch', '0', '是否开放注册功能,1是开放,0是关闭', 1, 1453452674),
 (2, 1, 'limitiporder', '0', '同一ip当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
 (3, 1, 'limitemailorder', '0', '同一email当日下单限制（针对未付款订单）,不限制请设置为0', 1, 1453452674),
-(4, 1, 'weburl', 'https://ka.abai.eu.org', '当前网站地址,用于支付站点异步返回，务必修改正确', 1, 1453452674),
+(4, 1, 'weburl', '', '当前网站地址,用于支付站点异步返回，务必修改正确', 1, 1453452674),
 (5, 1, 'adminemail', 'demo@demo.com', '管理员邮箱,用于接收邮件提醒用', 1, 1453452674),
 (6, 1, 'webname', 'ZFAKA平台', '当前站点名称', 1, 1453452674),
 (7, 1, 'webdescription', '本系统由资料空白开发并免费提供', '当前站点描述', 1, 1453452674),
-(8, 1, 'notice', '本系统商品均可正常购买。问题反馈：&lt;a href=&quot;https://t.me/erflvx/&quot; target=&quot;_blank&quot;&gt;TG群组&lt;/a&gt;', '首页公告', 1, 1453452674),
-(9, 1, 'ad', '&lt;image src=&quot;/res/images/pay/supportme.jpg&quot;&gt;', '购买页默认内容', 1, 1453452674),
+(8, 1, 'notice', '', '首页公告', 1, 1453452674),
+(9, 1, 'ad', '', '购买页默认内容', 1, 1453452674),
 (10, 1, 'yzmswitch', '0', '验证码开关(1开，0关)', 1, 1453452674),
 (11, 1, 'orderinputtype', '1', '订单必填输入框选择: 1邮箱 2QQ', 1, 1453452674),
-(13, 1, 'logo', '/res/images/logo.png', 'LOGO地址,默认：/res/images/logo.png', 1, 1453452674),
-(14, 1, 'tongji', '<!--统计js-->', '统计脚本', 1, 1453452674),
-(15, 1, 'mprodcutdescriptionswitch', '0', '移动端商品详情，隐藏(0)|显示(1)', 1, 1453452674),
-(16, 1, 'orderprefix', 'zlkb', '订单前缀，只能是英文和数字,且长度不要超过5个字符串建议不要超过5个字符串', 1, 1453452674),
-(17, 1, 'backgroundimage', 'https://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/6a600c338744ebf894c9e667dff9d72a6059a72a.jpg', '前台背景图片地址', 1, 1453452674),
-(18, 1, 'headermenucolor', 'layui-bg-black', '前台顶部菜单配色方案', 1, 1453452674),
-(20, 1, 'layerad', '', '弹窗广告', 1, 1453452674),
-(21, 1, 'loginswitch', '1', '登录开关', 1, 1453452674),
-(22, 1, 'forgetpwdswitch', '0', '找回密码开关', 1, 1453452674),
-(23, 1, 'adminyzmswitch', '0', '后台登录验证码开关', 1, 1453452674),
-(24, 1, 'shortcuticon', '', 'ICO图标,格式必须是png或者ico或者gif', 1, 1453452674),
-(25, 1, 'limitorderqty', '5', '单笔订单数量限制', 1, 1453452674),
-(26, 1, 'discountswitch', '0', '折扣开关', 1, 1453452674),
-(27, 1, 'qrserver', '/product/order/showqr/?url=', '生成二维码的服务地址,默认请填写:/product/order/showqr/?url=', 1, 1453452674),
-(28, 1, 'paysubjectswitch', '0', '订单说明显示:0商品名,1订单号,或者自定义', 1, 1453452674),
-(30, 1, 'emailswitch', '1', '发送用户邮件开关', '1', 1546063186),
-(31, 1, 'emailsendtypeswitch', '1', '发送用户邮件方式筛选开关', '1', '1546063186'),
-(32, 1, 'querycontactswitch', '1', '查询方式(联系方式)开关', '1', '1546063186'),
-(33, 1, 'tpl', 'hyacinth', '全新的整站模版', '1', '1546063186');
+(12, 1, 'logo', '/res/images/logo.png', 'LOGO地址,默认：/res/images/logo.png', 1, 1453452674),
+(13, 1, 'tongji', '<!--统计js-->', '统计脚本', 1, 1453452674),
+(14, 1, 'mprodcutdescriptionswitch', '0', '移动端商品详情，隐藏(0)|显示(1)', 1, 1453452674),
+(15, 1, 'orderprefix', 'flox', '订单前缀，只能是英文和数字,且长度不要超过5个字符串', 1, 1453452674),
+(16, 1, 'backgroundimage', '', '前台背景图片地址', 1, 1453452674),
+(17, 1, 'headermenucolor', 'layui-bg-black', '前台顶部菜单配色方案', 1, 1453452674),
+(18, 1, 'layerad', '', '弹窗广告', 1, 1453452674),
+(19, 1, 'loginswitch', '1', '登录开关', 1, 1453452674),
+(20, 1, 'forgetpwdswitch', '0', '找回密码开关', 1, 1453452674),
+(21, 1, 'adminyzmswitch', '0', '后台登录验证码开关', 1, 1453452674),
+(22, 1, 'shortcuticon', '/res/images/favicon.ico', 'ICO图标,格式必须是png或者ico或者gif', 1, 1453452674),
+(23, 1, 'limitorderqty', '5', '单笔订单数量限制', 1, 1453452674),
+(24, 1, 'discountswitch', '0', '折扣开关', 1, 1453452674),
+(25, 1, 'qrserver', '/product/order/showqr/?url=', '生成二维码的服务地址', 1, 1453452674),
+(26, 1, 'paysubjectswitch', '0', '订单说明显示:0商品名,1订单号,或者自定义', 1, 1453452674),
+(27, 1, 'emailswitch', '1', '发送用户邮件开关', 1, 1546063186),
+(28, 1, 'emailsendtypeswitch', '1', '发送用户邮件方式筛选开关', 1, 1546063186),
+(29, 1, 'querycontactswitch', '1', '查询方式(联系方式)开关', 1, 1546063186),
+(30, 1, 'tpl', 'tokyo', '全新的整站模版', 1, 1546063186);
 -- --------------------------------------------------------
 
 --
@@ -264,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `t_payment` (
 
 INSERT INTO `t_payment` (`id`, `payment`, `payname`, `payimage`, `alias`, `sign_type`, `app_id`, `app_secret`, `ali_public_key`, `rsa_private_key`, `configure3`,`configure4`,`overtime`, `active`) VALUES
 (1, '支付宝当面付', '支付宝', '/res/images/pay/alipay.jpg', 'zfbf2f', 'RSA2', '', '', '', '','','',0, 0),
-(2, '支付宝电脑网站支付(WEB)', '支付宝', '/res/images/pay/alipay.jpg', 'zfbweb', 'RSA2', '2018********', '', '', '', '','',0, 0),
+(2, '支付宝电脑网站支付(WEB)', '支付宝', '/res/images/pay/alipay.jpg', 'zfbweb', 'RSA2', '', '', '', '', '','',0, 0),
 (3, '微信扫码支付', '微信', '/res/images/pay/weixin.jpg', 'wxf2f', 'MD5', '', '', '', '', '', '',0, 0),
 (4, '微信H5支付', '微信', '/res/images/pay/weixin.jpg', 'wxh5', 'MD5', '', '', '', '', '','', 0, 0),
 (5, 'PAYPAL', 'PAYPAL', '/res/images/pay/paypal.jpg', 'paypal', 'RSA2', '', '', '', '', 'live','7', 0, 0),
@@ -586,7 +586,7 @@ ALTER TABLE `t_admin_user`
 -- AUTO_INCREMENT for table `t_config`
 --
 ALTER TABLE `t_config`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `t_config_cat`
 --
@@ -621,7 +621,7 @@ ALTER TABLE `t_order`
 -- AUTO_INCREMENT for table `t_payment`
 --
 ALTER TABLE `t_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `t_products`
 --
