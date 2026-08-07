@@ -16,7 +16,7 @@ services:
       retries: 30
 
   web:
-    image: ${ZFAKA_IMAGE:-ghcr.io/abai569/flox-zfaka:1.4.9}
+    image: ${ZFAKA_IMAGE:-ghcr.io/abai569/flox-zfaka:1.5.0}
     build:
       context: .
       dockerfile: Dockerfile
@@ -32,8 +32,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      ADMIN_DIR: ${ADMIN_DIR:-Admin}
-      ZFAKA_VERSION: ${ZFAKA_VERSION:-1.4.9}
+      ADMIN_DIR: ${ADMIN_DIR:-Goadmin}
+      ZFAKA_VERSION: ${ZFAKA_VERSION:-1.5.0}
     ports:
       - "${ZFAKA_PORT:-8089}:80"
     volumes:

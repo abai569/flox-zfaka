@@ -7,10 +7,10 @@ set -eu
 : "${DB_NAME:=zfaka}"
 : "${DB_USER:=zfaka}"
 : "${DB_PASSWORD:?DB_PASSWORD is required}"
-: "${ADMIN_DIR:=Admin}"
+: "${ADMIN_DIR:=Goadmin}"
 : "${ADMIN_EMAIL:=admin@example.com}"
 : "${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}"
-: "${ZFAKA_VERSION:=1.4.9}"
+: "${ZFAKA_VERSION:=1.5.0}"
 
 mkdir -p "$APP_PATH/conf" "$APP_PATH/install" "$APP_PATH/log/php" "$APP_PATH/log/request" "$APP_PATH/log/sqld" "$APP_PATH/log/crontab" "$APP_PATH/log/yewu" "$APP_PATH/log/upgrade" "$APP_PATH/temp" "$APP_PATH/public/res/upload"
 
