@@ -797,14 +797,14 @@ img {
 
 .tokyo-detail-panel {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0;
+    grid-template-columns: 736px 1fr;
+    gap: 48px;
     background: var(--tokyo-card);
 }
 
 .tokyo-detail-image-wrap {
     position: relative;
-    padding: 24px;
+    padding: 36px 0 36px 36px;
     background: var(--tokyo-card);
     display: flex;
     align-items: center;
@@ -812,7 +812,7 @@ img {
 }
 
 .tokyo-detail-gallery {
-    width: min(100%, 540px);
+    width: 100%;
     display: flex;
     gap: 12px;
     align-items: flex-start;
@@ -821,9 +821,9 @@ img {
 .tokyo-detail-image-box {
     position: relative;
     display: block;
-    flex: 1;
-    min-width: 0;
-    aspect-ratio: 1 / 1;
+    flex: 0 0 616px;
+    width: 616px;
+    height: 540px;
     overflow: hidden;
     border-radius: 20px;
 }
@@ -934,7 +934,7 @@ img {
 }
 
 .tokyo-detail-info {
-    padding: 32px;
+    padding: 32px 36px 32px 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -943,7 +943,9 @@ img {
 }
 
 .tokyo-detail-info > * {
+    width: 100%;
     max-width: 540px;
+    align-self: center;
 }
 
 .tokyo-detail-title {
@@ -2119,6 +2121,18 @@ img {
 
     .tokyo-detail-image-wrap {
         padding: 16px;
+    }
+
+    .tokyo-detail-gallery {
+        width: min(100%, 540px);
+    }
+
+    .tokyo-detail-image-box {
+        flex: 1;
+        width: auto;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        min-width: 0;
     }
 
     .tokyo-detail-info {
