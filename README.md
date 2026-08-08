@@ -12,6 +12,8 @@
 
 基于 Docker 的 ZFAKA 自动售货系统，支持自动发卡、手工发卡、会员、订单、文章、邮件及多种支付渠道。
 
+> 原项目：[ZFAKA/ZFAKA](https://github.com/ZFAKA/ZFAKA) — 本仓库在其基础上做 Docker 化部署和 Tokyo 界面适配。
+
 本仓库只维护 Docker 部署方式。无需手动安装 Nginx、PHP、Yaf 或 MySQL，也不需要宝塔面板。
 
 - 项目群组：[https://t.me/floxpanel](https://t.me/floxpanel)
