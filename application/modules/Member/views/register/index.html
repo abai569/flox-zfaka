@@ -1,0 +1,64 @@
+<?php $hideArticleNav = true; include MEMBER_COMMON_PATH.'/header.html';?>
+<div class="tokyo-auth-container">
+    <div class="tokyo-auth-panel">
+        <div class="tokyo-auth-header">
+            <h1 class="tokyo-auth-title">注册</h1>
+            <p class="tokyo-auth-subtitle">创建一个新账户以开始使用</p>
+        </div>
+        <?php if(isset($config['registerswitch']) AND $config['registerswitch']>0):?>
+        <form class="layui-form layui-form-pane tokyo-auth-form" method="post" action="/member/register/ajax">
+            <div class="layui-form-item">
+                <label for="L_nickname" class="layui-form-label">昵称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_nickname" name="nickname" required lay-verify="required" autocomplete="nickname" class="layui-input" placeholder="请输入昵称">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                    <input type="email" id="L_email" name="email" required lay-verify="email" autocomplete="email" class="layui-input" placeholder="请输入邮箱地址">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_pass" name="password" required lay-verify="required|passwd" autocomplete="new-password" class="layui-input" placeholder="6到16个字符">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="L_repass" name="repassword" required lay-verify="required|repasswd" autocomplete="new-password" class="layui-input" placeholder="请再次输入密码">
+                </div>
+            </div>
+            <?php if(isset($config['yzmswitch']) AND $config['yzmswitch']>0):?>
+            <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label">图形验证</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_vercode" name="vercode" required lay-verify="required|vercode" autocomplete="off" class="layui-input" placeholder="请输入验证码">
+                </div>
+                <div class="tokyo-captcha-row">
+                    <img src="/Captcha?t=register" alt="图片验证码" height="40" class="loadcode">
+                </div>
+            </div>
+            <?php endif;?>
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="register" lay-submit>立即注册</button>
+            </div>
+        </form>
+        <div class="tokyo-auth-links">
+            <?php if(isset($config['loginswitch']) AND $config['loginswitch']>0):?>
+            已有账号？<a href="/member/login/">立即登录</a>
+            <?php endif;?>
+        </div>
+        <?php else:?>
+        <blockquote class="layui-elem-quote">
+            <p>本系统已经关闭注册功能；</p>
+        </blockquote>
+        <?php endif;?>
+    </div>
+</div>
+<?php include MEMBER_COMMON_PATH.'/footer.html';?>
+<script>
+layui.use('memberregister');
+</script>

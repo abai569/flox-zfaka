@@ -1,0 +1,23 @@
+    </div>
+</div>
+<footer class="tokyo-footer">
+    <div class="tokyo-footer-inner">
+        <p>Powered by <a href="https://github.com/abai569/flox-zfaka" target="_blank">ZFAKA <?php echo VERSION;?></a></p>
+    </div>
+</footer>
+<script src="/res/layui/layui.js"></script>
+<script>
+layui.config({
+  version: "<?php echo VERSION;?>"
+  ,base: '/res/mods/'
+}).use('common');
+layui.use('element', function(){
+  var element = layui.element;
+});
+</script>
+<!--统计代码-->
+<?php if(isset($config['tongji']) AND strlen($config['tongji'])>0):?>
+<?php echo $config['tongji'];?>
+<?php endif;?>
+</body>
+</html>

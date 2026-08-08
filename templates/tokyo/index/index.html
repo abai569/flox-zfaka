@@ -1,0 +1,210 @@
+<?php include $tplBase.'/common/header.html';?>
+<main class="tokyo-main tokyo-page" data-default-category="recommend" data-user-logged-in="<?php echo $login?1:0;?>">
+    <section class="tokyo-shell">
+        <section class="tokyo-shop-layout">
+            <button type="button" class="tokyo-mobile-sidebar-backdrop" aria-label="关闭分类筛选"></button>
+            <aside class="panel tokyo-sidebar-panel">
+                <div class="panel-header tokyo-index-heading">
+                    <div class="tokyo-index-heading-copy">
+                        <span class="panel-kicker">Categories</span>
+                        <h2 class="panel-title tokyo-index-panel-title">商品分类</h2>
+                    </div>
+                    <button type="button" class="tokyo-mobile-sidebar-close" aria-label="关闭分类">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <div class="tokyo-category-tree" id="tokyo-category-tree">
+                        <?php if(!empty($products_type)):?>
+                        <?php foreach($products_type AS $ptype):?>
+                        <div class="tokyo-category-item<?php if(!isset($_GET['tid']) OR $_GET['tid']==$ptype['id']):?> active<?php endif;?>" data-tid="<?php echo $ptype['id'];?>">
+                            <div class="tokyo-category-icon">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <div class="tokyo-category-info">
+                                <span class="tokyo-category-name"><?php echo $ptype['name'];?></span>
+                            </div>
+                            <div class="tokyo-category-count">
+                                <?php
+                                $count = 0;
+                                if(!empty($products_type_active) AND isset($products_type_active[$ptype['id']])){
+                                    foreach($products AS $p){
+                                        if($p['products_type_id']==$ptype['id']) $count++;
+                                    }
+                                }
+                                echo $count;
+                                ?>
+                            </div>
+                            <div class="tokyo-category-arrow">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <?php endforeach;?>
+                        <?php else:?>
+                        <div class="tokyo-empty-state">暂无分类</div>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </aside>
+            <section class="panel tokyo-catalog-panel">
+                <div class="panel-header tokyo-catalog-heading">
+                    <div class="tokyo-index-heading-copy">
+                        <span class="panel-kicker">Catalog</span>
+                        <h2 class="panel-title tokyo-current-name tokyo-index-panel-title">
+                            <?php
+                            $currentCatName = '推荐';
+                            if(isset($_GET['tid']) AND $_GET['tid']>0){
+                                foreach($products_type AS $ptype){
+                                    if($ptype['id']==$_GET['tid']){
+                                        $currentCatName = $ptype['name'];
+                                        break;
+                                    }
+                                }
+                            }
+                            echo $currentCatName;
+                            ?>
+                        </h2>
+                    </div>
+                    <div class="tokyo-catalog-tools">
+                        <button type="button" class="tokyo-button tokyo-button-light tokyo-mobile-filter-trigger">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span>筛选分类</span>
+                        </button>
+                        <div class="tokyo-search-combo">
+                            <label class="tokyo-searchbox tokyo-searchbox-combo">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input class="item-search-input" type="search" placeholder="搜索商品关键词" id="item-search-input">
+                            </label>
+                            <button type="button" class="tokyo-button tokyo-button-dark item-search-trigger" id="item-search-trigger">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>搜索</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body tokyo-catalog-body">
+                    <div class="tokyo-table-wrap">
+                        <table class="tokyo-commodity-table">
+                            <colgroup>
+                                <col class="tokyo-commodity-col-main">
+                                <col class="tokyo-commodity-col-price">
+                                <col class="tokyo-commodity-col-stock">
+                                <col class="tokyo-commodity-col-action">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody class="item-list" id="item-list">
+                            <?php
+                            $currentTid = isset($_GET['tid']) ? intval($_GET['tid']) : 0;
+                            $filteredProducts = array();
+                            if(!empty($products)){
+                                foreach($products AS $p){
+                                    if($currentTid==0 OR $p['products_type_id']==$currentTid){
+                                        $filteredProducts[] = $p;
+                                    }
+                                }
+                            }
+                            if(!empty($filteredProducts)):
+                            foreach($filteredProducts AS $product):
+                            ?>
+                            <tr class="tokyo-commodity-row" data-id="<?php echo $product['id'];?>">
+                                <td class="tokyo-commodity-main">
+                                    <div class="tokyo-commodity-thumb">
+                                        <?php if(isset($product['imgurl']) AND strlen($product['imgurl'])>0):?>
+                                        <img src="<?php echo $product['imgurl'];?>" alt="<?php echo $product['name'];?>" onerror="this.outerHTML='<div class=\'tokyo-noimg\'><i class=\'fa-solid fa-image\'></i></div>'">
+                                        <?php else:?>
+                                        <div class="tokyo-noimg"><i class="fa-solid fa-image"></i></div>
+                                        <?php endif;?>
+                                    </div>
+                                    <div class="tokyo-commodity-info">
+                                        <div class="tokyo-commodity-name"><?php echo $product['name'];?></div>
+                                        <div class="tokyo-commodity-tags">
+                                            <?php if($product['auto']==1):?>
+                                            <span class="tokyo-tag tokyo-tag-success">在线发货</span>
+                                            <?php else:?>
+                                            <span class="tokyo-tag tokyo-tag-warning">手工发货</span>
+                                            <?php endif;?>
+                                            <?php if(isset($product['iszhekou']) AND $product['iszhekou']>0):?>
+                                            <span class="tokyo-tag tokyo-tag-info">推荐</span>
+                                            <?php endif;?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="tokyo-commodity-price">
+                                    <div class="tokyo-price-current">&yen; <?php echo number_format($product['price'], 2);?></div>
+                                    <?php if(isset($product['price_ori']) AND $product['price_ori']>$product['price']):?>
+                                    <div class="tokyo-price-member">&yen;<?php echo number_format($product['price_ori'], 2);?></div>
+                                    <?php endif;?>
+                                </td>
+                                <td class="tokyo-commodity-stock">
+                                    <?php if($product['stockcontrol']==1):?>
+                                    <span class="tokyo-stock <?php if($product['qty']<=0):?>stock-empty<?php elseif($product['qty']<10):?>stock-low<?php endif;?>"><?php echo $product['qty'];?></span>
+                                    <?php else:?>
+                                    <span class="tokyo-stock">充足</span>
+                                    <?php endif;?>
+                                </td>
+                                <td class="tokyo-commodity-action">
+                                    <a href="/product/<?php echo $product['id'];?>.html" class="tokyo-button tokyo-button-dark tokyo-buy-btn">
+                                        <i class="fa-solid fa-lock"></i> 购买
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php endforeach;?>
+                            <?php else:?>
+                            <tr class="tokyo-empty-row">
+                                <td colspan="4">
+                                    <div class="tokyo-empty-state">
+                                        <i class="fa-solid fa-box-open"></i>
+                                        <p>请选择左侧分类，开始浏览商品。</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endif;?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tokyo-mobile-product-cards">
+                    <?php if(!empty($filteredProducts)):?>
+                    <?php foreach($filteredProducts AS $product):?>
+                    <article class="tokyo-mobile-product-card" data-id="<?php echo $product['id'];?>">
+                        <div class="tokyo-mobile-product-main">
+                            <div class="tokyo-commodity-thumb">
+                                <?php if(isset($product['imgurl']) AND strlen($product['imgurl'])>0):?>
+                                <img src="<?php echo $product['imgurl'];?>" alt="<?php echo $product['name'];?>" onerror="this.outerHTML='<div class=\'tokyo-noimg\'><i class=\'fa-solid fa-image\'></i></div>'">
+                                <?php else:?>
+                                <div class="tokyo-noimg"><i class="fa-solid fa-image"></i></div>
+                                <?php endif;?>
+                            </div>
+                            <div class="tokyo-mobile-product-copy">
+                                <div class="tokyo-commodity-name"><?php echo $product['name'];?></div>
+                                <div class="tokyo-commodity-tags">
+                                    <?php if($product['auto']==1):?><span class="tokyo-tag tokyo-tag-success">在线发货</span><?php else:?><span class="tokyo-tag tokyo-tag-warning">手工发货</span><?php endif;?>
+                                    <?php if(isset($product['iszhekou']) AND $product['iszhekou']>0):?><span class="tokyo-tag tokyo-tag-info">推荐</span><?php endif;?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tokyo-mobile-product-meta">
+                            <div class="tokyo-price-current">&yen; <?php echo number_format($product['price'], 2);?></div>
+                            <?php if(isset($product['price_ori']) AND $product['price_ori']>$product['price']):?><div class="tokyo-price-member">&yen;<?php echo number_format($product['price_ori'], 2);?></div><?php endif;?>
+                            <span class="tokyo-stock"><?php if($product['stockcontrol']==1):?>库存 <?php echo $product['qty'];?><?php else:?>库存充足<?php endif;?></span>
+                            <a href="/product/<?php echo $product['id'];?>.html" class="tokyo-button tokyo-button-dark tokyo-buy-btn"><i class="fa-solid fa-lock"></i> 购买</a>
+                        </div>
+                    </article>
+                    <?php endforeach;?>
+                    <?php else:?>
+                    <div class="tokyo-empty-state"><i class="fa-solid fa-box-open"></i><p>请选择分类，开始浏览商品。</p></div>
+                    <?php endif;?>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </section>
+</main>
+<script src="/templates/tokyo/js/index.js?v=<?php echo VERSION;?>"></script>
+<?php include $tplBase.'/common/footer.html';?>

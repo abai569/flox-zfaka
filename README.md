@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.6.1-blue" alt="version 1.6.1">
+  <img src="https://img.shields.io/badge/version-1.6.2-blue" alt="version 1.6.2">
   <img src="https://img.shields.io/badge/deploy-Docker-2496ED?logo=docker" alt="Docker">
   <img src="https://img.shields.io/badge/platform-linux--amd64%20%7C%20linux--arm64-lightgrey" alt="platforms">
 </p>

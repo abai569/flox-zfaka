@@ -1,0 +1,67 @@
+<?php include ADMIN_COMMON_PATH.'/header.html';?>
+<div class="layui-container fly-marginTop fly-user-main">
+    <?php include ADMIN_COMMON_PATH.'/setting-nav.html';?>
+    <div class="fly-panel fly-panel-user" pad20>
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">数据备份</li>
+            </ul>
+            <div class="layui-tab-content" style="padding: 20px 0;">
+                <?php if(!empty($database_message)):?>
+                <div class="layui-alert <?php echo $database_message['code'] == 1 ? 'tokyo-backup-success' : 'tokyo-backup-error';?>">
+                    <?php echo htmlspecialchars($database_message['text'], ENT_QUOTES, 'UTF-8');?>
+                </div>
+                <?php endif;?>
+                <blockquote class="layui-elem-quote">
+                    导入会覆盖当前数据库。系统会先自动保存一份完整备份，导入失败时自动恢复。
+                </blockquote>
+
+                <div class="layui-row layui-col-space20">
+                    <div class="layui-col-md6">
+                        <div class="tokyo-admin-tool-panel">
+                            <h3>导出数据库</h3>
+                            <p>下载当前数据库的完整 SQL 备份，包含表结构和全部业务数据。</p>
+                            <form method="post" action="/<?php echo ADMIN_DIR;?>/database/export">
+                                <input type="hidden" name="csrf_token" value="<?php echo $csrf_token;?>">
+                                <button type="submit" class="layui-btn"><i class="fa-solid fa-download"></i> 导出 SQL</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="tokyo-admin-tool-panel tokyo-admin-tool-panel-danger">
+                            <h3>导入数据库</h3>
+                            <p>仅支持不超过 64 MB 的 ZFAKA SQL 备份文件。</p>
+                            <form class="layui-form" method="post" enctype="multipart/form-data" action="/<?php echo ADMIN_DIR;?>/database/import" onsubmit="return confirm('导入将覆盖当前数据库，确定继续吗？');">
+                                <input type="hidden" name="csrf_token" value="<?php echo $csrf_token;?>">
+                                <div class="layui-form-item">
+                                    <input type="file" name="sql_file" accept=".sql,text/plain,application/sql" required>
+                                </div>
+                                <button type="submit" class="layui-btn layui-btn-danger"><i class="fa-solid fa-upload"></i> 导入并覆盖</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tokyo-admin-backup-list">
+                    <h3>自动备份</h3>
+                    <table class="layui-table">
+                        <thead><tr><th>文件名</th><th>大小</th><th>生成时间</th><th>操作</th></tr></thead>
+                        <tbody>
+                        <?php if(empty($backups)):?>
+                            <tr><td colspan="4" style="text-align:center;color:#999;">暂无自动备份</td></tr>
+                        <?php else: foreach($backups as $backup):?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($backup['name'], ENT_QUOTES, 'UTF-8');?></td>
+                                <td><?php echo $backup['size'];?></td>
+                                <td><?php echo $backup['time'];?></td>
+                                <td><a class="layui-btn layui-btn-xs" href="/<?php echo ADMIN_DIR;?>/database/download?file=<?php echo urlencode($backup['name']);?>">下载</a></td>
+                            </tr>
+                        <?php endforeach; endif;?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php include ADMIN_COMMON_PATH.'/footer.html';?>

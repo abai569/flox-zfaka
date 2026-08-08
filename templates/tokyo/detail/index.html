@@ -1,0 +1,196 @@
+<?php include $tplBase.'/common/header.html';?>
+<main class="tokyo-main tokyo-page">
+    <section class="tokyo-shell">
+        <section class="tokyo-detail-layout">
+            <div class="panel tokyo-detail-panel">
+                <div class="tokyo-detail-image-wrap">
+                    <?php
+                    $detailImages = isset($images) && is_array($images) ? $images : array();
+                    if (empty($detailImages)) {
+                        $detailImages[] = array('imgurl'=>isset($product['imgurl']) && strlen($product['imgurl'])>0 ? $product['imgurl'] : '/templates/tokyo/images/noimg.jpg');
+                    }
+                    ?>
+                    <div class="tokyo-detail-gallery" data-product-gallery>
+                        <?php if(count($detailImages)>1):?>
+                        <div class="tokyo-gallery-thumbnails" aria-label="商品图片">
+                            <?php foreach($detailImages AS $index=>$image):?>
+                            <button class="tokyo-gallery-thumbnail<?php if($index===0):?> is-active<?php endif;?>" type="button" aria-label="查看商品图片 <?php echo $index + 1;?>" aria-pressed="<?php echo $index===0 ? 'true' : 'false';?>" data-gallery-index="<?php echo $index;?>" data-gallery-src="<?php echo $image['imgurl'];?>" data-gallery-alt="<?php echo $product['name'];?> 图片 <?php echo $index + 1;?>">
+                                <img src="<?php echo $image['imgurl'];?>" alt="" width="72" height="72" loading="lazy">
+                            </button>
+                            <?php endforeach;?>
+                        </div>
+                        <?php endif;?>
+                        <div class="tokyo-detail-image-box">
+                            <img src="<?php echo $detailImages[0]['imgurl'];?>" alt="<?php echo $product['name'];?> 图片 1" class="tokyo-detail-image" id="detail-image" width="800" height="800" fetchpriority="high">
+                            <?php if(count($detailImages)>1):?>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-prev" type="button" data-gallery-direction="previous" aria-label="上一张图片"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                            <button class="tokyo-gallery-arrow tokyo-gallery-next" type="button" data-gallery-direction="next" aria-label="下一张图片"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                            <span class="tokyo-gallery-counter" aria-live="polite"><span data-gallery-current>1</span> / <?php echo count($detailImages);?></span>
+                            <?php endif;?>
+                            <button class="tokyo-image-zoom" id="image-zoom-btn" type="button"><i class="fa-solid fa-expand"></i> 查看原图</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tokyo-detail-info">
+                    <h1 class="tokyo-detail-title"><?php echo $product['name'];?></h1>
+                    <div class="tokyo-detail-badges">
+                        <?php if(isset($product['auto']) AND ($product['auto']>0)):?>
+                        <span class="tokyo-badge tokyo-badge-success">在线发货</span>
+                        <?php else:?>
+                        <span class="tokyo-badge tokyo-badge-warning">手工发货</span>
+                        <?php endif;?>
+                        <?php if($product['stockcontrol']==1):?>
+                        <span class="tokyo-badge tokyo-badge-info">库存 <?php echo $product['qty'];?></span>
+                        <?php else:?>
+                        <span class="tokyo-badge tokyo-badge-info">库存充足</span>
+                        <?php endif;?>
+                        <button class="tokyo-badge tokyo-badge-share" id="share-btn" type="button"><i class="fa-solid fa-share-nodes"></i> 分享</button>
+                    </div>
+                    <div class="tokyo-detail-price">
+                        <span class="tokyo-price-symbol">&yen;</span>
+                        <span class="tokyo-price-value"><?php echo $product['price'];?></span>
+                        <?php if(isset($product['price_ori']) AND $product['price_ori']>$product['price']):?>
+                        <span class="tokyo-price-original">&yen;<?php echo $product['price_ori'];?></span>
+                        <?php endif;?>
+                    </div>
+                    <?php if(strlen($pifa)>0):?>
+                    <div class="tokyo-detail-pifa">
+                        <span style="color:#6c6c6c;font-size:13px;">优惠：</span>
+                        <span id="view-youhui" style="color:var(--tokyo-info);cursor:pointer;font-size:13px;font-weight:500;">查看批发优惠</span>
+                    </div>
+                    <?php endif;?>
+                    <form class="layui-form tokyo-purchase-form" id="purchase-form" method="post">
+                        <div class="tokyo-form-group">
+                            <label class="tokyo-form-label">购买数量</label>
+                            <div class="tokyo-qty-control">
+                                <button type="button" class="tokyo-qty-btn" id="qty-minus"><i class="fa-solid fa-minus"></i></button>
+                                <input type="number" name="number" id="number" lay-verify="required|numberCheck" maxlength="10" value="1" placeholder="" autocomplete="off" class="tokyo-qty-input">
+                                <button type="button" class="tokyo-qty-btn" id="qty-plus"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <div style="font-size:12px;color:var(--tokyo-text-muted);margin-top:6px;">件&nbsp;(库存:<?php if($product['stockcontrol']>0):?><?php if($product['qty']>0):?><?php echo $product['qty'];?><?php else:?>缺货中<?php endif;?><?php else:?>不限量<?php endif;?>)</div>
+                        </div>
+                        <div class="tokyo-form-group">
+                            <?php if($login):?>
+                            <label class="tokyo-form-label">邮箱账户</label>
+                            <input type="text" name="email" id="email" value="<?php echo $uinfo['email'];?>" readonly class="tokyo-form-input" style="background:#f5f5f5;">
+                            <?php else:?>
+                                <?php if(isset($config['orderinputtype']) AND $config['orderinputtype']=='2'):?>
+                                <label class="tokyo-form-label">QQ</label>
+                                <input type="number" name="qq" id="qq" class="tokyo-form-input" required lay-verify="required|number" placeholder="请输入您的QQ号码">
+                                <?php else:?>
+                                <label class="tokyo-form-label">邮箱账户</label>
+                                <input type="text" name="email" id="email" class="tokyo-form-input" required lay-verify="required|email" placeholder="请输入您的邮箱地址">
+                                <?php endif;?>
+                            <?php endif;?>
+                        </div>
+                        <?php if(isset($config['querycontactswitch']) AND $config['querycontactswitch']>0):?>
+                        <div class="tokyo-form-group">
+                            <label class="tokyo-form-label">安全密码</label>
+                            <input type="text" name="chapwd" id="chapwd" class="tokyo-form-input" required lay-verify="required" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" readonly onfocus="this.removeAttribute('readonly');" placeholder="将作为自助查询订单重要依据">
+                        </div>
+                        <?php endif;?>
+                        <?php if(!empty($addons)):?>
+                        <div id="tokyo-addons">
+                        <?php foreach($addons AS $key=>$addon):?>
+                            <?php if($addon):?>
+                            <div class="tokyo-form-group">
+                                <label class="tokyo-form-label"><?php echo $addon;?></label>
+                                <input type="text" name="addons[]" id="addons<?php echo $key;?>" class="tokyo-form-input" required lay-verify="required" placeholder="">
+                            </div>
+                            <?php endif;?>
+                        <?php endforeach;?>
+                        </div>
+                        <?php endif;?>
+                        <input type="hidden" name="price" id="price" value="<?php echo $product['price'];?>">
+                        <input type="hidden" name="qty" id="qty" value="<?php if($product['stockcontrol']>0):?><?php if($product['qty']>0):?><?php echo $product['qty'];?><?php else:?>库存不足<?php endif;?><?php else:?>不限量<?php endif;?>">
+                        <input type="hidden" name="stockcontrol" id="stockcontrol" value="<?php echo $product['stockcontrol'];?>">
+                        <input type="hidden" name="limitorderqty" id="limitorderqty" value="<?php echo $config['limitorderqty'];?>">
+                        <input type="hidden" name="pid" id="pid" value="<?php echo $product['id'];?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token;?>">
+                        <button type="submit" class="tokyo-button tokyo-button-dark tokyo-submit-btn" id="buy" lay-submit lay-filter="buy" <?php if($product['stockcontrol']>0 AND $product['qty']<1):?>disabled="disabled"<?php endif;?>>
+                            <i class="fa-solid fa-cart-shopping"></i> 立即购买
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <?php if(isset($product['description']) AND strlen($product['description'])>0):?>
+            <div class="panel tokyo-description-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">宝贝详情</h2>
+                </div>
+                <div class="panel-body tokyo-description-body">
+                    <?php echo htmlspecialchars_decode(htmlspecialchars_decode($product['description']));?>
+                </div>
+            </div>
+            <?php endif;?>
+        </section>
+    </section>
+</main>
+<?php if(strlen($pifa)>0):?>
+<script>
+function changeTwoDecimal_html(x) {
+    var f_x = parseFloat(x);
+    if (isNaN(f_x)) {
+        alert('function:changeTwoDecimal->parameter error');
+        return false;
+    }
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+        s_x += '0';
+    }
+    return s_x;
+}
+</script>
+<script id="youhui_tpl" type="text/html">
+{{#  if(d.length === 0){ }}
+    <blockquote class="layui-elem-quote">无数据....</blockquote>
+{{# }else{ }}
+    {{# var price = <?php echo $product['price'];?>  }}
+    <div class="panel" style="padding:20px;">
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">折扣信息</h3>
+        <div class="tokyo-table-wrap">
+            <table class="tokyo-commodity-table">
+                <thead>
+                    <tr>
+                        <th>数量</th>
+                        <th>折扣</th>
+                        <th>原价</th>
+                        <th>折扣价</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{# layui.each(d, function(index, item){ }}
+                    <tr>
+                        <td>{{ item.qty}}</td>
+                        <td>{{ item.discount}}</td>
+                        <td>{{ changeTwoDecimal_html(price*item.qty)}}元</td>
+                        <td>{{ changeTwoDecimal_html(price*item.qty*item.discount)}}元</td>
+                    </tr>
+                {{#  }); }}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{{#  } }}
+</script>
+<?php endif;?>
+<script src="/res/layui/layui.js"></script>
+<script>
+layui.config({
+    version: "<?php echo VERSION;?>"
+    ,base: '/templates/tokyo/js/'
+}).use('product');
+var PASSWORD_PRODUCT = 0;
+<?php if(strlen($pifa)>0):?>
+var PIFA = <?php echo $pifa;?>;
+<?php else:?>
+var PIFA = "";
+<?php endif;?>
+</script>
+<?php include $tplBase.'/common/footer.html';?>

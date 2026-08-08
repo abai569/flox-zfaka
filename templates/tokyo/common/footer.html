@@ -1,0 +1,11 @@
+    </div>
+</div>
+<?php if(isset($config['layerad']) AND strlen($config['layerad'])>0):?>
+<div id="tokyo-layerad" style="display:none;"><?php echo $config['layerad'];?></div>
+<?php endif;?>
+<script src="/templates/tokyo/js/common.js?v=<?php echo VERSION;?>.20260806.1"></script>
+<?php if(isset($config['tongji']) AND strlen($config['tongji'])>0):?>
+<?php echo $config['tongji'];?>
+<?php endif;?>
+</body>
+</html>
