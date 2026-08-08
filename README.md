@@ -79,6 +79,16 @@ bash <(curl -fsSL https://raw.githubusercontent.com/abai569/flox-zfaka/main/inst
 /opt/flox-zfaka/.env
 ```
 
+## 演示地址
+
+前端：http://152.67.211.151:8089/
+
+后端：http://152.67.211.151:8089/Goadmin/login
+
+账号：`demo@demo.com`
+
+密码：`admin123`
+
 ## 更新
 
 建议更新前先备份：
